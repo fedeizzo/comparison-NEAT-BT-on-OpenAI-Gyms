@@ -22,6 +22,7 @@ let
 in
 pkgs.mkShell {
   buildInputs = with pkgs; [
+    chromium
     python39
     python39Packages.ipython
     python39Packages.matplotlib-inline
@@ -30,4 +31,10 @@ pkgs.mkShell {
     python39Packages.jupyter-client
     python39Packages.pyppeteer
   ] ++ [ python-mach ];
+  CHROMIUM_EXECUTABLE_DERK = "$HOME/.nix-profile/bin/google-chrome-stable";
+  LD_LIBRARY_PATH = "${pkgs.lib.makeLibraryPath [pkgs.stdenv.cc.cc]}";
+  shellHook = ''
+    export LD_PRELOAD="/run/opengl-driver/lib/libcuda.so"
+  '';
+
 }

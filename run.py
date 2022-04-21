@@ -1,5 +1,7 @@
 from argparse import ArgumentParser
 import importlib
+import os
+from os.path import expandvars
 
 import asyncio
 from gym_derk import DerkSession, DerkAgentServer, DerkAppInstance
@@ -23,13 +25,17 @@ async def main(p1, p2, n, turbo):
     """
     Runs the game in n arenas between p1 and p2
     """
+    chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
+    chrome_executable = expandvars(chrome_executable) if chrome_executable else None
     agent_p1 = DerkAgentServer(run_player, args={"DerkPlayerClass": p1}, port=8788)
     agent_p2 = DerkAgentServer(run_player, args={"DerkPlayerClass": p2}, port=8789)
 
     await agent_p1.start()
     await agent_p2.start()
 
-    app = DerkAppInstance()
+    app = DerkAppInstance(
+        chrome_executable=chrome_executable if chrome_executable else None
+    )
     await app.start()
 
     await app.run_session(

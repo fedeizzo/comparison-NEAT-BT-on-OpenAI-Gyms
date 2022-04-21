@@ -1,5 +1,6 @@
 # project
 data
+chromedata
 
 # NIX and emacs
 .envrc

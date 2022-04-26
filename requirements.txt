@@ -5,6 +5,7 @@ scipy
 matplotlib
 
 # GAME ENV
+pyppeteer
 gym-derk
 
 # BIAI

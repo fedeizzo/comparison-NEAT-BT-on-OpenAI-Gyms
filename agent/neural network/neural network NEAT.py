@@ -19,7 +19,7 @@ import gym
 import math
 import os.path
 
-# creation of the environment in Chromium,
+# creation of the environment in Chromium (side note, it is required to keep the tab open, or the game will not update)),
 # 3 agents each of the 2 teams, 2 totems ( default game, default rules, default map, default settings etc)
 # agents are controlled by neural network
 # each agent is generated with random equipment ( arms , misc, tail). Each slot may be filled or not, giving each agent different "abilities". 
@@ -29,7 +29,7 @@ import os.path
 # Standard reward function promotes killing and destroying totems. All other actions have 0 reward 
 
 # Colors and aesthetics are present but randomly initalized and are not meaningful for the outcome. However they are useful to distinguish the agents.
-env = DerkEnv()
+env = DerkEnv(turbo_mode=True)
 
 
 # standard NN from Derk Docs
@@ -69,8 +69,10 @@ class Network:
 
 
 # loads weights, we need to load our weights from the file and save them
-weights = np.load('weights.npy') if os.path.isfile('weights.npy') else None
-biases = np.load('biases.npy') if os.path.isfile('biases.npy') else None
+weights_path = 'Project\bio-inspired-mutant-battlegrounds\agent\neural network\weights.npy'
+biases_path = 'Project\bio-inspired-mutant-battlegrounds\agent\neural network\biases.npy'
+weights = np.load('weights_path') if os.path.isfile('weights_path') else None
+biases = np.load('biases_path') if os.path.isfile('biases_path') else None
 
 # each Derk Agent is controlled by a neural network!
 networks = [Network(weights, biases) for i in range(env.n_agents)]
@@ -92,8 +94,6 @@ for e in range(episodes):
     if all(done_n):
         print("Episode finished")
         break
-  import pdb
-  pdb.set_trace()
     
   # this is the part that needs to be changed with neat
   if env.mode == 'train':
@@ -104,6 +104,8 @@ for e in range(episodes):
     for network in networks:
       network.copy_and_mutate(top_network)
     print('top reward', reward_n[top_network_i])
-    np.save('weights.npy', top_network.weights)
-    np.save('biases.npy', top_network.biases)
+    
+    # save network
+    np.save('weights_path', top_network.weights)
+    np.save('biases_path', top_network.biases)
 env.close()

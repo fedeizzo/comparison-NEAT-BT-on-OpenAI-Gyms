@@ -1,5 +1,5 @@
 # supposedly agents that are controlled by neural network
-# the network evolves using pytorch-NEAT
+# the network evolves randomly
 
 # Game is here for Docs http://docs.gym.derkgame.com/
 
@@ -12,6 +12,7 @@
 # After each episode ends, the agents are "reset" and the environment is also reset. The agents may "evolve" in some way.
 
 # import of classic libraries for the game
+
 from gym_derk.envs import DerkEnv
 from gym_derk import ObservationKeys
 import numpy as np

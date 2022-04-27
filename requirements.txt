@@ -11,4 +11,10 @@ gym-derk
 # BIAI
 inspyred
 
+# NEAT
+torch
+neat-python
+click
+gym
+
 # RL

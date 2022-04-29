@@ -1,7 +1,7 @@
 [game]
 fast_mode = false
 number_of_arenas = 2
-is_train = true
+train = true
 episodes_number = 5
 
 [reward-function]

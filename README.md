@@ -68,7 +68,7 @@ In game section there are four variables:
 
 - fast_mode: enalbe or disable the fast mode;
 - number\_of\_arenas: define the number of concurrent runs;
-- is\_train: enable or disable train mode;
+- train: enable or disable train mode;
 - episodes\_number: number of episodes.
 
 #### reward-function

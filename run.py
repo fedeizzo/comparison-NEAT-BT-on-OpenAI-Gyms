@@ -97,14 +97,16 @@ def main_high_level(
         del players[i]["path"]
         del players[i]["name"]
         player = getattr(importlib.import_module(f"agent.{type}"), name)
-        for _ in env.n_agents_per_team:
-            derklings.append(player(players[i]))
+        for _ in range(env.n_agents_per_team):
+            derklings.append(
+                player(env.n_agents_per_team, env.action_space, **players[i])
+            )
 
     for e in range(episodes_number):
         observation_n = env.reset()
         while True:
             action_n = [
-                derklings[i].take_actions(observation_n[i]) for i in range(env.n_agents)
+                derklings[i].take_action(observation_n[i]) for i in range(env.n_agents)
             ]
             observation_n, reward_n, done_n, info = env.step(action_n)
             if all(done_n):

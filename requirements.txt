@@ -3,6 +3,7 @@ numpy
 pandas
 scipy
 matplotlib
+toml
 
 # GAME ENV
 pyppeteer

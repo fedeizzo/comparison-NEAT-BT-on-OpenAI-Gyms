@@ -1,6 +1,8 @@
 # project
 data
 chromedata
+**/*.toml
+!configs/**/*.toml
 
 # NIX and emacs
 .envrc

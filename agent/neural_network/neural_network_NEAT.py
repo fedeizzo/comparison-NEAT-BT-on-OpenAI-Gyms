@@ -1,17 +1,3 @@
-# supposedly agents that are controlled by neural network
-# the network evolves using pytorch-NEAT
-
-# Game is here for Docs http://docs.gym.derkgame.com/
-
-# the games is played in "episodes" or "epochs"
-# For each episode the agents are fixed, but if they "learn" through RL or other mechanisms, they can improve from the environment. 
-# Each episode is split in steps, where each step is a "tick". 
-# Each agent is given a fixed set of actions, and the environment is updated accordingly when the agents perfom these actions. 
-# This repeats for each tick of an episode.
-# Each agent can learn from the results of each tick, try new actions etc.
-# After each episode ends, the agents are "reset" and the environment is also reset. The agents may "evolve" in some way.
-
-# import of classic libraries for the game
 from gym_derk.envs import DerkEnv
 from gym_derk import ObservationKeys
 import numpy as np
@@ -21,16 +7,6 @@ import os.path
 
 from neural_network.pytorch_neat.recurrent_net import RecurrentNet
 
-# creation of the environment in Chromium (side note, it is required to keep the tab open, or the game will not update)),
-# 3 agents each of the 2 teams, 2 totems ( default game, default rules, default map, default settings etc)
-# agents are controlled by neural network
-# each agent is generated with random equipment ( arms , misc, tail). Each slot may be filled or not, giving each agent different "abilities". 
-# Our network should be able to correctly exploit any of these abilities and come up with a "good" strategy to destroy the enemy and win.
-
-# Win is defined by whichever team has the most points when times is up. 
-# Standard reward function promotes killing and destroying totems. All other actions have 0 reward 
-
-# Colors and aesthetics are present but randomly initalized and are not meaningful for the outcome. However they are useful to distinguish the agents.
 env = DerkEnv(turbo_mode=True)
 
 

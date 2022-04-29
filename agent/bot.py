@@ -7,13 +7,14 @@ class DerkPlayer:
     Each arena has 3 agents which the player must control.
     """
 
-    def __init__(self, n_agents, action_space):
+    def __init__(self, n_agents, action_space, test):
         """
         Parameters:
          - n_agents: TOTAL number of agents being controlled (= #arenas * #agents per arena)
         """
         self.n_agents = n_agents
         self.action_space = action_space
+        self.test = test
 
     def signal_env_reset(self, obs):
         """

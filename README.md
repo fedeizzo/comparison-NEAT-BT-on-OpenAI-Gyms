@@ -114,4 +114,4 @@ Required fiels are:
 - name: the name class in the file indicated by path, an example is [DerkPlayer](./agent/bot.py);
 - all other fields in this section are field passed to the init method of the class.
 
-In order to avoid a mess of config files inside the repo all files ending with `.toml` are not pushed to the repo expect for `configs` directory (do not abuse of this power!!).
+In order to avoid a mess of config files inside the repo all files ending with `.toml` are not pushed to the repo expect for the onse contained inside `configs` directory (do not abuse of this power!!).

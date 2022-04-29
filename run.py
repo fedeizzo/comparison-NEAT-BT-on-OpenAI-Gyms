@@ -6,6 +6,7 @@ import toml
 
 import asyncio
 from gym_derk import DerkSession, DerkAgentServer, DerkAppInstance
+from gym_derk.envs import DerkEnv
 
 
 async def run_player(env: DerkSession, DerkPlayerClass, class_args):
@@ -22,7 +23,7 @@ async def run_player(env: DerkSession, DerkPlayerClass, class_args):
         ordi = await env.step(actions)
 
 
-async def main(p1, p2, n, turbo, reward_function):
+async def main_low_level(p1, p2, n, turbo, reward_function):
     """
     Runs the game in n arenas between p1 and p2
     """
@@ -65,6 +66,59 @@ async def main(p1, p2, n, turbo, reward_function):
     await app.print_team_stats()
 
 
+def main_high_level(
+    players, number_of_arenas, is_turbo, reward_function, is_train, episodes_number
+):
+    chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
+    chrome_executable = expandvars(chrome_executable) if chrome_executable else None
+
+    env = DerkEnv(
+        mode="normal",
+        n_arenas=number_of_arenas,
+        reward_function=reward_function,
+        turbo_mode=is_turbo,
+        app_args={
+            "chrome_executable": chrome_executable if chrome_executable else None
+        },
+        home_team=[
+            {"primaryColor": "#ff00ff"},
+            {"primaryColor": "#00ff00", "slots": ["Talons", None, None]},
+            {"primaryColor": "#ff0000", "rewardFunction": {"healTeammate1": 1}},
+        ],
+        away_team=[
+            {"primaryColor": "#c0c0c0"},
+            {"primaryColor": "navy", "slots": ["Talons", None, None]},
+            {"primaryColor": "red", "rewardFunction": {"healTeammate1": 1}},
+        ],
+    )
+    derklings = []
+    for i in range(env.n_teams):
+        type, name = (players[i]["path"], players[i]["name"])
+        del players[i]["path"]
+        del players[i]["name"]
+        player = getattr(importlib.import_module(f"agent.{type}"), name)
+        for _ in env.n_agents_per_team:
+            derklings.append(player(players[i]))
+
+    for e in range(episodes_number):
+        observation_n = env.reset()
+        while True:
+            action_n = [
+                derklings[i].take_actions(observation_n[i]) for i in range(env.n_agents)
+            ]
+            observation_n, reward_n, done_n, info = env.step(action_n)
+            if all(done_n):
+                print("Episode finished")
+                break
+
+        if is_train:
+            # EVOLVE DERKLINGS
+            # SAVE SOME WEIGHTS
+            # OTHER STUFF
+            pass
+    env.close()
+
+
 if __name__ == "__main__":
     p = ArgumentParser()
     p.add_argument(
@@ -74,12 +128,11 @@ if __name__ == "__main__":
     args = p.parse_args()
     config = toml.load(args.config)
 
-    asyncio.get_event_loop().run_until_complete(
-        main(
-            config["players"][0],
-            config["players"][1],
-            config["game"]["number_of_arenas"],
-            config["game"]["fast_mode"],
-            config["reward-function"],
-        )
+    main_high_level(
+        config["players"],
+        config["game"]["number_of_arenas"],
+        config["game"]["fast_mode"],
+        config["reward-function"],
+        config["game"]["train"],
+        config["game"]["episodes_number"],
     )

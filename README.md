@@ -64,10 +64,12 @@ To improve reproducibility and readability of the code a `toml` config parser is
 
 ### Required sections
 #### game
-In game section there are two variables:
+In game section there are four variables:
 
 - fast_mode: enalbe or disable the fast mode;
 - number\_of\_arenas: define the number of concurrent runs;
+- is\_train: enable or disable train mode;
+- episodes\_number: number of episodes.
 
 #### reward-function
 Section for the reward function

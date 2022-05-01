@@ -3,6 +3,7 @@ data
 chromedata
 **/*.toml
 !configs/**/*.toml
+**/*.npy
 
 # NIX and emacs
 .envrc

@@ -1,8 +1,11 @@
 from argparse import ArgumentParser
 import importlib
+import numpy as np
 import os
 from os.path import expandvars
 import toml
+import neat
+import visualize
 
 import asyncio
 from gym_derk import DerkSession, DerkAgentServer, DerkAppInstance
@@ -66,12 +69,43 @@ async def main_low_level(p1, p2, n, turbo, reward_function):
     await app.print_team_stats()
 
 
+def eval_genomes(genomes, config):
+    derklings = []
+    for _, genome in genomes:
+        genome.fitness = 0
+        derklings.append(neat.nn.FeedForwardNetwork.create(genome, config))
+    env = config.env
+    if len(derklings) != env.n_agents:
+        print(len(derklings), env.n_agents)
+        assert "Population for neat must be n_agents_per_arena * n_arenas"
+    observation_n = env.reset()
+    total_reward = []
+    while True:
+        action_n = [
+            derklings[i].activate(observation_n[i]) for i in range(env.n_agents)
+        ]
+        print(action_n)
+        observation_n, reward_n, done_n, info = env.step(action_n)
+        total_reward.append(np.copy(reward_n))
+        if all(done_n):
+            print("Episode finished")
+            break
+
+    total_reward = np.array(total_reward)
+    # total_reward = total_reward.mean(axis=0) - np.sum(total_reward == 0, axis=0)
+    total_reward = total_reward.sum(axis=0)
+    print(total_reward)
+    for (_, genome), reward in zip(genomes, list(total_reward)):
+        genome.fitness = float(reward)
+
+
 def main_high_level(
-    players, number_of_arenas, is_turbo, reward_function, is_train, episodes_number
+        players, number_of_arenas, is_turbo, reward_function, is_train, episodes_number, neat_config
 ):
     chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
     chrome_executable = expandvars(chrome_executable) if chrome_executable else None
 
+    print(reward_function)
     env = DerkEnv(
         mode="normal",
         n_arenas=number_of_arenas,
@@ -91,33 +125,31 @@ def main_high_level(
             {"primaryColor": "red", "rewardFunction": {"healTeammate1": 1}},
         ],
     )
-    derklings = []
-    for i in range(env.n_teams):
-        type, name = (players[i]["path"], players[i]["name"])
-        del players[i]["path"]
-        del players[i]["name"]
-        player = getattr(importlib.import_module(f"agent.{type}"), name)
-        for _ in range(env.n_agents_per_team):
-            derklings.append(
-                player(env.n_agents_per_team, env.action_space, **players[i])
-            )
+    # derklings = []
+    # for i in range(env.n_teams):
+    #     player_number = i % (len(players) - 1)
+    #     type, name = (players[player_number]["path"], players[player_number]["name"])
+    #     args = {k:v for k, v in players[player_number].items() if k != 'path' and k != 'name'}
+    #     player = getattr(importlib.import_module(f"agent.{type}"), name)
+    #     for _ in range(env.n_agents_per_team):
+    #         derklings.append(
+    #             player(env.n_agents_per_team, env.action_space, **args)
+    #         )
+    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+                         neat.DefaultSpeciesSet, neat.DefaultStagnation,
+                         neat_config)
+    config.__setattr__('env', env)
 
-    for e in range(episodes_number):
-        observation_n = env.reset()
-        while True:
-            action_n = [
-                derklings[i].take_action(observation_n[i]) for i in range(env.n_agents)
-            ]
-            observation_n, reward_n, done_n, info = env.step(action_n)
-            if all(done_n):
-                print("Episode finished")
-                break
-
-        if is_train:
-            # EVOLVE DERKLINGS
-            # SAVE SOME WEIGHTS
-            # OTHER STUFF
-            pass
+    # Create the population, which is the top-level object for a NEAT run.
+    p = neat.Population(config)
+    p.add_reporter(neat.StdOutReporter(True))
+    stats = neat.StatisticsReporter()
+    p.add_reporter(stats)
+    # p.add_reporter(neat.Checkpointer(5))
+    winner = p.run(eval_genomes, episodes_number)
+    # visualize.draw_net(config, winner, True)
+    # visualize.plot_stats(stats, ylog=False, view=True)
+    # visualize.plot_species(stats, view=True)
     env.close()
 
 
@@ -137,4 +169,5 @@ if __name__ == "__main__":
         config["reward-function"],
         config["game"]["train"],
         config["game"]["episodes_number"],
+        config["game"]["neat_config"],
     )

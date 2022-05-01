@@ -3,6 +3,7 @@ numpy
 pandas
 scipy
 matplotlib
+graphviz
 toml
 
 # GAME ENV

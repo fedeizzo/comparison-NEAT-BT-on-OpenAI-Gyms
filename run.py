@@ -77,7 +77,7 @@ def eval_genomes(genomes, config):
     env = config.env
     if len(derklings) != env.n_agents:
         print(len(derklings), env.n_agents)
-        assert "Population for neat must be n_agents_per_arena * n_arenas"
+        assert len(derklings) == env.n_agents, "Population for neat must be n_agents_per_arena * n_arenas"
     observation_n = env.reset()
     total_reward = []
     while True:
@@ -163,11 +163,11 @@ if __name__ == "__main__":
     config = toml.load(args.config)
 
     main_high_level(
-        config["players"],
-        config["game"]["number_of_arenas"],
-        config["game"]["fast_mode"],
-        config["reward-function"],
-        config["game"]["train"],
-        config["game"]["episodes_number"],
-        config["game"]["neat_config"],
+        players = config["players"],
+        number_of_arenas = config["game"]["number_of_arenas"],
+        is_turbo = config["game"]["fast_mode"],
+        reward_function = config["reward-function"],
+        is_train = config["game"]["train"],
+        episodes_number = config["game"]["episodes_number"],
+        neat_config = config["game"]["neat_config"],
     )

@@ -3,6 +3,7 @@ fast_mode = false
 number_of_arenas = 2
 train = true
 episodes_number = 5
+neat_config = './configs/NEAT_NN.ini'
 
 [reward-function]
 damageEnemyStatue = 4

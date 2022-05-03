@@ -6,6 +6,7 @@ from os.path import expandvars
 import toml
 import neat
 import visualize
+from scipy.special import softmax
 
 import asyncio
 from gym_derk import DerkSession, DerkAgentServer, DerkAppInstance
@@ -70,22 +71,46 @@ async def main_low_level(p1, p2, n, turbo, reward_function):
 
 
 def eval_genomes(genomes, config):
-    derklings = []
-    for _, genome in genomes:
-        genome.fitness = 0
-        derklings.append(neat.nn.FeedForwardNetwork.create(genome, config))
     env = config.env
+    network_input_mask = config.network_input_mask
+    derklings = []
+    fitnesses = []
+    for _, genome in genomes:
+        if genome.fitness is None:
+            genome.fitness = 0
+        fitnesses.append(genome.fitness)
+    fitnesses = softmax(fitnesses)
+    for id in np.random.choice(
+        np.arange(len(genomes)), size=(env.n_agents), replace=False, p=fitnesses
+    ):
+        derklings.append(neat.nn.FeedForwardNetwork.create(genomes[id][1], config))
     if len(derklings) != env.n_agents:
         print(len(derklings), env.n_agents)
-        assert len(derklings) == env.n_agents, "Population for neat must be n_agents_per_arena * n_arenas"
+        assert (
+            len(derklings) == env.n_agents
+        ), "Population for neat must be n_agents_per_arena * n_arenas"
     observation_n = env.reset()
     total_reward = []
+    first_action = 0
     while True:
-        action_n = [
-            derklings[i].activate(observation_n[i]) for i in range(env.n_agents)
-        ]
-        print(action_n)
+        if first_action < 5:
+            action_n = [[1, 0, 0, 0, 0] for _ in range(env.n_agents)]
+            first_action += 1
+        else:
+            pred = [
+                derklings[i].activate(observation_n[i][network_input_mask])
+                for i in range(env.n_agents)
+            ]
+            action_n = [
+                [0, 0, 0, int(i[0]), int(i[1])] for i in pred
+            ]
+            # action_n += [
+            #     [0, 0, 0, 1, 0] for _ in range(3)
+            # ]
+        print(len(action_n))
         observation_n, reward_n, done_n, info = env.step(action_n)
+        print(observation_n[0][network_input_mask])
+        print(action_n[0])
         total_reward.append(np.copy(reward_n))
         if all(done_n):
             print("Episode finished")
@@ -100,12 +125,18 @@ def eval_genomes(genomes, config):
 
 
 def main_high_level(
-        players, number_of_arenas, is_turbo, reward_function, is_train, episodes_number, neat_config
+    players,
+    number_of_arenas,
+    is_turbo,
+    reward_function,
+    is_train,
+    episodes_number,
+    neat_config,
+    network_input,
 ):
     chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
     chrome_executable = expandvars(chrome_executable) if chrome_executable else None
 
-    print(reward_function)
     env = DerkEnv(
         mode="normal",
         n_arenas=number_of_arenas,
@@ -115,14 +146,15 @@ def main_high_level(
             "chrome_executable": chrome_executable if chrome_executable else None
         },
         home_team=[
-            {"primaryColor": "#ff00ff"},
-            {"primaryColor": "#00ff00", "slots": ["Talons", None, None]},
-            {"primaryColor": "#ff0000", "rewardFunction": {"healTeammate1": 1}},
+            {"primaryColor": "#ff00ff", "slots": ["Pistol", None, None]},
+            {"primaryColor": "#00ff00", "slots": ["Pistol", None, None]},
+            # {"primaryColor": "#ff0000", "rewardFunction": {"healTeammate1": 1}},
+            {"primaryColor": "#ff0000", "slots": ["Pistol", None, None]},
         ],
         away_team=[
-            {"primaryColor": "#c0c0c0"},
-            {"primaryColor": "navy", "slots": ["Talons", None, None]},
-            {"primaryColor": "red", "rewardFunction": {"healTeammate1": 1}},
+            {"primaryColor": "#c0c0c0", "slots": ["Pistol", None, None]},
+            {"primaryColor": "navy", "slots": ["Pistol", None, None]},
+            {"primaryColor": "red", "slots": ["Pistol", None, None]},
         ],
     )
     # derklings = []
@@ -135,10 +167,15 @@ def main_high_level(
     #         derklings.append(
     #             player(env.n_agents_per_team, env.action_space, **args)
     #         )
-    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
-                         neat.DefaultSpeciesSet, neat.DefaultStagnation,
-                         neat_config)
-    config.__setattr__('env', env)
+    config = neat.Config(
+        neat.DefaultGenome,
+        neat.DefaultReproduction,
+        neat.DefaultSpeciesSet,
+        neat.DefaultStagnation,
+        neat_config,
+    )
+    config.__setattr__("env", env)
+    config.__setattr__("network_input_mask", list(network_input.values()))
 
     # Create the population, which is the top-level object for a NEAT run.
     p = neat.Population(config)
@@ -163,11 +200,12 @@ if __name__ == "__main__":
     config = toml.load(args.config)
 
     main_high_level(
-        players = config["players"],
-        number_of_arenas = config["game"]["number_of_arenas"],
-        is_turbo = config["game"]["fast_mode"],
-        reward_function = config["reward-function"],
-        is_train = config["game"]["train"],
-        episodes_number = config["game"]["episodes_number"],
-        neat_config = config["game"]["neat_config"],
+        players=config["players"],
+        number_of_arenas=config["game"]["number_of_arenas"],
+        is_turbo=config["game"]["fast_mode"],
+        reward_function=config["reward-function"],
+        is_train=config["game"]["train"],
+        episodes_number=config["game"]["episodes_number"],
+        neat_config=config["game"]["neat_config"],
+        network_input=config["network_input"],
     )

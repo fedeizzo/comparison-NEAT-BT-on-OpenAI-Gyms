@@ -106,7 +106,7 @@ def eval_genomes(genomes, config):
             focuses = [pred[i][2:10] for i in range(env.n_agents)]
             focuses_i = [np.argmax(focus) for focus in focuses]
             action_n = [
-                [0, 0, 0, cast_i+1 if cast[cast_i] >0 else 0, focus_i+1 if focus[focus_i] >0 else 0 ] for i,cast,cast_i,focus,focus_i in zip(pred,casts,casts_i,focuses,focuses_i)
+                [0, 0, 0, cast_i if cast[cast_i] >0 else 0, focus_i if focus[focus_i] >0 else 0 ] for i,cast,cast_i,focus,focus_i in zip(pred,casts,casts_i,focuses,focuses_i)
             ]
             # action_n += [
             #     [0, 0, 0, 1, 0] for _ in range(3)

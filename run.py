@@ -81,7 +81,7 @@ def eval_genomes(genomes, config):
         fitnesses.append(genome.fitness)
     fitnesses = softmax(fitnesses)
     for id in np.random.choice(
-        np.arange(len(genomes)), size=(env.n_agents), replace=False, p=fitnesses
+        np.arange(len(genomes)), size=(env.n_agents), replace=True, p=fitnesses
     ):
         derklings.append(neat.nn.FeedForwardNetwork.create(genomes[id][1], config))
     if len(derklings) != env.n_agents:
@@ -101,8 +101,12 @@ def eval_genomes(genomes, config):
                 derklings[i].activate(observation_n[i][network_input_mask])
                 for i in range(env.n_agents)
             ]
+            casts = [pred[i][0:2] for i in range(env.n_agents)]
+            casts_i = [np.argmax(cast) for cast in casts]
+            focuses = [pred[i][2:10] for i in range(env.n_agents)]
+            focuses_i = [np.argmax(focus) for focus in focuses]
             action_n = [
-                [0, 0, 0, int(i[0]), int(i[1])] for i in pred
+                [0, 0, 0, cast_i+1 if cast[cast_i] >0 else 0, focus_i+1 if focus[focus_i] >0 else 0 ] for i,cast,cast_i,focus,focus_i in zip(pred,casts,casts_i,focuses,focuses_i)
             ]
             # action_n += [
             #     [0, 0, 0, 1, 0] for _ in range(3)

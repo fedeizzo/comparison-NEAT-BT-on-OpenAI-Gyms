@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+import fractions
 import importlib
 import numpy as np
 import os
@@ -19,15 +20,16 @@ def create_derklings(genomes, config, player_class, n_agents, activation_functio
         if genome.fitness is None:
             genome.fitness = 0
         fitnesses.append(genome.fitness)
+    # laplacian smoothing to avoid 0 probability
     fitnesses = softmax(fitnesses)
-    index_max_fitness = np.argmax(fitnesses)
-    for i in range(len(fitnesses)):
-        if fitnesses[i] == 0:
-            fitnesses[i] = 0.0001
-            fitnesses[index_max_fitness] -= 0.0001
+    total_sum = 0
+    for fitness in fitnesses:
+        total_sum += fitness
+    for fitness in fitnesses:
+        fitness = ( fitness + 1 ) / ( total_sum + 1*len(fitnesses) )
     for id in np.random.choice(
-        np.arange(len(genomes)), size=(n_agents), replace=False
-        # np.arange(len(genomes)), size=(n_agents), replace=False, p=fitnesses
+        # np.arange(len(genomes)), size=(n_agents), replace=False
+        np.arange(len(genomes)), size=(n_agents), replace=False, p=fitnesses
     ):
         derklings.append(
             player_class(genomes[id][1], config, activation_functions, verbose=False)

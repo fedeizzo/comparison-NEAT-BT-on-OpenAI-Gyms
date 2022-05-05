@@ -17,6 +17,6 @@ inspyred
 torch
 click
 gym
-git@github.com:fedeizzo/neat-python.git
+git+https://github.com/fedeizzo/neat-python.git
 
 # RL

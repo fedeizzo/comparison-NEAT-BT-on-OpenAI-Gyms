@@ -15,8 +15,8 @@ inspyred
 
 # NEAT
 torch
-neat-python
 click
 gym
+git+https://github.com/fedeizzo/bio-inspired-mutant-battlegrounds.git#subdirectory=python-neat
 
 # RL

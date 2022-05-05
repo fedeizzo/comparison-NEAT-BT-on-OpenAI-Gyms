@@ -8,6 +8,7 @@ chromedata
 weights
 Digraph.gv
 Digraph.gv.png
+Digraph.gv.svg
 
 # NIX and emacs
 .envrc

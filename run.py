@@ -12,6 +12,14 @@ from scipy.special import softmax
 from gym_derk.envs import DerkEnv
 from activation_functions import ReLU, identity
 
+# to save winning model
+import pickle
+
+# to flush directly in log files
+import functools
+
+print = functools.partial(print, flush=True)
+
 
 def create_derklings(genomes, config, player_class, n_agents, activation_functions):
     derklings = []
@@ -26,10 +34,13 @@ def create_derklings(genomes, config, player_class, n_agents, activation_functio
     for fitness in fitnesses:
         total_sum += fitness
     for fitness in fitnesses:
-        fitness = ( fitness + 1 ) / ( total_sum + 1*len(fitnesses) )
+        fitness = (fitness + 1) / (total_sum + 1 * len(fitnesses))
     for id in np.random.choice(
         # np.arange(len(genomes)), size=(n_agents), replace=False
-        np.arange(len(genomes)), size=(n_agents), replace=False, p=fitnesses
+        np.arange(len(genomes)),
+        size=(n_agents),
+        replace=False,
+        p=fitnesses,
     ):
         derklings.append(
             player_class(genomes[id][1], config, activation_functions, verbose=False)
@@ -44,7 +55,13 @@ def eval_genomes(genomes, config):
     player_class = config.player_class
     activation_functions = config.activation_functions
 
-    derklings = create_derklings(genomes, config, player_class, env.n_agents, activation_functions)
+    derklings = []
+    for _, genome in genomes:
+        genome.fitness = 0
+        derklings.append(
+            player_class(genome, config, activation_functions, verbose=False)
+        )
+
     if len(derklings) != env.n_agents:
         print(len(derklings), env.n_agents)
         assert (
@@ -55,15 +72,12 @@ def eval_genomes(genomes, config):
     total_reward = []
     first_action = 0
     while True:
-        if first_action < 5:
-            action_n = [[1, 0, 0, 0, 0] for _ in range(env.n_agents)]
-            first_action += 1
-        else:
-            action_n = [
-                [0, 0, 0, *derklings[i].forward(observation_n[i][network_input_mask])]
-                for i in range(env.n_agents)
-            ]
+        action_n = [
+            [*derklings[i].forward(observation_n[i][network_input_mask])]
+            for i in range(env.n_agents)
+        ]
         observation_n, reward_n, done_n, info = env.step(action_n)
+        # print(action_n[:][-2:])
         total_reward.append(np.copy(reward_n))
         if all(done_n):
             print("Episode finished")
@@ -86,6 +100,7 @@ def main_high_level(
     episodes_number,
     neat_config,
     network_input,
+    weights_path,
 ):
     chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
     chrome_executable = expandvars(chrome_executable) if chrome_executable else None
@@ -99,15 +114,33 @@ def main_high_level(
             "chrome_executable": chrome_executable if chrome_executable else None
         },
         home_team=[
-            {"primaryColor": "#ff00ff", "slots": ["Pistol", "IronBubblegum", "HealingGland"]},
-            {"primaryColor": "#00ff00", "slots": ["Pistol", "IronBubblegum", "HealingGland"]},
+            {
+                "primaryColor": "#ff00ff",
+                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+            },
+            {
+                "primaryColor": "#00ff00",
+                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+            },
             # {"primaryColor": "#ff0000", "rewardFunction": {"healTeammate1": 1}},
-            {"primaryColor": "#ff0000", "slots": ["Pistol", "IronBubblegum", "HealingGland"]},
+            {
+                "primaryColor": "#ff0000",
+                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+            },
         ],
         away_team=[
-            {"primaryColor": "#c0c0c0", "slots": ["Pistol", "IronBubblegum", "HealingGland"]},
-            {"primaryColor": "navy", "slots": ["Pistol", "IronBubblegum", "HealingGland"]},
-            {"primaryColor": "red", "slots": ["Pistol", "IronBubblegum", "HealingGland"]},
+            {
+                "primaryColor": "#c0c0c0",
+                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+            },
+            {
+                "primaryColor": "navy",
+                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+            },
+            {
+                "primaryColor": "red",
+                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+            },
         ],
     )
     # derklings = []
@@ -148,8 +181,10 @@ def main_high_level(
     p.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
-    # p.add_reporter(neat.Checkpointer(5))
+    # p.add_reporter(neat.Checkpointer(1, filename_prefix="neat-checkpoint-"))
     winner = p.run(eval_genomes, episodes_number)
+    with open(weights_path, "wb") as f:
+        pickle.dump(winner, f)
     visualize.draw_net(config, winner, True)
     visualize.plot_stats(stats, ylog=False, view=True)
     visualize.plot_species(stats, view=True)
@@ -174,4 +209,5 @@ if __name__ == "__main__":
         episodes_number=config["game"]["episodes_number"],
         neat_config=config["game"]["neat_config"],
         network_input=config["network_input"],
+        weights_path=config["game"]["weights_path"],
     )

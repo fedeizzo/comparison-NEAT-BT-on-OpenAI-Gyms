@@ -29,7 +29,10 @@ class DerkNeatNNPlayer:
         output = np.array(self.network.activate(observations))
         cast, focus = (np.argmax(output[-12:-8]), np.argmax(output[-8:]))
         output = np.array(
-            [self.activation_functions[i](o) for i, o in enumerate([cast, focus])]
+            [
+                *output[:-12],
+                *[self.activation_functions[i](o) for i, o in enumerate([cast, focus])],
+            ]
         ).flatten()
         if self.verbose:
             print(f"Actions taken: {output}")

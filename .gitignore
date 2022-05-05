@@ -5,6 +5,9 @@ chromedata
 **/*.ini
 !configs/**/*.ini
 **/*.npy
+weights
+Digraph.gv
+Digraph.gv.png
 
 # NIX and emacs
 .envrc

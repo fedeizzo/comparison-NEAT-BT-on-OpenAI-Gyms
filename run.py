@@ -143,16 +143,6 @@ def main_high_level(
             },
         ],
     )
-    # derklings = []
-    # for i in range(env.n_teams):
-    #     player_number = i % (len(players) - 1)
-    #     type, name = (players[player_number]["path"], players[player_number]["name"])
-    #     args = {k:v for k, v in players[player_number].items() if k != 'path' and k != 'name'}
-    #     player = getattr(importlib.import_module(f"agent.{type}"), name)
-    #     for _ in range(env.n_agents_per_team):
-    #         derklings.append(
-    #             player(env.n_agents_per_team, env.action_space, **args)
-    #         )
     config = neat.Config(
         neat.DefaultGenome,
         neat.DefaultReproduction,
@@ -161,33 +151,56 @@ def main_high_level(
         neat_config,
     )
     config.__setattr__("env", env)
-    config.__setattr__("network_input_mask", list(network_input.values()))
+    network_input_mask = list(network_input.values())
+    config.__setattr__("network_input_mask", network_input_mask)
+    player_class = getattr(
+        importlib.import_module(f"agent.neural_network_NEAT"), "DerkNeatNNPlayer"
+    )
     config.__setattr__(
         "player_class",
-        getattr(
-            importlib.import_module(f"agent.neural_network_NEAT"), "DerkNeatNNPlayer"
-        ),
+        player_class,
     )
+    activation_functions = {
+        0: identity,
+        1: identity,
+    }
     config.__setattr__(
         "activation_functions",
-        {
-            0: identity,
-            1: identity,
-        },
+        activation_functions,
     )
 
-    # Create the population, which is the top-level object for a NEAT run.
-    p = neat.Population(config)
-    p.add_reporter(neat.StdOutReporter(True))
-    stats = neat.StatisticsReporter()
-    p.add_reporter(stats)
-    # p.add_reporter(neat.Checkpointer(1, filename_prefix="neat-checkpoint-"))
-    winner = p.run(eval_genomes, episodes_number)
-    with open(weights_path, "wb") as f:
-        pickle.dump(winner, f)
-    visualize.draw_net(config, winner, True)
-    visualize.plot_stats(stats, ylog=False, view=True)
-    visualize.plot_species(stats, view=True)
+    if is_train:
+        # Create the population, which is the top-level object for a NEAT run.
+        p = neat.Population(config)
+        p.add_reporter(neat.StdOutReporter(True))
+        stats = neat.StatisticsReporter()
+        p.add_reporter(stats)
+        # p.add_reporter(neat.Checkpointer(1, filename_prefix="neat-checkpoint-"))
+        winner = p.run(eval_genomes, episodes_number)
+        with open(weights_path, "wb") as f:
+            pickle.dump(winner, f)
+        visualize.draw_net(config, winner, True)
+        visualize.plot_stats(stats, ylog=False, view=True)
+        visualize.plot_species(stats, view=True)
+    else:
+        with open(weights_path, "rb") as f:
+            genome = pickle.load(f)
+
+        derklings = []
+        for _ in range(env.n_agents):
+            derklings.append(
+                player_class(genome, config, activation_functions, verbose=False)
+            )
+        observation_n = env.reset()
+        while True:
+            action_n = [
+                [*derklings[i].forward(observation_n[i][network_input_mask])]
+                for i in range(env.n_agents)
+            ]
+            observation_n, reward_n, done_n, info = env.step(action_n)
+            if all(done_n):
+                print("Episode finished")
+                break
     env.close()
 
 

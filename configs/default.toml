@@ -1,10 +1,10 @@
 [game]
 fast_mode = true
-number_of_arenas = 20
+number_of_arenas = 50
 train = true
-episodes_number = 1
+episodes_number = 50
 neat_config = './configs/NEAT_NN.ini'
-weights_path = './weights/winner.pkl'
+weights_path = './weights/winner_50arena_50episodes.pkl'
 
 [reward-function]
 damageEnemyStatue = 5

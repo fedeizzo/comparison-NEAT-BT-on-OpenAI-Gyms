@@ -13,7 +13,7 @@ gym-derk
 # BIAI
 inspyred
 
-# NEAT
+# NEAT and PYTORCH-NEAT
 torch
 click
 gym

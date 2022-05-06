@@ -21,8 +21,8 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "fedeizzo";
       repo = "neat-python";
-      rev = "019d3dcf39beed5f3788001d5737b78974fcb3a0";
-      sha256 = "sha256-/epmEqTnPU/LkwwwF/4R+57OZNwkZLOSkxhtLa4vB/4=";
+      rev = "bbc67344f90da89ef24d3866b0afc4968e653f27";
+      sha256 = "sha256-qxChFC+Tr7Y6MPTuOycXLvLC5PO+Xp658ki4VMAMW+Q=";
     };
   };
   python-mach = mach-nix.mkPython {

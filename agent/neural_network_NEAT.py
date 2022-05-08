@@ -4,6 +4,7 @@ import numpy as np
 from typing import Dict, Callable
 
 from agent.pytorch_neat import recurrent_net
+import activation_functions as af
 
 input_node_names = [
     "Hitpoints",
@@ -96,14 +97,14 @@ class DerkNeatNNPlayer:
         self,
         genome,
         config: neat.Config,
-        activation_functions: Dict[int, Callable[[float], float]],
+        activation_functions: Dict[int, str],
         verbose: bool = False,
     ):
         self.genome = genome
         self.config = config
         # self.network = neat.nn.FeedForwardNetwork.create(self.genome, self.config)
         self.network = recurrent_net.RecurrentNet.create(self.genome, self.config)
-        self.activation_functions = activation_functions
+        self.activation_functions = {int(k): getattr(af, v) for k, v in activation_functions.items()}
         self.verbose = verbose
         if self.verbose:
             print(f"Agent with {len(activation_functions)} output")

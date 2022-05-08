@@ -1,0 +1,113 @@
+[game]
+fast_mode = true
+number_of_arenas = 1
+train = true
+episodes_number = 1
+neat_config = './configs/NEAT_NN.ini'
+weights_path = './weights/winner.pkl'
+
+[reward-function]
+damageEnemyStatue = 5
+damageEnemyUnit = 5
+killEnemyStatue = 5
+killEnemyUnit = 5
+healFriendlyStatue = 3
+healTeammate1 = 2
+healTeammate2 = 2
+timeSpentHomeBase = 0
+timeSpentHomeTerritory = 0
+timeSpentAwayTerritory = 0
+timeSpentAwayBase = 0
+damageTaken = -1
+friendlyFire = -3
+healEnemy = -3
+fallDamageTaken = -1
+statueDamageTaken = -3
+manualBonus = 0
+victory = 5
+loss = -5
+tie = 0
+teamSpirit = 0
+timeScaling = 0.4
+
+[network_input]
+Hitpoints = true
+Ability0Ready = true
+FriendStatueDistance = true
+FriendStatueAngle = true
+Friend1Distance = true
+Friend1Angle = true
+Friend2Distance = true
+Friend2Angle = true
+EnemyStatueDistance = true
+EnemyStatueAngle = true
+Enemy1Distance = true
+Enemy1Angle = true
+Enemy2Distance = true
+Enemy2Angle = true
+Enemy3Distance = true
+Enemy3Angle = true
+HasFocus = true
+FocusRelativeRotation = true
+FocusFacingUs = true
+FocusFocusingBack = true
+FocusHitpoints = true
+Ability1Ready = true
+Ability2Ready = true
+FocusDazed = true
+FocusCrippled = true
+HeightFront1 = true
+HeightFront5 = true
+HeightBack2 = true
+PositionLeftRight = true
+PositionUpDown = true
+Stuck = true
+UnusedSense31 = true
+HasTalons = true
+HasBloodClaws = true
+HasCleavers = true
+HasCripplers = true
+HasHealingGland = true
+HasVampireGland = true
+HasFrogLegs = true
+HasPistol = true
+HasMagnum = true
+HasBlaster = true
+HasParalyzingDart = true
+HasIronBubblegum = true
+HasHeliumBubblegum = true
+HasShell = true
+HasTrombone = true
+FocusHasTalons = true
+FocusHasBloodClaws = true
+FocusHasCleavers = true
+FocusHasCripplers = true
+FocusHasHealingGland = true
+FocusHasVampireGland = true
+FocusHasFrogLegs = true
+FocusHasPistol = true
+FocusHasMagnum = true
+FocusHasBlaster = true
+FocusHasParalyzingDart = true
+FocusHasIronBubblegum = true
+FocusHasHeliumBubblegum = true
+FocusHasShell = true
+FocusHasTrombone = true
+UnusedExtraSense30 = true
+UnusedExtraSense31 = true
+
+[[players]]
+path = 'neural_network_NEAT'
+name = 'DerkNeatNNPlayer'
+verbose = false
+[players.activation_functions]
+0 = 'identity'
+1 = 'identity'
+
+[[players]]
+path = 'neural_network_NEAT'
+name = 'DerkNeatNNPlayer'
+verbose = false
+[players.activation_functions]
+0 = 'identity'
+1 = 'identity'

@@ -4,6 +4,7 @@ chromedata
 **/*.toml
 **/*.ini
 !configs/**/*.ini
+!configs/**/*.toml
 **/*.npy
 weights
 Digraph.gv

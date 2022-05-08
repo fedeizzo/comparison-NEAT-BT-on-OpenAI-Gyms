@@ -1,7 +1,7 @@
 # bio-inspired-mutant-battlegrounds
-Game is here for Docs http://docs.gym.derkgame.com/
-
 ![Game demo](./assets/game.gif)
+
+[Docs](http://docs.gym.derkgame.com/)
 
 ## Game base rules
 The games is played in "episodes" or "epochs", for each episode the agents are fixed, but if they "learn" through RL or other mechanisms, they can improve from the environment. 

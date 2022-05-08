@@ -73,6 +73,7 @@ input_node_names = [
     "UnusedExtraSense31",
 ]
 
+
 class DerkQLearningNEATPlayer:
     def __init__(
         self,

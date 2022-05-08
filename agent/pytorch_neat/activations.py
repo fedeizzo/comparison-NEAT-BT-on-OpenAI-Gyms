@@ -29,7 +29,7 @@ def abs_activation(x):
 
 
 def gauss_activation(x):
-    return torch.exp(-5.0 * x**2)
+    return torch.exp(-5.0 * x ** 2)
 
 
 def identity_activation(x):
@@ -45,11 +45,11 @@ def relu_activation(x):
 
 
 str_to_activation = {
-    'sigmoid': sigmoid_activation,
-    'tanh': tanh_activation,
-    'abs': abs_activation,
-    'gauss': gauss_activation,
-    'identity': identity_activation,
-    'sin': sin_activation,
-    'relu': relu_activation,
+    "sigmoid": sigmoid_activation,
+    "tanh": tanh_activation,
+    "abs": abs_activation,
+    "gauss": gauss_activation,
+    "identity": identity_activation,
+    "sin": sin_activation,
+    "relu": relu_activation,
 }

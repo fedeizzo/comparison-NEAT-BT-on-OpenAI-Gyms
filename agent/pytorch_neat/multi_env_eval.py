@@ -16,7 +16,15 @@ import numpy as np
 
 
 class MultiEnvEvaluator:
-    def __init__(self, make_net, activate_net, batch_size=1, max_env_steps=None, make_env=None, envs=None):
+    def __init__(
+        self,
+        make_net,
+        activate_net,
+        batch_size=1,
+        max_env_steps=None,
+        make_env=None,
+        envs=None,
+    ):
         if envs is None:
             self.envs = [make_env() for _ in range(batch_size)]
         else:
@@ -39,8 +47,7 @@ class MultiEnvEvaluator:
             if self.max_env_steps is not None and step_num == self.max_env_steps:
                 break
             if debug:
-                actions = self.activate_net(
-                    net, states, debug=True, step_num=step_num)
+                actions = self.activate_net(net, states, debug=True, step_num=step_num)
             else:
                 actions = self.activate_net(net, states)
             assert len(actions) == len(self.envs)

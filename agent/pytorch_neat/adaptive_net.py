@@ -18,25 +18,23 @@ from .cppn import create_cppn, clamp_weights_, get_coord_inputs
 
 
 class AdaptiveNet:
-    def __init__(self,
-
-                 w_ih_node,
-                 b_h_node,
-                 w_hh_node,
-                 b_o_node,
-                 w_ho_node,
-                 delta_w_node,
-                 #  stateful_node,
-
-                 input_coords,
-                 hidden_coords,
-                 output_coords,
-
-                 weight_threshold=0.2,
-                 activation=tanh_activation,
-
-                 batch_size=1,
-                 device='cuda:0'):
+    def __init__(
+        self,
+        w_ih_node,
+        b_h_node,
+        w_hh_node,
+        b_o_node,
+        w_ho_node,
+        delta_w_node,
+        #  stateful_node,
+        input_coords,
+        hidden_coords,
+        output_coords,
+        weight_threshold=0.2,
+        activation=tanh_activation,
+        batch_size=1,
+        device="cuda:0",
+    ):
 
         self.w_ih_node = w_ih_node
 
@@ -51,15 +49,18 @@ class AdaptiveNet:
 
         self.n_inputs = len(input_coords)
         self.input_coords = torch.tensor(
-            input_coords, dtype=torch.float32, device=device)
+            input_coords, dtype=torch.float32, device=device
+        )
 
         self.n_hidden = len(hidden_coords)
         self.hidden_coords = torch.tensor(
-            hidden_coords, dtype=torch.float32, device=device)
+            hidden_coords, dtype=torch.float32, device=device
+        )
 
         self.n_outputs = len(output_coords)
         self.output_coords = torch.tensor(
-            output_coords, dtype=torch.float32, device=device)
+            output_coords, dtype=torch.float32, device=device
+        )
 
         self.weight_threshold = weight_threshold
 
@@ -75,11 +76,17 @@ class AdaptiveNet:
         n_in = len(in_coords)
         n_out = len(out_coords)
 
-        zeros = torch.zeros(
-            (n_out, n_in), dtype=torch.float32, device=self.device)
+        zeros = torch.zeros((n_out, n_in), dtype=torch.float32, device=self.device)
 
-        weights = w_node(x_out=x_out, y_out=y_out, x_in=x_in, y_in=y_in,
-                         pre=zeros, post=zeros, w=zeros)
+        weights = w_node(
+            x_out=x_out,
+            y_out=y_out,
+            x_in=x_in,
+            y_in=y_in,
+            pre=zeros,
+            post=zeros,
+            w=zeros,
+        )
         clamp_weights_(weights, self.weight_threshold)
 
         return weights
@@ -87,83 +94,103 @@ class AdaptiveNet:
     def reset(self):
         with torch.no_grad():
             self.input_to_hidden = self.get_init_weights(
-                self.input_coords, self.hidden_coords, self.w_ih_node)
+                self.input_coords, self.hidden_coords, self.w_ih_node
+            )
 
-            bias_coords = torch.zeros(
-                (1, 2), dtype=torch.float32, device=self.device)
-            self.bias_hidden = self.get_init_weights(
-                bias_coords, self.hidden_coords, self.b_h_node).unsqueeze(0).expand(
-                    self.batch_size, self.n_hidden, 1)
+            bias_coords = torch.zeros((1, 2), dtype=torch.float32, device=self.device)
+            self.bias_hidden = (
+                self.get_init_weights(bias_coords, self.hidden_coords, self.b_h_node)
+                .unsqueeze(0)
+                .expand(self.batch_size, self.n_hidden, 1)
+            )
 
-            self.hidden_to_hidden = self.get_init_weights(
-                self.hidden_coords, self.hidden_coords, self.w_hh_node).unsqueeze(0).expand(
-                    self.batch_size, self.n_hidden, self.n_hidden)
+            self.hidden_to_hidden = (
+                self.get_init_weights(
+                    self.hidden_coords, self.hidden_coords, self.w_hh_node
+                )
+                .unsqueeze(0)
+                .expand(self.batch_size, self.n_hidden, self.n_hidden)
+            )
 
-            bias_coords = torch.zeros(
-                (1, 2), dtype=torch.float32, device=self.device)
+            bias_coords = torch.zeros((1, 2), dtype=torch.float32, device=self.device)
             self.bias_output = self.get_init_weights(
-                bias_coords, self.output_coords, self.b_o_node)
+                bias_coords, self.output_coords, self.b_o_node
+            )
 
             self.hidden_to_output = self.get_init_weights(
-                self.hidden_coords, self.output_coords, self.w_ho_node)
+                self.hidden_coords, self.output_coords, self.w_ho_node
+            )
 
-            self.hidden = torch.zeros((self.batch_size, self.n_hidden, 1),
-                                      dtype=torch.float32)
+            self.hidden = torch.zeros(
+                (self.batch_size, self.n_hidden, 1), dtype=torch.float32
+            )
 
             self.batched_hidden_coords = get_coord_inputs(
-                self.hidden_coords, self.hidden_coords, batch_size=self.batch_size)
+                self.hidden_coords, self.hidden_coords, batch_size=self.batch_size
+            )
             # self.cppn_state = torch.zeros(
             #     (self.batch_size, self.n_hidden, self.n_hidden))
 
     def activate(self, inputs):
-        '''
+        """
         inputs: (batch_size, n_inputs)
 
         returns: (batch_size, n_outputs)
-        '''
+        """
         with torch.no_grad():
             inputs = torch.tensor(
-                inputs, dtype=torch.float32, device=self.device).unsqueeze(2)
+                inputs, dtype=torch.float32, device=self.device
+            ).unsqueeze(2)
 
-            self.hidden = self.activation(self.input_to_hidden.matmul(inputs) +
-                                          self.hidden_to_hidden.matmul(self.hidden) +
-                                          self.bias_hidden)
+            self.hidden = self.activation(
+                self.input_to_hidden.matmul(inputs)
+                + self.hidden_to_hidden.matmul(self.hidden)
+                + self.bias_hidden
+            )
 
             outputs = self.activation(
-                self.hidden_to_output.matmul(self.hidden) +
-                self.bias_output)
+                self.hidden_to_output.matmul(self.hidden) + self.bias_output
+            )
 
             hidden_outputs = self.hidden.expand(
-                self.batch_size, self.n_hidden, self.n_hidden)
+                self.batch_size, self.n_hidden, self.n_hidden
+            )
             hidden_inputs = hidden_outputs.transpose(1, 2)
 
             (x_out, y_out), (x_in, y_in) = self.batched_hidden_coords
 
             self.hidden_to_hidden += self.delta_w_node(
-                x_out=x_out, y_out=y_out, x_in=x_in, y_in=y_in,
-                pre=hidden_inputs, post=hidden_outputs,
-                w=self.hidden_to_hidden)
+                x_out=x_out,
+                y_out=y_out,
+                x_in=x_in,
+                y_in=y_in,
+                pre=hidden_inputs,
+                post=hidden_outputs,
+                w=self.hidden_to_hidden,
+            )
             # self.cppn_state = self.stateful_node.get_activs()
 
         return outputs.squeeze(2)
 
     @staticmethod
-    def create(genome,
-               config,
-
-               input_coords,
-               hidden_coords,
-               output_coords,
-
-               weight_threshold=0.2,
-               activation=tanh_activation,
-               batch_size=1,
-               device='cuda:0'):
+    def create(
+        genome,
+        config,
+        input_coords,
+        hidden_coords,
+        output_coords,
+        weight_threshold=0.2,
+        activation=tanh_activation,
+        batch_size=1,
+        device="cuda:0",
+    ):
 
         nodes = create_cppn(
-            genome, config,
-            ['x_in', 'y_in', 'x_out', 'y_out', 'pre', 'post', 'w'],
-            ['w_ih', 'b_h', 'w_hh', 'b_o', 'w_ho', 'delta_w'])
+            genome,
+            config,
+            ["x_in", "y_in", "x_out", "y_out", "pre", "post", "w"],
+            ["w_ih", "b_h", "w_hh", "b_o", "w_ho", "delta_w"],
+        )
 
         w_ih_node = nodes[0]
         b_h_node = nodes[1]
@@ -172,18 +199,18 @@ class AdaptiveNet:
         w_ho_node = nodes[4]
         delta_w_node = nodes[5]
 
-        return AdaptiveNet(w_ih_node,
-                           b_h_node,
-                           w_hh_node,
-                           b_o_node,
-                           w_ho_node,
-                           delta_w_node,
-
-                           input_coords,
-                           hidden_coords,
-                           output_coords,
-
-                           weight_threshold=weight_threshold,
-                           activation=activation,
-                           batch_size=batch_size,
-                           device=device)
+        return AdaptiveNet(
+            w_ih_node,
+            b_h_node,
+            w_hh_node,
+            b_o_node,
+            w_ho_node,
+            delta_w_node,
+            input_coords,
+            hidden_coords,
+            output_coords,
+            weight_threshold=weight_threshold,
+            activation=activation,
+            batch_size=batch_size,
+            device=device,
+        )

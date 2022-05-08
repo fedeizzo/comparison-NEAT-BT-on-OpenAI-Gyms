@@ -104,7 +104,9 @@ class DerkNeatNNPlayer:
         self.config = config
         # self.network = neat.nn.FeedForwardNetwork.create(self.genome, self.config)
         self.network = recurrent_net.RecurrentNet.create(self.genome, self.config)
-        self.activation_functions = {int(k): getattr(af, v) for k, v in activation_functions.items()}
+        self.activation_functions = {
+            int(k): getattr(af, v) for k, v in activation_functions.items()
+        }
         self.verbose = verbose
         if self.verbose:
             print(f"Agent with {len(activation_functions)} output")

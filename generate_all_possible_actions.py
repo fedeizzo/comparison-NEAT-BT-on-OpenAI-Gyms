@@ -3,14 +3,18 @@ import numpy as np
 from argparse import ArgumentParser
 from itertools import product
 
+
 def generate_actions(move, rot, chase):
     move_actions = np.linspace(-1, 1, num=move)
     rot_actions = np.linspace(-1, 1, num=rot)
     chase_actions = np.linspace(0, 1, num=chase)
     cast_actions = np.arange(0, 4)
     focus_actions = np.arange(0, 8)
-    
-    return list(product(move_actions, rot_actions, chase_actions, cast_actions, focus_actions))
+
+    return list(
+        product(move_actions, rot_actions, chase_actions, cast_actions, focus_actions)
+    )
+
 
 if __name__ == "__main__":
     p = ArgumentParser()

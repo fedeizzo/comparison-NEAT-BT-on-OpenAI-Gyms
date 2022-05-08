@@ -1,4 +1,6 @@
 from typing import Union
+
+
 def identity(x: Union[float, int]) -> Union[float, int]:
     return x
 

@@ -25,14 +25,16 @@ def eval_genomes(genomes, config):
     env = config.env
     network_input_mask = config.network_input_mask
     player_class = config.player_classes[0]
-    player_args = {k.replace("p0_", ""): v for k, v in config.__dict__.items() if k.startswith("p0_")}
+    player_args = {
+        k.replace("p0_", ""): v
+        for k, v in config.__dict__.items()
+        if k.startswith("p0_")
+    }
 
     derklings = []
     for _, genome in genomes:
         genome.fitness = 0
-        derklings.append(
-            player_class(genome, config, **player_args)
-        )
+        derklings.append(player_class(genome, config, **player_args))
 
     if len(derklings) != env.n_agents:
         print(len(derklings), env.n_agents)
@@ -59,18 +61,22 @@ def eval_genomes(genomes, config):
     for (_, genome), reward in zip(genomes, list(total_reward)):
         genome.fitness = float(reward)
 
+
 def set_player_args(player_id, p_cfg, config):
-    if p_cfg['name'] == 'DerkQLearningNEATPlayer':
+    if p_cfg["name"] == "DerkQLearningNEATPlayer":
         movement_split = p_cfg["movement_split"]
         rotation_split = p_cfg["rotation_split"]
         chase_focus_split = p_cfg["chase_focus_split"]
         del p_cfg["movement_split"]
         del p_cfg["rotation_split"]
         del p_cfg["chase_focus_split"]
-        p_cfg["all_actions"] = generate_actions(movement_split, rotation_split, chase_focus_split)
+        p_cfg["all_actions"] = generate_actions(
+            movement_split, rotation_split, chase_focus_split
+        )
     for k, v in p_cfg.items():
-        if k != 'name' and k != 'path':
+        if k != "name" and k != "path":
             config.__setattr__(f"p{player_id}_{k}", v)
+
 
 def main_high_level(
     players,
@@ -134,9 +140,10 @@ def main_high_level(
     config.__setattr__("env", env)
     network_input_mask = list(network_input.values())
     config.__setattr__("network_input_mask", network_input_mask)
-    player_classes = [getattr(
-        importlib.import_module(f"agent.{p['path']}"), p["name"]
-    ) for p in players]
+    player_classes = [
+        getattr(importlib.import_module(f"agent.{p['path']}"), p["name"])
+        for p in players
+    ]
     config.__setattr__(
         "player_classes",
         player_classes,
@@ -145,7 +152,9 @@ def main_high_level(
         set_player_args(i, p, config)
 
     if is_train:
-        assert all([p['name'] for p in players]), "During train all players must be the same"
+        assert all(
+            [p["name"] for p in players]
+        ), "During train all players must be the same"
         # Create the population, which is the top-level object for a NEAT run.
         p = neat.Population(config)
         p.add_reporter(neat.StdOutReporter(True))
@@ -164,8 +173,8 @@ def main_high_level(
 
         derklings = []
         for i in range(env.n_teams):
-            del players[i]['name']
-            del players[i]['path']
+            del players[i]["name"]
+            del players[i]["path"]
             for _ in range(env.n_agents_per_team):
                 derklings.append(player_classes[i](genome, config, **players[i]))
         observation_n = env.reset()

@@ -1,22 +1,12 @@
 # bio-inspired-mutant-battlegrounds
 Game is here for Docs http://docs.gym.derkgame.com/
 
+![Game demo](./assets/game.gif)
+
 ## Game base rules
 The games is played in "episodes" or "epochs", for each episode the agents are fixed, but if they "learn" through RL or other mechanisms, they can improve from the environment. 
 Each episode is split in steps, where each step is a "tick". An agent has a fixed set of actions, and the environment is updated accordingly when the agents perfom one action among all possible ones. This is repeated for each tick of an episode.
 
-This is observable from file [run](./run.py) line 10 to 21:
-``` python
-    # env represents the engine that changes the environment given an action
-	ordi = await env.step()
-    while not env.done:
-	    # player represents a decision strategy shared by a minions in the same team
-        actions = player.take_action(ordi)
-		# ordi represents the current state of the game
-        ordi = await env.step(actions)
-```
-
-Each agent can learn from the results of each tick, try new actions etc.
 After each episode ends, agents and environment are cleared.
 
 ## Default configuration
@@ -69,7 +59,9 @@ In game section there are four variables:
 - fast_mode: enalbe or disable the fast mode;
 - number\_of\_arenas: define the number of concurrent runs;
 - train: enable or disable train mode;
-- episodes\_number: number of episodes.
+- episodes\_number: number of episodes;
+- neat\_config: path to the configuration for neat;
+- weights\_path: path where weights of the network will be saved.
 
 #### reward-function
 Section for the reward function
@@ -99,6 +91,76 @@ teamSpirit = 0.5
 timeScaling = 0.8
 ```
 
+### Network input
+Section for the network input
+
+```toml
+Hitpoints = true
+Ability0Ready = true
+FriendStatueDistance = true
+FriendStatueAngle = true
+Friend1Distance = true
+Friend1Angle = true
+Friend2Distance = true
+Friend2Angle = true
+EnemyStatueDistance = true
+EnemyStatueAngle = true
+Enemy1Distance = true
+Enemy1Angle = true
+Enemy2Distance = true
+Enemy2Angle = true
+Enemy3Distance = true
+Enemy3Angle = true
+HasFocus = true
+FocusRelativeRotation = true
+FocusFacingUs = true
+FocusFocusingBack = true
+FocusHitpoints = true
+Ability1Ready = true
+Ability2Ready = true
+FocusDazed = true
+FocusCrippled = true
+HeightFront1 = true
+HeightFront5 = true
+HeightBack2 = true
+PositionLeftRight = true
+PositionUpDown = true
+Stuck = true
+UnusedSense31 = true
+HasTalons = true
+HasBloodClaws = true
+HasCleavers = true
+HasCripplers = true
+HasHealingGland = true
+HasVampireGland = true
+HasFrogLegs = true
+HasPistol = true
+HasMagnum = true
+HasBlaster = true
+HasParalyzingDart = true
+HasIronBubblegum = true
+HasHeliumBubblegum = true
+HasShell = true
+HasTrombone = true
+FocusHasTalons = true
+FocusHasBloodClaws = true
+FocusHasCleavers = true
+FocusHasCripplers = true
+FocusHasHealingGland = true
+FocusHasVampireGland = true
+FocusHasFrogLegs = true
+FocusHasPistol = true
+FocusHasMagnum = true
+FocusHasBlaster = true
+FocusHasParalyzingDart = true
+FocusHasIronBubblegum = true
+FocusHasHeliumBubblegum = true
+FocusHasShell = true
+FocusHasTrombone = true
+UnusedExtraSense30 = true
+UnusedExtraSense31 = true
+```
+
 #### players array
 Each player is defined as:
 
@@ -115,5 +177,13 @@ Required fiels are:
 - path: the namefile in which the class is contained, an example is [bot](./agent/bot.py);
 - name: the name class in the file indicated by path, an example is [DerkPlayer](./agent/bot.py);
 - all other fields in this section are field passed to the init method of the class.
+
+During train phase it is required to have same player for both teams, instead for test phase it is possible to use different players.
+
+##### Nueral Network NEAT
+Configuration for neural network neat can be found [here](./configs/default_nn_neat.toml) and [here](./configs/default_nn_neat.ini).
+
+##### Revisited Deep Q Learning with NEAT
+Configuration for revisited depp q learning with neat can be found [here](./configs/q_learning_neat.toml) and [here](./configs/q_learning_neat_config.ini).
 
 In order to avoid a mess of config files inside the repo all files ending with `.toml` are not pushed to the repo expect for the onse contained inside `configs` directory (do not abuse of this power!!).

@@ -2,7 +2,7 @@
     "0": { "class": "SequenceNode", "parameters": {}, "children": [1, 2, 3] },
     "1": {
         "class": "ChangeFocusNode",
-        "parameters": { "focus": 5 },
+        "parameters": { "focus": 1 },
         "children": []
     },
     "2": {
@@ -12,7 +12,7 @@
     },
     "3": {
         "class": "CastNode",
-        "parameters": { "cast_ability": 1 },
+        "parameters": { "cast_ability": 3 },
         "children": []
     }
 }

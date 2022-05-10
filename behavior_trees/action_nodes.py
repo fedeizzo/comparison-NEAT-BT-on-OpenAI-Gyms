@@ -79,7 +79,7 @@ class CastNode(ActionNode):
             boolean: True if the ability is ready, false otherwise.
         """
         ability_name = f"Ability{self.parameters['cast_ability']}Ready"
-        return input[InputIndex.__getitem__(ability_name)]
+        return input[int(InputIndex.__getitem__(ability_name))]
 
     def run(self, input):
         action = numpy.zeros((5,))
@@ -88,7 +88,7 @@ class CastNode(ActionNode):
 
     @staticmethod
     def get_random_node():
-        parameters = {"cast_ability": randint(0, 2)}
+        parameters = {"cast_ability": randint(0, 3)}
         return CastNode(parameters)
 
     def mutate(self, prob: float):
@@ -99,7 +99,7 @@ class CastNode(ActionNode):
         """
         if random() < prob:
             print(f"mutate {self}")
-            self.parameters["cast_ability"] = randint(0, 2)
+            self.parameters["cast_ability"] = randint(1, 3)
 
 
 class ChangeFocusNode(ActionNode):
@@ -186,14 +186,14 @@ action_node_classes = [MoveNode,RotateNode,CastNode, ChangeFocusNode, ChaseFocus
 
 if __name__ == "__main__":
     sample_input = np.zeros((64))
-    sample_input[InputIndex.Ability2Ready] = 1
+    sample_input[InputIndex.Ability1Ready] = 1
     sample_input[InputIndex.HasFocus] = 1
     for clas in action_node_classes:
         node = clas.get_random_node()
         print(node)
 
-        node.mutate(1)
-        print(node)
+        # node.mutate(1)
+        # print(node)
 
         result = node.tick(sample_input)
         print(result)

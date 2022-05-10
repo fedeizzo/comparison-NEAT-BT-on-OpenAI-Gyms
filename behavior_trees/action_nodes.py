@@ -104,7 +104,7 @@ class CastNode(ActionNode):
 
     def run(self, input):
         action = numpy.zeros((5,))
-        action[OutputIndex.CastingSlot] = self.parameters["cast_ability"]
+        action[OutputIndex.CastingSlot] = self.parameters["cast_ability"]+1
         return (BehaviorStates.RUNNING, action)
 
     @staticmethod
@@ -213,14 +213,14 @@ action_node_classes = [
 
 if __name__ == "__main__":
     sample_input = np.zeros((64))
-    sample_input[InputIndex.Ability2Ready] = 1
+    sample_input[InputIndex.Ability1Ready] = 1
     sample_input[InputIndex.HasFocus] = 1
     for clas in action_node_classes:
         node = clas.get_random_node()
         print(node)
 
-        node.mutate(1)
-        print(node)
+        # node.mutate(1)
+        # print(node)
 
         result = node.tick(sample_input)
         print(result)

@@ -114,6 +114,7 @@ class BehaviorNode:
             result = self.run(input)
         else:
             result = (BehaviorStates.FAILURE, np.zeros(shape=(5,)))
+            print("Node not applicable")
         self.status = result[0]
         return result
 

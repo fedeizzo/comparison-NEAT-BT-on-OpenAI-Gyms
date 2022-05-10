@@ -13,7 +13,6 @@ missing:
 For the last actions it would be great to use inputs a little more
 """
 
-
 class ActionNode(BehaviorNode):
     """Action nodes perform a single action.
     They return as state RUNNING.
@@ -22,6 +21,47 @@ class ActionNode(BehaviorNode):
     def __init__(self, parameters):
         super().__init__(BehaviorNodeTypes.ACT, parameters)
 
+class MoveNode(ActionNode):
+    "Action node that moves the Derks front or back"
+    def __init__(self, parameters):
+        super().__init__(parameters)
+    def run(self, input):
+        action = numpy.zeros((5,))
+        action[OutputIndex.MoveX] = self.parameters["move_x"]
+        return (BehaviorStates.RUNNING, action)
+    @staticmethod
+    def get_random_node():
+        parameters = {"move_x": random()*2-1}
+        return MoveNode(parameters)
+    def mutate(self, prob: float):
+        """Mutates the focusing ability with probability prob.
+        Args:
+            prob (float): probability of mutation.
+        """
+        if random() < prob:
+            print(f"mutate {self}")
+            self.parameters["move_x"] = random()*2-1
+
+class RotateNode(ActionNode):
+    "Action node that rotates the Derks left or right"
+    def __init__(self, parameters):
+        super().__init__(parameters)
+    def run(self, input):
+        action = numpy.zeros((5,))
+        action[OutputIndex.Rotate] = self.parameters["rotate"]
+        return (BehaviorStates.RUNNING, action)
+    @staticmethod
+    def get_random_node():
+        parameters = {"rotate": random()*2-1}
+        return MoveNode(parameters)
+    def mutate(self, prob: float):
+        """Mutates the focusing ability with probability prob.
+        Args:
+            prob (float): probability of mutation.
+        """
+        if random() < prob:
+            print(f"mutate {self}")
+            self.parameters["rotate"] = random()*2-1
 
 class CastNode(ActionNode):
     """Action node that casts one of the three abilities."""
@@ -141,7 +181,7 @@ class ChaseFocusNode(ActionNode):
             self.parameters["chase_focus"] = random()
 
 
-action_node_classes = [CastNode, ChangeFocusNode, ChaseFocusNode]
+action_node_classes = [MoveNode,RotateNode,CastNode, ChangeFocusNode, ChaseFocusNode]
 
 
 if __name__ == "__main__":

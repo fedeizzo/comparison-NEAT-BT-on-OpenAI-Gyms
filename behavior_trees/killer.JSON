@@ -1,0 +1,18 @@
+{
+    "0": { "class": "SequenceNode", "parameters": {}, "children": [1, 2, 3] },
+    "1": {
+        "class": "ChangeFocusNode",
+        "parameters": { "focus": 5 },
+        "children": []
+    },
+    "2": {
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.9 },
+        "children": []
+    },
+    "3": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
+        "children": []
+    }
+}

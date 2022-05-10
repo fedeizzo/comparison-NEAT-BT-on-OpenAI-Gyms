@@ -88,7 +88,7 @@ class CastNode(ActionNode):
 
     @staticmethod
     def get_random_node():
-        parameters = {"cast_ability": randint(0, 3)}
+        parameters = {"cast_ability": randint(1, 2)}
         return CastNode(parameters)
 
     def mutate(self, prob: float):
@@ -99,7 +99,7 @@ class CastNode(ActionNode):
         """
         if random() < prob:
             print(f"mutate {self}")
-            self.parameters["cast_ability"] = randint(1, 3)
+            self.parameters["cast_ability"] = randint(1, 2)
 
 
 class ChangeFocusNode(ActionNode):

@@ -70,7 +70,6 @@ class CompositeNode(BehaviorNode):
             string_form += "\n" + child_str
         return string_form
 
-
 class SequenceNode(CompositeNode):
     """I decide to implement the sequence node as node with memory in this
     case: the node will execute each child once and then remember, on the next

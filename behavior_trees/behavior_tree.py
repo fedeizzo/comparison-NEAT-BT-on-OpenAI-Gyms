@@ -80,7 +80,6 @@ class BehaviorTree:
     def tick(self, input):
         return self.root.tick(input)
 
-
 if __name__ == "__main__":
     bt = BehaviorTree.generate(4)
     print(bt)
@@ -90,6 +89,7 @@ if __name__ == "__main__":
     sample_input[InputIndex.Ability2Ready] = 1
 
     result = bt.tick(sample_input)
+    import pdb; pdb.set_trace()
     print(f"result: {result}")
 
     # bt1 = BehaviorTree.generate(2)

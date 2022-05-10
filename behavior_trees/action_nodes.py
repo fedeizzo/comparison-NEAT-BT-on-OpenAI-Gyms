@@ -8,9 +8,6 @@ missing:
 - Move
 - Rotate
 - Joint actions/logic to join actions?
-
-#! watch out, we are not using the input senses right now
-For the last actions it would be great to use inputs a little more
 """
 
 
@@ -71,7 +68,7 @@ class RotateNode(ActionNode):
     @staticmethod
     def get_random_node():
         parameters = {"rotate": random() * 2 - 1}
-        return MoveNode(parameters)
+        return RotateNode(parameters)
 
     def mutate(self, prob: float):
         """Mutates the focusing ability with probability prob.
@@ -104,7 +101,7 @@ class CastNode(ActionNode):
 
     def run(self, input):
         action = numpy.zeros((5,))
-        action[OutputIndex.CastingSlot] = self.parameters["cast_ability"]+1
+        action[OutputIndex.CastingSlot] = self.parameters["cast_ability"] + 1
         return (BehaviorStates.RUNNING, action)
 
     @staticmethod

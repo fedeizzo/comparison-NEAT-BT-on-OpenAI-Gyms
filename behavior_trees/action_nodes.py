@@ -83,12 +83,12 @@ class CastNode(ActionNode):
 
     def run(self, input):
         action = numpy.zeros((5,))
-        action[OutputIndex.CastingSlot] = self.parameters["cast_ability"]
+        action[OutputIndex.CastingSlot] = self.parameters["cast_ability"]+1
         return (BehaviorStates.RUNNING, action)
 
     @staticmethod
     def get_random_node():
-        parameters = {"cast_ability": randint(1, 2)}
+        parameters = {"cast_ability": randint(0, 2)}
         return CastNode(parameters)
 
     def mutate(self, prob: float):
@@ -99,7 +99,7 @@ class CastNode(ActionNode):
         """
         if random() < prob:
             print(f"mutate {self}")
-            self.parameters["cast_ability"] = randint(1, 2)
+            self.parameters["cast_ability"] = randint(0, 2)
 
 
 class ChangeFocusNode(ActionNode):

@@ -23,7 +23,7 @@ env = DerkEnv(turbo_mode=True,n_arenas=1,
 #       { 'primaryColor': '#ff0000','slots': ['Cleavers', 'Shell', 'ParalyzingDart'],}
 #    ],
    away_team=[
-      { 'primaryColor': '#ff00ff', 'slots': ['Pistol', 'FrogLegs', 'HealingGland'],},
+      { 'primaryColor': '#ff00ff', 'slots': ['Blaster', 'FrogLegs', 'HealingGland'],},
       { 'primaryColor': '#00ff00', 'slots': ['Blaster', 'FrogLegs', 'HealingGland'],},
       { 'primaryColor': '#ff0000', 'slots': ['Blaster', 'FrogLegs', 'HealingGland'],}
    ],
@@ -45,14 +45,15 @@ print(players_away[0])
 for e in range(100):
   observation_n = env.reset()
   while True:
-    action_home = [player.tick(observation_n[i])[1] for i,player in enumerate(players_home)]
-    action_away = [player.tick(observation_n[i+env.n_agents//2])[1] for i,player in enumerate(players_away)]
-    # action_away[0][4] = int(action_away[0][4])
-    actions = action_home+action_away
-    
-    observation_n, reward_n, done_n, info = env.step(actions)
-    if all(done_n):
-        print("Episode finished")
-        break
-    
+      actions = [[0,0,0,0,0] for i in range(env.n_agents)]
+      #  action_home = [player.tick(observation_n[i])[1] for i,player in enumerate(players_home)]
+      #  action_away = [player.tick(observation_n[i+env.n_agents//2])[1] for i,player in enumerate(players_away)]
+         # action_away[0][4] = int(action_away[0][4])
+      # actions = action_home+action_away
+      actions[4] = players_away[0].tick(observation_n[4])[1]
+      observation_n, reward_n, done_n, info = env.step(actions)
+      if all(done_n):
+         print("Episode finished")
+         break
+
 env.close()

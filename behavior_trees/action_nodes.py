@@ -13,6 +13,7 @@ missing:
 For the last actions it would be great to use inputs a little more
 """
 
+
 class ActionNode(BehaviorNode):
     """Action nodes perform a single action.
     They return as state RUNNING.
@@ -21,18 +22,27 @@ class ActionNode(BehaviorNode):
     def __init__(self, parameters):
         super().__init__(BehaviorNodeTypes.ACT, parameters)
 
+
 class MoveNode(ActionNode):
     "Action node that moves the Derks front or back"
+
     def __init__(self, parameters):
         super().__init__(parameters)
+
+    def applicable(self, input):
+        """Always return true."""
+        return True
+
     def run(self, input):
         action = numpy.zeros((5,))
         action[OutputIndex.MoveX] = self.parameters["move_x"]
         return (BehaviorStates.RUNNING, action)
+
     @staticmethod
     def get_random_node():
-        parameters = {"move_x": random()*2-1}
+        parameters = {"move_x": random() * 2 - 1}
         return MoveNode(parameters)
+
     def mutate(self, prob: float):
         """Mutates the focusing ability with probability prob.
         Args:
@@ -40,20 +50,29 @@ class MoveNode(ActionNode):
         """
         if random() < prob:
             print(f"mutate {self}")
-            self.parameters["move_x"] = random()*2-1
+            self.parameters["move_x"] = random() * 2 - 1
+
 
 class RotateNode(ActionNode):
     "Action node that rotates the Derks left or right"
+
     def __init__(self, parameters):
         super().__init__(parameters)
+
+    def applicable(self, input):
+        """Always return true."""
+        return True
+
     def run(self, input):
         action = numpy.zeros((5,))
         action[OutputIndex.Rotate] = self.parameters["rotate"]
         return (BehaviorStates.RUNNING, action)
+
     @staticmethod
     def get_random_node():
-        parameters = {"rotate": random()*2-1}
+        parameters = {"rotate": random() * 2 - 1}
         return MoveNode(parameters)
+
     def mutate(self, prob: float):
         """Mutates the focusing ability with probability prob.
         Args:
@@ -61,7 +80,8 @@ class RotateNode(ActionNode):
         """
         if random() < prob:
             print(f"mutate {self}")
-            self.parameters["rotate"] = random()*2-1
+            self.parameters["rotate"] = random() * 2 - 1
+
 
 class CastNode(ActionNode):
     """Action node that casts one of the three abilities."""
@@ -78,8 +98,9 @@ class CastNode(ActionNode):
         Returns:
             boolean: True if the ability is ready, false otherwise.
         """
-        ability_name = f"Ability{self.parameters['cast_ability']}Ready"
-        return input[InputIndex.__getitem__(ability_name)]
+        # watch out, the input indexes ability with -1 w.r.t. the actual ability
+        ability_name = f"Ability{self.parameters['cast_ability']-1}Ready"
+        return input[int(InputIndex.__getitem__(ability_name))]
 
     def run(self, input):
         action = numpy.zeros((5,))
@@ -88,7 +109,7 @@ class CastNode(ActionNode):
 
     @staticmethod
     def get_random_node():
-        parameters = {"cast_ability": randint(0, 2)}
+        parameters = {"cast_ability": randint(1, 3)}
         return CastNode(parameters)
 
     def mutate(self, prob: float):
@@ -99,7 +120,7 @@ class CastNode(ActionNode):
         """
         if random() < prob:
             print(f"mutate {self}")
-            self.parameters["cast_ability"] = randint(0, 2)
+            self.parameters["cast_ability"] = randint(1, 3)
 
 
 class ChangeFocusNode(ActionNode):
@@ -181,7 +202,13 @@ class ChaseFocusNode(ActionNode):
             self.parameters["chase_focus"] = random()
 
 
-action_node_classes = [MoveNode,RotateNode,CastNode, ChangeFocusNode, ChaseFocusNode]
+action_node_classes = [
+    MoveNode,
+    RotateNode,
+    CastNode,
+    ChangeFocusNode,
+    ChaseFocusNode,
+]
 
 
 if __name__ == "__main__":

@@ -1,5 +1,6 @@
 {
-    "0": { "class": "SequenceNode", "parameters": {}, "children": [1, 2, 3] },
+    "0": { "class": "FallbackNode", "parameters": {}, "children": [4] },
+    "4": { "class": "SequenceNode", "parameters": {}, "children": [1, 2, 3] },
     "1": {
         "class": "ChangeFocusNode",
         "parameters": { "focus": 5 },
@@ -7,7 +8,7 @@
     },
     "2": {
         "class": "ChaseFocusNode",
-        "parameters": { "chase_focus": 0.9 },
+        "parameters": { "chase_focus": 0.99 },
         "children": []
     },
     "3": {

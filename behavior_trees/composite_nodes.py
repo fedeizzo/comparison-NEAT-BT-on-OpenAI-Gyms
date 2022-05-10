@@ -107,13 +107,13 @@ class SequenceNode(CompositeNode):
         for i in range(self.last_child_ticked, len(self.children)):
             self.last_child_ticked += 1
             result = self.children[i].tick(input)
-            if (
-                result[0] == BehaviorStates.FAILURE
-                or result[0] == BehaviorStates.RUNNING
-            ):
+            if result[0] == BehaviorStates.FAILURE:
+                self.last_child_ticked = 0
+                break
+            if result[0] == BehaviorStates.RUNNING:
                 break
         # ticked all children: restart from 0
-        if self.last_child_ticked == (len(self.children) - 1):
+        if self.last_child_ticked == len(self.children):
             self.last_child_ticked = 0
         return result
 
@@ -162,7 +162,7 @@ class FallbackNode(CompositeNode):
             ):
                 break
         # ticked all children: restart from 0
-        if self.last_child_ticked == (len(self.children) - 1):
+        if self.last_child_ticked == len(self.children):
             self.last_child_ticked = 0
         return result
 

@@ -6,13 +6,16 @@ import random
 Not sure that we need them... only inverter?
 """
 
+
 class CompositeNode(BehaviorNode):
     def __init__(self, type, parameters):
         super().__init__(type, parameters)
         # composite nodes do have children
         self.children: list[BehaviorNode] = list()
 
-    def insert_child(self, child: BehaviorNode, position: int):
+    def insert_child(self, child: BehaviorNode, position: int = -1):
+        if position == -1:
+            position = len(self.children)
         self.children.insert(position, child)
 
     def remove_child(self, position):
@@ -70,14 +73,15 @@ class CompositeNode(BehaviorNode):
             string_form += "\n" + child_str
         return string_form
 
+
 class SequenceNode(CompositeNode):
     """I decide to implement the sequence node as node with memory in this
     case: the node will execute each child once and then remember, on the next
     tick where it ended and start again from that point.
     """
 
-    def __init__(self) -> None:
-        super().__init__(BehaviorNodeTypes.SEQ, {})
+    def __init__(self, parameters={}) -> None:
+        super().__init__(BehaviorNodeTypes.SEQ, parameters)
         self.last_child_ticked = 0
 
     def applicable(self, input):
@@ -128,8 +132,8 @@ class SequenceNode(CompositeNode):
 class FallbackNode(CompositeNode):
     """Fallback node with memory"""
 
-    def __init__(self) -> None:
-        super().__init__(BehaviorNodeTypes.FALL, {})
+    def __init__(self, parameters={}) -> None:
+        super().__init__(BehaviorNodeTypes.FALL, parameters)
         self.last_child_ticked = 0
 
     def applicable(self, input):

@@ -159,7 +159,7 @@ class BehaviorNode:
 
     def __str__(self, indent = 0) -> str:
         string_form = "\t"*indent
-        string_form += f"{self.type} node \t status: {self.status} \t params: {self.parameters}"
+        string_form += f"{self.__class__.__name__}\tparams: {self.parameters}"
         return string_form
 
 

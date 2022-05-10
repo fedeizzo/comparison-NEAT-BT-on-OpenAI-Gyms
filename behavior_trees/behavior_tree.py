@@ -1,3 +1,5 @@
+from ftplib import all_errors
+import json
 from composite_nodes import composite_node_classes, CompositeNode
 from behavior_node import BehaviorNode, InputIndex, BehaviorNodeTypes
 from action_nodes import action_node_classes
@@ -5,11 +7,16 @@ import numpy as np
 import pickle
 import random
 
+name_to_class = {
+    cl.__name__: cl for cl in (composite_node_classes + action_node_classes)
+}
+
 
 class BehaviorTree:
     """Wrapper class for the behavior tree.
     Contains utility method to manage a single complete tree.
     """
+
     def __init__(self) -> None:
         root_class: BehaviorNode = np.random.choice(composite_node_classes)
         self.root: CompositeNode = root_class.get_random_node()
@@ -63,7 +70,7 @@ class BehaviorTree:
         #! Would be great to set a minimum depth instead of width.
 
         Args:
-            min_children (int, optional): minimum number of children for the 
+            min_children (int, optional): minimum number of children for the
             root. Defaults to 5.
 
         Returns:
@@ -80,17 +87,85 @@ class BehaviorTree:
     def tick(self, input):
         return self.root.tick(input)
 
-if __name__ == "__main__":
-    bt = BehaviorTree.generate(4)
-    print(bt)
-    sample_input = np.zeros((64))
-    sample_input[InputIndex.Ability0Ready] = 1
-    sample_input[InputIndex.Ability1Ready] = 1
-    sample_input[InputIndex.Ability2Ready] = 1
+    def to_json(self, filename):
+        """Saves the tree into a json file in almost human-readable format.
+        For each node it saves:
+        - class
+        - parameters
+        - children
 
-    result = bt.tick(sample_input)
-    import pdb; pdb.set_trace()
-    print(f"result: {result}")
+        Args:
+            filename (str): name of the json file.
+        """
+        all_nodes = {}
+        fifo: list[tuple[str, BehaviorNode]] = list()
+        fifo.append(("0", self.root))
+        node_global_index = 1
+        while len(fifo):
+            index, node = fifo.pop(0)
+            all_nodes[index] = {}
+            all_nodes[index]["class"] = node.__class__.__name__
+            all_nodes[index]["parameters"] = node.parameters
+            all_nodes[index]["children"] = []
+            if hasattr(node, "children"):
+                for child in node.children:
+                    all_nodes[index]["children"].append(node_global_index)
+                    fifo.append((str(node_global_index), child))
+                    node_global_index += 1
+        with open(filename, "w") as outfile:
+            json.dump(all_nodes, outfile)
+
+    @staticmethod
+    def from_json(filename):
+        """Creates a BT give a certain json which specifies the strucutre of
+        the nodes. The format of the json must be the same as returned from
+        method to_json().
+
+        Args:
+            filename (str): path to the file containing the json description.
+        """
+        with open(filename, "r") as infile:
+            json_description = json.load(infile)
+        # first, create all the nodes
+        all_nodes = {}
+        relations = {}
+        for index in json_description.keys():
+            node_class = name_to_class[json_description[index]["class"]]
+            node_parameters = json_description[index]["parameters"]
+            node = node_class(parameters=node_parameters)
+            node_children = json_description[index]["children"]
+            if len(node_children):
+                relations[index] = node_children
+            all_nodes[index] = node
+        # then append children to the composite nodes
+        for composite_idx in relations.keys():
+            children_idxs = relations[composite_idx]
+            for child_idx in children_idxs:
+                all_nodes[composite_idx].insert_child(all_nodes[str(child_idx)])
+        # finally, create a new bt
+        new_bt = BehaviorTree()
+        # and set the root
+        new_bt.root = all_nodes["0"]
+        return new_bt
+
+
+if __name__ == "__main__":
+    bt = BehaviorTree.generate(2)
+    print(bt)
+    bt.to_json("try.json")
+    print("===============")
+    loaded = BehaviorTree.from_json("try.json")
+    print(loaded)
+    # sample_input = np.zeros((64))
+    # sample_input[InputIndex.Ability0Ready] = 1
+    # sample_input[InputIndex.Ability1Ready] = 1
+    # sample_input[InputIndex.Ability2Ready] = 1
+
+    # result = bt.tick(sample_input)
+    # import pdb
+
+    # pdb.set_trace()
+    # print(f"result: {result}")
 
     # bt1 = BehaviorTree.generate(2)
     # bt2 = BehaviorTree.generate(2)

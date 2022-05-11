@@ -1,4 +1,5 @@
 from behavior_tree import BehaviorTree
+from behavior_node import OutputIndex
 from argparse import ArgumentParser
 from gym_derk.envs import DerkEnv
 from scipy.special import softmax
@@ -28,8 +29,20 @@ def tournament(individuals, size):
     )
     partecipants.sort(key=lambda x: x.fitness, reverse=True)
     return partecipants[0]
-
-
+def evolutionary_selection(individuals, tournament_size, elitism, number_of_elites):
+    offsprings = []
+    # sort individuals by fitness
+    individuals.sort(key=lambda x: x.fitness, reverse=True)
+    # select the best individuals
+    if elitism > 0:
+        offsprings.append(individuals[:number_of_elites])
+    while len(offsprings) < len(individuals):
+        # select the rest of the individuals using tournament selection
+        parent_a = tournament(individuals, tournament_size)
+        parent_b = tournament(individuals, tournament_size)
+        child = parent_a.recombination(parent_b)
+        offsprings.append(child)
+    return offsprings
 def main_dinosaurs(
     number_of_arenas,
     reward_function,
@@ -88,66 +101,32 @@ def main_dinosaurs(
     if is_train:
         population_size = number_of_arenas * 6
 
-        new_population = [
+        population = [
             BehaviorTree.generate(5) for _ in range(population_size)
         ]
-        for _ in range(episodes_number):
-            # print(new_population[0])
-            players = new_population
+        for i in range(episodes_number):
+            players_home = population[:population_size//2]
+            players_away = population[population_size//2:]
             observation_n = env.reset()
-            total_reward = []
             while True:
-                actions = [
-                    player.tick(observation_n[i])[1]
-                    for i, player in enumerate(players)
-                ]
-                # print(actions)
+                actions_home = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(players_home)])
+                actions_away = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(players_away)])
+                actions = np.asarray([*actions_home,*actions_away])
                 observation_n, reward_n, done_n, _ = env.step(actions)
-                total_reward.append(np.copy(reward_n))
                 if all(done_n):
-                    print("Episode finished")
+                    print(f"Episode finished{i}")
                     break
-
-            total_reward = np.array(total_reward)
-            total_reward = total_reward.sum(axis=0)
-            # print(total_reward)
-            for player, reward in zip(players, list(total_reward)):
+            total_reward = env.total_reward
+            for player, reward in zip(population, list(total_reward)):
                 player.fitness = float(reward)
-
-            # create new population
-            new_population = list()
-
-            # is elitism used?
-            if bt_config["elitism"]:
-                new_population += players[: bt_config["number_of_elites"]]
-
-            print("building new population")
-            # using tournament directly
-            # implement crossover and mutation
-            if bt_config["crossover"]:
-                while len(new_population) < population_size:
-                    # choose 2 parents according to their fitness
-                    gen_a = tournament(players, bt_config["tournament_size"])
-                    gen_b = tournament(players, bt_config["tournament_size"])
-                    #! use deep copy
-                    child = copy.deepcopy(gen_a)
-                    temp = copy.deepcopy(gen_b)
-                    child.recombination(temp)
-                    if bt_config["mutation"]:
-                        child.mutate(bt_config["mutation_rate"])
-                    new_population.append(child)
-            else:
-                while len(new_population) > population_size:
-                    gen_a = tournament(players, bt_config["tournament_size"])
-                    new_individual = copy.deepcopy(gen_a)
-                    if bt_config["mutation"]:
-                        new_individual.mutate(bt_config["mutation_rate"])
-                    new_population.append(new_individual)
-            print("population mutated")
-
+            # create new population and evolve
+            population_home = evolutionary_selection(players_home,config['bt_config']['tournament_size'],config['bt_config']['elitism'],config['bt_config']['number_of_elites'])
+            population_away = evolutionary_selection(players_home,config['bt_config']['tournament_size'],config['bt_config']['elitism'],config['bt_config']['number_of_elites'])
         agent_path = os.path.join(
             os.getcwd(), "behavior_trees", "saved_bts", bt_best_player_name
         )
+        players = [*population_home, *population_away]
+        players.sort(key=lambda x: x.fitness, reverse=True)
         # save best player
         print(players[0])
         players[0].to_json(agent_path)

@@ -112,6 +112,7 @@ def main_dinosaurs(
                 player.fitness = float(reward)
             fitnesses = [p.fitness for p in players]
             print(f"Max fitness: {max(fitnesses)}")
+            players.sort(key = lambda x : x.fitness, reverse = True)
 
             # create new population
             new_population = list()

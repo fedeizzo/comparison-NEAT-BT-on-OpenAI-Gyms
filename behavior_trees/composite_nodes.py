@@ -62,10 +62,7 @@ class CompositeNode(BehaviorNode):
             self.last_child_ticked = 0
 
         # mutate child
-        print(f"len(self.children) : {len(self.children)}")
-        tmp = len(self.children)
-        for i in range(tmp):
-            print(f"i : {i}")
+        for i in range(len(self.children)):
             if random.random() < prob:
                 self.children[i].mutate(prob)
 

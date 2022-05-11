@@ -6,6 +6,7 @@ import numpy as np
 import os.path
 import toml
 import os
+import copy
 
 """To evolve behavior trees we use genetic programming we use Genetic 
 Algorithms principles, therefore we need:
@@ -19,6 +20,14 @@ Once we have all of these, we can start the evolution process.
 
 try with python .\behavior_trees\bt_run.py -c .\configs\sam.toml
 """
+
+
+def tournament(individuals, size):
+    partecipants = list(
+        np.random.choice(a=individuals, size=size, replace=False)
+    )
+    partecipants.sort(key=lambda x: x.fitness, reverse=True)
+    return partecipants[0]
 
 
 def main_dinosaurs(
@@ -104,8 +113,6 @@ def main_dinosaurs(
             # print(total_reward)
             for player, reward in zip(players, list(total_reward)):
                 player.fitness = float(reward)
-            players.sort(key = lambda x : x.fitness, reverse=True)
-            print(players)
 
             # create new population
             new_population = list()
@@ -114,29 +121,25 @@ def main_dinosaurs(
             if bt_config["elitism"]:
                 new_population += players[: bt_config["number_of_elites"]]
 
-            fitnesses = [p.fitness for p in players]
-            max_fitness = max(fitnesses)
-            fitnesses = [f+max_fitness/50 for f in fitnesses]
-            probabilities = softmax(fitnesses)
-
             print("building new population")
+            # using tournament directly
             # implement crossover and mutation
             if bt_config["crossover"]:
                 while len(new_population) < population_size:
                     # choose 2 parents according to their fitness
-                    # now implement only fitness proportional selection
-                    (genitore_1, genitore_2) = np.random.choice(
-                        a=players, size=2, replace=False, p=probabilities
-                    )
-                    genitore_1.recombination(genitore_2)
+                    gen_a = tournament(players, bt_config["tournament_size"])
+                    gen_b = tournament(players, bt_config["tournament_size"])
+                    #! use deep copy
+                    child = copy.deepcopy(gen_a)
+                    temp = copy.deepcopy(gen_b)
+                    child.recombination(temp)
                     if bt_config["mutation"]:
-                        genitore_1.mutate(bt_config["mutation_rate"])
-                    new_population.append(genitore_1)
+                        child.mutate(bt_config["mutation_rate"])
+                    new_population.append(child)
             else:
                 while len(new_population) > population_size:
-                    new_individual = np.random.choice(
-                        a=players, size=1, replace=False, p=probabilities
-                    )
+                    gen_a = tournament(players, bt_config["tournament_size"])
+                    new_individual = copy.deepcopy(gen_a)
                     if bt_config["mutation"]:
                         new_individual.mutate(bt_config["mutation_rate"])
                     new_population.append(new_individual)
@@ -146,6 +149,7 @@ def main_dinosaurs(
             os.getcwd(), "behavior_trees", "saved_bts", bt_best_player_name
         )
         # save best player
+        print(players[0])
         players[0].to_json(agent_path)
 
     else:

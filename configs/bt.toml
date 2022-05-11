@@ -3,8 +3,6 @@ fast_mode = true
 number_of_arenas = 1
 train = true
 episodes_number = 5
-neat_config = './configs/NEAT_NN.ini'
-weights_path = './weights/fly_away_64_30_15.pkl'
 bt_best_player_name = 'killer2.json'
 
 [reward-function]
@@ -31,85 +29,10 @@ tie = 0
 teamSpirit = 0
 timeScaling = 0.5
 
-[network_input]
-Hitpoints = true
-Ability0Ready = true
-FriendStatueDistance = true
-FriendStatueAngle = true
-Friend1Distance = true
-Friend1Angle = true
-Friend2Distance = true
-Friend2Angle = true
-EnemyStatueDistance = true
-EnemyStatueAngle = true
-Enemy1Distance = true
-Enemy1Angle = true
-Enemy2Distance = true
-Enemy2Angle = true
-Enemy3Distance = true
-Enemy3Angle = true
-HasFocus = true
-FocusRelativeRotation = true
-FocusFacingUs = true
-FocusFocusingBack = true
-FocusHitpoints = true
-Ability1Ready = true
-Ability2Ready = true
-FocusDazed = true
-FocusCrippled = true
-HeightFront1 = true
-HeightFront5 = true
-HeightBack2 = true
-PositionLeftRight = true
-PositionUpDown = true
-Stuck = true
-UnusedSense31 = true
-HasTalons = true
-HasBloodClaws = true
-HasCleavers = true
-HasCripplers = true
-HasHealingGland = true
-HasVampireGland = true
-HasFrogLegs = true
-HasPistol = true
-HasMagnum = true
-HasBlaster = true
-HasParalyzingDart = true
-HasIronBubblegum = true
-HasHeliumBubblegum = true
-HasShell = true
-HasTrombone = true
-FocusHasTalons = true
-FocusHasBloodClaws = true
-FocusHasCleavers = true
-FocusHasCripplers = true
-FocusHasHealingGland = true
-FocusHasVampireGland = true
-FocusHasFrogLegs = true
-FocusHasPistol = true
-FocusHasMagnum = true
-FocusHasBlaster = true
-FocusHasParalyzingDart = true
-FocusHasIronBubblegum = true
-FocusHasHeliumBubblegum = true
-FocusHasShell = true
-FocusHasTrombone = true
-UnusedExtraSense30 = true
-UnusedExtraSense31 = true
-
-[[players]]
-path = 'bot'
-name = 'DerkPlayer'
-test = 5
-
-[[players]]
-path = 'bot'
-name = 'DerkPlayer'
-test = 7
-
 [bt_config]
 elitism = true
 number_of_elites = 2
 crossover = true
 mutation = true
 mutation_rate = 0.2
+tournament_size = 3

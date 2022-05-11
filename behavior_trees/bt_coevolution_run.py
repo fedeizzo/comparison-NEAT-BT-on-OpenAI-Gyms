@@ -1,4 +1,3 @@
-from time import time
 from behavior_tree import BehaviorTree
 from behavior_node import OutputIndex
 from argparse import ArgumentParser
@@ -8,10 +7,7 @@ import numpy as np
 import os.path
 import toml
 import os
-from behavior_tree_evolution import *
 import copy
-import random
-random.seed(42)
 
 """To evolve behavior trees we use genetic programming we use Genetic 
 Algorithms principles, therefore we need:
@@ -23,10 +19,30 @@ Algorithms principles, therefore we need:
 6. recombination strategy (implemented in the BT classes)
 Once we have all of these, we can start the evolution process.
 
-try with python .\behavior_trees\bt_run.py -c .\configs\bt.toml
+try with python .\behavior_trees\bt_run.py -c .\configs\sam.toml
 """
 
 
+def tournament(individuals, size):
+    partecipants = list(
+        np.random.choice(a=individuals, size=size, replace=False)
+    )
+    partecipants.sort(key=lambda x: x.fitness, reverse=True)
+    return partecipants[0]
+def evolutionary_selection(individuals, tournament_size, elitism, number_of_elites):
+    offsprings = []
+    # sort individuals by fitness
+    individuals.sort(key=lambda x: x.fitness, reverse=True)
+    # select the best individuals
+    if elitism > 0:
+        offsprings.append(individuals[:number_of_elites])
+    while len(offsprings) < len(individuals):
+        # select the rest of the individuals using tournament selection
+        parent_a = tournament(individuals, tournament_size)
+        parent_b = tournament(individuals, tournament_size)
+        child = parent_a.recombination(parent_b)
+        offsprings.append(child)
+    return offsprings
 def main_dinosaurs(
     number_of_arenas,
     reward_function,
@@ -53,22 +69,22 @@ def main_dinosaurs(
         },
         home_team=[
             {
-                "primaryColor": "#ce03fc",
+                "primaryColor": "#adfc03",
                 "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
             {
-                "primaryColor": "#8403fc",
-                "slots": ["Blaster", "FrogLegs", "HealingGland"],
+                "primaryColor": "#3dfc03",
+                "slots": ["Cleavers", "FrogLegs", "HealingGland"],
             },
             {
-                "primaryColor": "#0331fc",
+                "primaryColor": "#03fc73",
                 "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
         ],
         away_team=[
             {
                 "primaryColor": "#fc1c03",
-                "slots": ["Blaster", "FrogLegs", "HealingGland"],
+                "slots": ["Cleavers", "FrogLegs", "HealingGland"],
             },
             {
                 "primaryColor": "#fc6f03",
@@ -85,60 +101,34 @@ def main_dinosaurs(
     if is_train:
         population_size = number_of_arenas * 6
 
-        new_population = [
+        population = [
             BehaviorTree.generate(5) for _ in range(population_size)
         ]
-        for ep in range(episodes_number):
-            start = time()
-            players = new_population
+        for i in range(episodes_number):
+            players_home = population[:population_size//2]
+            players_away = population[population_size//2:]
             observation_n = env.reset()
             while True:
-                actions = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(players)])
+                actions_home = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(players_home)])
+                actions_away = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(players_away)])
+                actions = np.asarray([*actions_home,*actions_away])
                 observation_n, reward_n, done_n, _ = env.step(actions)
                 if all(done_n):
-                    print(f"Episode {ep} finished in {time()-start}s")
+                    print(f"Episode finished{i}")
                     break
             total_reward = env.total_reward
-            for player, reward in zip(players, list(total_reward)):
+            for player, reward in zip(population, list(total_reward)):
                 player.fitness = float(reward)
-            fitnesses = [p.fitness for p in players]
-            print(f"Max fitness: {max(fitnesses)}")
-            players.sort(key = lambda x : x.fitness, reverse = True)
-
-            # create new population
-            new_population = list()
-
-            # is elitism used?
-            if bt_config["elitism"]:
-                new_population += players[: bt_config["number_of_elites"]]
-
-            print("building new population")
-            # using tournament directly
-            # implement crossover and mutation
-            if bt_config["crossover"]:
-                while len(new_population) < population_size:
-                    # choose 2 parents according to their fitness
-                    gen_a = tournament(players, bt_config["tournament_size"])
-                    gen_b = tournament(players, bt_config["tournament_size"])
-                    child = gen_b.recombination(gen_a)
-                    if bt_config["mutation"]:
-                        child.mutate(bt_config["mutation_rate"])
-                    new_population.append(child)
-            else:
-                while len(new_population) > population_size:
-                    gen_a = tournament(players, bt_config["tournament_size"])
-                    new_individual = copy.deepcopy(gen_a)
-                    if bt_config["mutation"]:
-                        new_individual.mutate(bt_config["mutation_rate"])
-                    new_population.append(new_individual)
-            print("population mutated")
-
+            # create new population and evolve
+            population_home = evolutionary_selection(players_home,config['bt_config']['tournament_size'],config['bt_config']['elitism'],config['bt_config']['number_of_elites'])
+            population_away = evolutionary_selection(players_home,config['bt_config']['tournament_size'],config['bt_config']['elitism'],config['bt_config']['number_of_elites'])
         agent_path = os.path.join(
             os.getcwd(), "behavior_trees", "saved_bts", bt_best_player_name
         )
-        # players = [*population_home, *population_away]
+        players = [*population_home, *population_away]
         players.sort(key=lambda x: x.fitness, reverse=True)
         # save best player
+        print(players[0])
         players[0].to_json(agent_path)
 
     else:

@@ -1,6 +1,7 @@
 from action_nodes import ActionNode, action_node_classes, CastNode
 from behavior_node import *
 import random
+import copy
 
 """Maybe, implement decorators.
 Not sure that we need them... only inverter?
@@ -39,32 +40,49 @@ class CompositeNode(BehaviorNode):
         Args:
             prob (float): probability of the mutation, between 0 and 1.
         """
+        self.last_child_ticked = 0
 
         # add a node with probability prob
         if random.random() < prob:
-            candidate_classes = action_node_classes + composite_node_classes
             child_class: BehaviorNode = np.random.choice(candidate_classes)
             child = child_class.get_random_node()
-            self.insert_child(child, len(self.children))
+            self.insert_child(child)
 
         # remove a node with probability prob
         if random.random() < prob and len(self.children) > 1:
             removing_index = random.randint(0, (len(self.children) - 1))
-            if removing_index > self.last_child_ticked:
-                self.last_child_ticked -= 1
-            # print("remove")
+            # no need to update last child ticked
+            # if the tree is reset at each play
             self.remove_child(removing_index)
 
         # swap children
         if random.random() < prob:
-            # print("swap")
             np.random.shuffle(self.children)
-            self.last_child_ticked = 0
 
         # mutate child
-        for i in range(len(self.children)):
+        tmp = len(self.children)
+        tmp_children = copy.deepcopy((self.children))
+        tmp_self = self
+
+        #! left here to test effectiveness of solution
+        to_mutate = list()
+        for i in range(tmp):
             if random.random() < prob:
-                self.children[i].mutate(prob)
+                if self.children[i].type == BehaviorNodeTypes.ACT:
+                    self.children[i].mutate(prob)
+                else:
+                    to_mutate.append(self.children[i])
+        
+        for mutating in to_mutate:
+            try:
+                mutating.mutate(prob)
+            except:
+                import pdb
+                pdb.set_trace()
+                print(f"tmp: {tmp}")
+                print(f"tmp_children  : {tmp_children}")
+                print(f"self.children : {self.children}")
+                raise Exception("Problem with the mutation of children")
 
     def __str__(self, indent=0) -> str:
         string_form = super().__str__(indent)
@@ -179,6 +197,8 @@ class FallbackNode(CompositeNode):
 
 
 composite_node_classes = [SequenceNode, FallbackNode]
+
+candidate_classes = action_node_classes + composite_node_classes
 
 
 if __name__ == "__main__":

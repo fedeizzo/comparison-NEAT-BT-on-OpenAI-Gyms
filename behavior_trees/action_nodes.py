@@ -46,7 +46,6 @@ class MoveNode(ActionNode):
             prob (float): probability of mutation.
         """
         if random() < prob:
-            print(f"mutate {self}")
             self.parameters["move_x"] = random() * 2 - 1
 
 
@@ -76,7 +75,6 @@ class RotateNode(ActionNode):
             prob (float): probability of mutation.
         """
         if random() < prob:
-            print(f"mutate {self}")
             self.parameters["rotate"] = random() * 2 - 1
 
 
@@ -101,7 +99,7 @@ class CastNode(ActionNode):
 
     def run(self, input):
         action = numpy.zeros((5,))
-        action[OutputIndex.CastingSlot] = self.parameters["cast_ability"] + 1
+        action[OutputIndex.CastingSlot] = self.parameters["cast_ability"]
         return (BehaviorStates.RUNNING, action)
 
     @staticmethod
@@ -116,7 +114,6 @@ class CastNode(ActionNode):
             prob (float): probability of mutation.
         """
         if random() < prob:
-            print(f"mutate {self}")
             self.parameters["cast_ability"] = randint(1, 3)
 
 
@@ -156,7 +153,6 @@ class ChangeFocusNode(ActionNode):
             prob (float): probability of mutation.
         """
         if random() < prob:
-            print(f"mutate {self}")
             self.parameters["focus"] = randint(0, 7)
 
 
@@ -195,7 +191,6 @@ class ChaseFocusNode(ActionNode):
             prob (float): probability of mutation.
         """
         if random() < prob:
-            print(f"mutate {self}")
             self.parameters["chase_focus"] = random()
 
 

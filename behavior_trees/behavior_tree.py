@@ -6,6 +6,7 @@ from action_nodes import action_node_classes
 import numpy as np
 import pickle
 import random
+import copy
 
 name_to_class = {
     cl.__name__: cl for cl in (composite_node_classes + action_node_classes)
@@ -43,26 +44,30 @@ class BehaviorTree:
             other (BehaviorTree): the other behavior tree that we want to use
             for recombination.
         """
-        exchange_point_a = self.root
-        child_a = self.root
+        parent_a = copy.deepcopy(self)
+        parent_b = copy.deepcopy(other)
+        exchange_point_a = parent_a.root
+        child_a = parent_a.root
         index_a = False
         while child_a.type != BehaviorNodeTypes.ACT and random.random() < 0.5:
             exchange_point_a = child_a
             index_a = random.randint(0, len(exchange_point_a.children) - 1)
             child_a = exchange_point_a.children[index_a]
 
-        exchange_point_b = other.root
-        child_b = other.root
+        exchange_point_b = parent_b.root
+        child_b = parent_b.root
         index_b = False
         while child_b.type != BehaviorNodeTypes.ACT and random.random() < 0.5:
             exchange_point_b = child_b
             index_b = random.randint(0, len(exchange_point_b.children) - 1)
             child_b = exchange_point_b.children[index_b]
 
-        # print(f"Sbstituting\n\t{child_a}, idx{index_a} with \n\t{child_b}, idx{index_b}")
         # actual swap of subtrees
         exchange_point_a.children[index_a] = child_b
         exchange_point_b.children[index_b] = child_a
+        new_bt = BehaviorTree()
+        new_bt.root = exchange_point_a
+        return new_bt
 
     @staticmethod
     def generate(min_children=5):

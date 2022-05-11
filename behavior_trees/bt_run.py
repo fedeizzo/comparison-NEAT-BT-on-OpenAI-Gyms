@@ -1,3 +1,4 @@
+from time import time
 from behavior_tree import BehaviorTree
 from argparse import ArgumentParser
 from gym_derk.envs import DerkEnv
@@ -6,7 +7,10 @@ import numpy as np
 import os.path
 import toml
 import os
+from behavior_tree_evolution import *
 import copy
+import random
+random.seed(42)
 
 """To evolve behavior trees we use genetic programming we use Genetic 
 Algorithms principles, therefore we need:
@@ -18,16 +22,8 @@ Algorithms principles, therefore we need:
 6. recombination strategy (implemented in the BT classes)
 Once we have all of these, we can start the evolution process.
 
-try with python .\behavior_trees\bt_run.py -c .\configs\sam.toml
+try with python .\behavior_trees\bt_run.py -c .\configs\bt.toml
 """
-
-
-def tournament(individuals, size):
-    partecipants = list(
-        np.random.choice(a=individuals, size=size, replace=False)
-    )
-    partecipants.sort(key=lambda x: x.fitness, reverse=True)
-    return partecipants[0]
 
 
 def main_dinosaurs(
@@ -56,22 +52,22 @@ def main_dinosaurs(
         },
         home_team=[
             {
-                "primaryColor": "#adfc03",
+                "primaryColor": "#ce03fc",
                 "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
             {
-                "primaryColor": "#3dfc03",
-                "slots": ["Cleavers", "FrogLegs", "HealingGland"],
+                "primaryColor": "#8403fc",
+                "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
             {
-                "primaryColor": "#03fc73",
+                "primaryColor": "#0331fc",
                 "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
         ],
         away_team=[
             {
                 "primaryColor": "#fc1c03",
-                "slots": ["Cleavers", "FrogLegs", "HealingGland"],
+                "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
             {
                 "primaryColor": "#fc6f03",
@@ -91,8 +87,9 @@ def main_dinosaurs(
         new_population = [
             BehaviorTree.generate(5) for _ in range(population_size)
         ]
-        for _ in range(episodes_number):
+        for ep in range(episodes_number):
             # print(new_population[0])
+            start = time()
             players = new_population
             observation_n = env.reset()
             total_reward = []
@@ -105,7 +102,7 @@ def main_dinosaurs(
                 observation_n, reward_n, done_n, _ = env.step(actions)
                 total_reward.append(np.copy(reward_n))
                 if all(done_n):
-                    print("Episode finished")
+                    print(f"Episode {ep} finished in {time()-start}s")
                     break
 
             total_reward = np.array(total_reward)
@@ -113,6 +110,8 @@ def main_dinosaurs(
             # print(total_reward)
             for player, reward in zip(players, list(total_reward)):
                 player.fitness = float(reward)
+            fitnesses = [p.fitness for p in players]
+            print(f"Max fitness: {max(fitnesses)}")
 
             # create new population
             new_population = list()
@@ -129,10 +128,7 @@ def main_dinosaurs(
                     # choose 2 parents according to their fitness
                     gen_a = tournament(players, bt_config["tournament_size"])
                     gen_b = tournament(players, bt_config["tournament_size"])
-                    #! use deep copy
-                    child = copy.deepcopy(gen_a)
-                    temp = copy.deepcopy(gen_b)
-                    child.recombination(temp)
+                    child = gen_b.recombination(gen_a)
                     if bt_config["mutation"]:
                         child.mutate(bt_config["mutation_rate"])
                     new_population.append(child)
@@ -149,7 +145,6 @@ def main_dinosaurs(
             os.getcwd(), "behavior_trees", "saved_bts", bt_best_player_name
         )
         # save best player
-        print(players[0])
         players[0].to_json(agent_path)
 
     else:

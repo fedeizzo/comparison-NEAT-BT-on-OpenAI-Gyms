@@ -1,4 +1,5 @@
 [game]
+
 # fast_mode = true
 # number_of_arenas = 10
 # train = true
@@ -7,29 +8,29 @@ fast_mode = false
 number_of_arenas = 1
 train = false
 episodes_number = 1
-neat_config = './configs/q_learning_neat_config.ini'
-weights_path = './weights/q_learning_winner.pkl'
+neat_config = './configs/q_learning/ranged_weapon_neat.ini'
+weights_path = './weights/q_learning/ranged_weapon.pkl'
 
 [reward-function]
 damageEnemyStatue = 5
 damageEnemyUnit = 5
 killEnemyStatue = 5
 killEnemyUnit = 5
-healFriendlyStatue = 3
-healTeammate1 = 2
-healTeammate2 = 2
+healFriendlyStatue = 0
+healTeammate1 = 0
+healTeammate2 = 0
 timeSpentHomeBase = 0
 timeSpentHomeTerritory = 0
 timeSpentAwayTerritory = 0
 timeSpentAwayBase = 0
 damageTaken = -1
 friendlyFire = -3
-healEnemy = -3
-fallDamageTaken = -1
+healEnemy = 0
+fallDamageTaken = -3
 statueDamageTaken = -3
 manualBonus = 0
-victory = 5
-loss = -5
+victory = 0
+loss = 0
 tie = 0
 teamSpirit = 0
 timeScaling = 0.4
@@ -104,11 +105,7 @@ UnusedExtraSense31 = true
 path = 'q_learning_nn_neat'
 name = 'DerkQLearningNEATPlayer'
 verbose = false
-# if actions_space is set to restricted
-# movement, rotaion and chase focust split
-# are ignored
-# actions_space = "restricted"
-actions_space = "linespace"
+actions_space = "ranged_weapon"
 movement_split = 3
 rotation_split = 3
 chase_focus_split = 3
@@ -117,7 +114,7 @@ chase_focus_split = 3
 path = 'q_learning_nn_neat'
 name = 'DerkQLearningNEATPlayer'
 verbose = false
-actions_space = "linespace"
+actions_space = "ranged_weapon"
 movement_split = 3
 rotation_split = 3
 chase_focus_split = 3

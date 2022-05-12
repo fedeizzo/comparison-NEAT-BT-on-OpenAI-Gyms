@@ -18,20 +18,27 @@ class ConditionNode(BehaviorNode):
     def __init__(self, parameters):
         super().__init__(BehaviorNodeTypes.COND, parameters)
 
-class Example(ConditionNode):
+class CheckConditionGreater(ConditionNode):
 
     def __init__(self, parameters):
         super().__init__(parameters)
 
     def applicable(self, input):
-        pass
+        # always applicable to check conditions
+        return True
 
     def run(self, input):
-        pass
+        # check if input is greater than condition
+        value = InputIndex.get_value(self.parameters["index"], input)
+        if value > self.parameters["condition"]:
 
     @staticmethod
     def get_random_node():
-        pass
-
+        index = randint(0,len(InputIndex)-1)
+        name = next(name for name, value in vars(InputIndex).items() if value == InputIndex)
+        input_properties = getattr(InputProperties,name)
+        condition = random()*(input_properties['max']-input_properties['min'])+input_properties['min']
+        parameters = {"input_name":name,"input_index":index,"condition": condition,}
+        return CheckConditionGreater(parameters)
     def mutate(self, prob: float):
         pass

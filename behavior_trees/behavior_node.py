@@ -84,10 +84,10 @@ class InputIndex(IntEnum):
     UnusedExtraSense31 = 63
 
 class InputProperties():
-    Hitpoints = {'min':0,'max':1,'type':float,}
+    Hitpoints = {'min':0,'max':1,'type':float}
     Ability0Ready = {'min':0,'max':1,'type':bool,}
     FriendStatueDistance = {'min':0,'max':1,'type':float,}
-    FriendStatueAngle = -{'min':-1,'max':1,'type':float,}
+    FriendStatueAngle = {'min':-1,'max':1,'type':float,}
     Friend1Distance = {'min':0,'max':1,'type':float,'not_applicable':2}
     Friend1Angle = {'min':-1,'max':1,'type':float,}
     Friend2Distance = {'min':0,'max':1,'type':float,'not_applicable':2}

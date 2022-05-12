@@ -1,7 +1,9 @@
 from argparse import ArgumentParser
 import fractions
 import importlib
+from neat import species, statistics
 import numpy as np
+import pandas as pd
 import os
 from os.path import expandvars
 import toml
@@ -64,14 +66,16 @@ def eval_genomes(genomes, config):
 
 def set_player_args(player_id, p_cfg, config):
     if p_cfg["name"] == "DerkQLearningNEATPlayer":
+        actions_space = p_cfg["actions_space"]
         movement_split = p_cfg["movement_split"]
         rotation_split = p_cfg["rotation_split"]
         chase_focus_split = p_cfg["chase_focus_split"]
+        del p_cfg["actions_space"]
         del p_cfg["movement_split"]
         del p_cfg["rotation_split"]
         del p_cfg["chase_focus_split"]
         p_cfg["all_actions"] = generate_actions(
-            movement_split, rotation_split, chase_focus_split
+            actions_space, movement_split, rotation_split, chase_focus_split
         )
     for k, v in p_cfg.items():
         if k != "name" and k != "path":
@@ -87,6 +91,9 @@ def main_high_level(
     episodes_number,
     neat_config,
     network_input,
+    best_stats_path,
+    extensive_stats_path,
+    species_stats_path,
     weights_path,
 ):
     chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
@@ -107,12 +114,12 @@ def main_high_level(
             },
             {
                 "primaryColor": "#00ff00",
-                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+                "slots": ["Magnum", "IronBubblegum", "HealingGland"],
             },
             # {"primaryColor": "#ff0000", "rewardFunction": {"healTeammate1": 1}},
             {
                 "primaryColor": "#ff0000",
-                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+                "slots": ["Blaster", "IronBubblegum", "HealingGland"],
             },
         ],
         away_team=[
@@ -122,11 +129,11 @@ def main_high_level(
             },
             {
                 "primaryColor": "navy",
-                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+                "slots": ["Magnum", "IronBubblegum", "HealingGland"],
             },
             {
                 "primaryColor": "red",
-                "slots": ["Pistol", "IronBubblegum", "HealingGland"],
+                "slots": ["Blaster", "IronBubblegum", "HealingGland"],
             },
         ],
     )
@@ -137,6 +144,7 @@ def main_high_level(
         neat.DefaultStagnation,
         neat_config,
     )
+    config.pop_size = env.n_agents
     config.__setattr__("env", env)
     network_input_mask = list(network_input.values())
     config.__setattr__("network_input_mask", network_input_mask)
@@ -164,9 +172,46 @@ def main_high_level(
         winner = p.run(eval_genomes, episodes_number)
         with open(weights_path, "wb") as f:
             pickle.dump(winner, f)
-        visualize.draw_net(config, winner, True)
-        visualize.plot_stats(stats, ylog=False, view=True)
-        visualize.plot_species(stats, view=True)
+        visualize.draw_net(config, winner, False)
+        best_genome_stats = pd.DataFrame()
+        # stats_df['species'] = stats.get_species_sizes()
+        # stats_df['species_fitness'] = stats.get_species_fitness()
+        # BEST GENOME STATS
+        most_fit_genomes = [c for c in stats.most_fit_genomes]
+        best_genome_stats["generation"] = np.arange(len(most_fit_genomes))
+        best_genome_stats["fitness"] = [g.fitness for g in most_fit_genomes]
+        best_genome_stats["nodes_number"] = [len(g.nodes) for g in most_fit_genomes]
+        best_genome_stats["connections_number"] = [
+            len(g.connections) for g in most_fit_genomes
+        ]
+        best_genome_stats["enabled_connections_number"] = [
+            g.size()[1] for g in most_fit_genomes
+        ]
+        best_genome_stats["mean"] = stats.get_fitness_mean()
+        best_genome_stats["median"] = stats.get_fitness_median()
+        best_genome_stats["stdev"] = stats.get_fitness_stdev()
+
+        # ALL GENOMES STATS
+        extensive_stats = []
+        for gen, i in enumerate(stats.generation_statistics):
+            for net, fitness in i.items():
+                extensive_stats.append([gen, net, fitness[net]])
+
+        extensive_stats = pd.DataFrame(
+            extensive_stats, columns=["generation", "genome", "fitness"]
+        )
+
+        # SPECIES STATS
+        species_stats = [
+            [gen, curve] for gen, curve in enumerate(stats.get_species_sizes())
+        ]
+        species_stats = pd.DataFrame(
+            species_stats, columns=["generation", "species_sizes"]
+        )
+
+        best_genome_stats.to_pickle(best_stats_path)
+        extensive_stats.to_pickle(extensive_stats_path)
+        species_stats.to_pickle(species_stats_path)
     else:
         with open(weights_path, "rb") as f:
             genome = pickle.load(f)
@@ -207,5 +252,8 @@ if __name__ == "__main__":
         episodes_number=config["game"]["episodes_number"],
         neat_config=config["game"]["neat_config"],
         network_input=config["network_input"],
+        best_stats_path=config["game"]["best_stats"],
+        extensive_stats_path=config["game"]["extensive_stats"],
+        species_stats_path=config["game"]["species_stats"],
         weights_path=config["game"]["weights_path"],
     )

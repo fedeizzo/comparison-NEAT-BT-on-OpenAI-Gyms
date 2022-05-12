@@ -1,0 +1,32 @@
+{
+    "0": {
+        "class": "SequenceNode",
+        "parameters": {},
+        "children": [1, 2, 3, 4, 5]
+    },
+    "1": {
+        "class": "ChangeFocusNode",
+        "parameters": { "focus": 5 },
+        "children": []
+    },
+    "2": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
+        "children": []
+    },
+    "3": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
+        "children": []
+    },
+    "4": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
+        "children": []
+    },
+    "5": {
+        "class": "MoveNode",
+        "parameters": { "move_x": 0.6281922735691103 },
+        "children": []
+    }
+}

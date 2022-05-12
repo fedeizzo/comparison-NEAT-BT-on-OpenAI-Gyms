@@ -3,11 +3,7 @@ from behavior_node import *
 from random import randint, random
 
 """
-#! all the actions must be implemented
-missing: 
-- Move
-- Rotate
-- Joint actions/logic to join actions?
+May implement logic for joint actions.
 """
 
 
@@ -18,6 +14,18 @@ class ActionNode(BehaviorNode):
 
     def __init__(self, parameters):
         super().__init__(BehaviorNodeTypes.ACT, parameters)
+
+    def copy(self):
+        self_class = self.__class__
+        copy = self_class(self.parameters)
+        return copy
+
+    def get_size(self):
+        """Returns a tuple (depth,count) where depth is the level of the node
+        starting from the leaves, and count is the count of nodes below+this 
+        node.
+        """
+        return (1, 1)
 
 
 class MoveNode(ActionNode):

@@ -1,0 +1,42 @@
+{
+    "0": {
+        "class": "SequenceNode",
+        "parameters": {},
+        "children": [1, 2, 3, 4, 5, 6]
+    },
+    "1": {
+        "class": "ChangeFocusNode",
+        "parameters": { "focus": 6 },
+        "children": []
+    },
+    "2": { "class": "FallbackNode", "parameters": {}, "children": [7] },
+    "3": { "class": "FallbackNode", "parameters": {}, "children": [8] },
+    "4": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
+        "children": []
+    },
+    "5": {
+        "class": "MoveNode",
+        "parameters": { "move_x": 0.07875806023925147 },
+        "children": []
+    },
+    "6": { "class": "SequenceNode", "parameters": {}, "children": [9] },
+    "7": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 3 },
+        "children": []
+    },
+    "8": { "class": "FallbackNode", "parameters": {}, "children": [10] },
+    "9": { "class": "SequenceNode", "parameters": {}, "children": [11] },
+    "10": {
+        "class": "ChangeFocusNode",
+        "parameters": { "focus": 5 },
+        "children": []
+    },
+    "11": {
+        "class": "MoveNode",
+        "parameters": { "move_x": 0.5572529572611165 },
+        "children": []
+    }
+}

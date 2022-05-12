@@ -1,17 +1,13 @@
-from time import time
+from behavior_tree_evolution import BehaviorTreeEvolution
 from behavior_tree import BehaviorTree
-from behavior_node import OutputIndex
+from behavior_tree_evolution import *
 from argparse import ArgumentParser
 from gym_derk.envs import DerkEnv
-from scipy.special import softmax
+from time import time
 import numpy as np
 import os.path
 import toml
 import os
-from behavior_tree_evolution import *
-import copy
-import random
-random.seed(42)
 
 """To evolve behavior trees we use genetic programming we use Genetic 
 Algorithms principles, therefore we need:
@@ -81,30 +77,36 @@ def main_dinosaurs(
         ],
     )
 
+    evolution_engine = BehaviorTreeEvolution(bt_config)
+
     # create players at gen 0
     if is_train:
         population_size = number_of_arenas * 6
-
         new_population = [
             BehaviorTree.generate(5) for _ in range(population_size)
         ]
+        best_player = new_population[0]
         for ep in range(episodes_number):
             start = time()
             players = new_population
             observation_n = env.reset()
             while True:
-                actions = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(players)])
+                actions = np.asarray([player.tick(observation_n[i])[1]
+                                     for i, player in enumerate(players)])
                 observation_n, reward_n, done_n, _ = env.step(actions)
                 if all(done_n):
                     print(f"Episode {ep} finished in {time()-start}s")
                     break
+            start = time()
             total_reward = env.total_reward
             for player, reward in zip(players, list(total_reward)):
                 player.fitness = float(reward)
+            players = evolution_engine.penalize_big_trees(players)
             fitnesses = [p.fitness for p in players]
             print(f"Max fitness: {max(fitnesses)}")
-            players.sort(key = lambda x : x.fitness, reverse = True)
-
+            players.sort(key=lambda x: x.fitness, reverse=True)
+            if max(fitnesses) > best_player.fitness:
+                best_player = players[0]
             # create new population
             new_population = list()
 
@@ -127,19 +129,18 @@ def main_dinosaurs(
             else:
                 while len(new_population) > population_size:
                     gen_a = tournament(players, bt_config["tournament_size"])
-                    new_individual = copy.deepcopy(gen_a)
+                    new_individual = gen_a.copy()
                     if bt_config["mutation"]:
                         new_individual.mutate(bt_config["mutation_rate"])
                     new_population.append(new_individual)
-            print("population mutated")
+            print(f"population mutated in {time()-start}s")
 
         agent_path = os.path.join(
             os.getcwd(), "behavior_trees", "saved_bts", bt_best_player_name
         )
-        # players = [*population_home, *population_away]
-        players.sort(key=lambda x: x.fitness, reverse=True)
+
         # save best player
-        players[0].to_json(agent_path)
+        best_player.to_json(agent_path)
 
     else:
         assert False, "Test phase not implemented yet"

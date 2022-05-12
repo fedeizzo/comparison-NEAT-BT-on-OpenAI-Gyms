@@ -1,4 +1,3 @@
-from ftplib import all_errors
 import json
 from composite_nodes import composite_node_classes, CompositeNode
 from behavior_node import BehaviorNode, InputIndex, BehaviorNodeTypes
@@ -44,29 +43,42 @@ class BehaviorTree:
             other (BehaviorTree): the other behavior tree that we want to use
             for recombination.
         """
-        parent_a = copy.deepcopy(self)
-        parent_b = copy.deepcopy(other)
+        # deep copy to avoid "data race" condition
+        parent_a = self.copy()
+        parent_b = other.copy()
+
+        # find exchange point in the first tree
         exchange_point_a = parent_a.root
         child_a = parent_a.root
-        index_a = False
-        while child_a.type != BehaviorNodeTypes.ACT and random.random() < 0.5:
+        index_a = None
+        while child_a.type != BehaviorNodeTypes.ACT and random.random() < 0.8:
             exchange_point_a = child_a
             index_a = random.randint(0, len(exchange_point_a.children) - 1)
             child_a = exchange_point_a.children[index_a]
 
         exchange_point_b = parent_b.root
         child_b = parent_b.root
-        index_b = False
-        while child_b.type != BehaviorNodeTypes.ACT and random.random() < 0.5:
+        index_b = None
+        while child_b.type != BehaviorNodeTypes.ACT and random.random() < 0.8:
             exchange_point_b = child_b
             index_b = random.randint(0, len(exchange_point_b.children) - 1)
             child_b = exchange_point_b.children[index_b]
 
         # actual swap of subtrees
-        exchange_point_a.children[index_a] = child_b
-        exchange_point_b.children[index_b] = child_a
-        new_bt = BehaviorTree()
-        new_bt.root = exchange_point_a
+        # need to check the special case where the child is the root
+        if index_a is None:
+            parent_a.root = child_b
+        else:
+            exchange_point_a.children[index_a] = child_b
+
+        if index_b is None:
+            parent_b.root = child_a
+        else:
+            exchange_point_b.children[index_b] = child_a
+
+        # return one of the two with uniform probability
+        new_bt = np.random.choice(a=[parent_a, parent_b])
+
         return new_bt
 
     @staticmethod
@@ -104,9 +116,9 @@ class BehaviorTree:
         """
         all_nodes = {}
         fifo: list[tuple[str, BehaviorNode]] = list()
-        fifo.append(("0", self.root))
+        fifo.append(('0', self.root))
         node_global_index = 1
-        while len(fifo):
+        while len(fifo) > 0:
             index, node = fifo.pop(0)
             all_nodes[index] = {}
             all_nodes[index]["class"] = node.__class__.__name__
@@ -152,6 +164,29 @@ class BehaviorTree:
         # and set the root
         new_bt.root = all_nodes["0"]
         return new_bt
+
+    def is_regular(self):
+        """Checks if the tree is regular, namely if it does not contain two 
+        times the very same node.
+        """
+        tree_nodes: set[BehaviorNode] = set()
+        nodes = [self.root]
+        while len(nodes) > 0:
+            node = nodes.pop()
+            if hasattr(node, "children"):
+                for child in node.children:
+                    nodes.append(child)
+            if node.id in tree_nodes:
+                return False
+            tree_nodes.add(node.id)
+        return True
+
+    def copy(self):
+        """Manual implementation of deepcopy.
+        """
+        copy = BehaviorTree()
+        copy.root = self.root.copy()
+        return copy
 
 
 if __name__ == "__main__":

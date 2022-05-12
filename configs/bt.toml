@@ -1,9 +1,9 @@
 [game]
 fast_mode = true
-number_of_arenas = 10
+number_of_arenas = 5
 train = true
-episodes_number = 20
-bt_best_player_name = 'killer_with_rebalanced_config_2.json'
+episodes_number = 5
+bt_best_player_name = 'perfection.json'
 
 [reward-function]
 damageEnemyStatue = 1
@@ -23,15 +23,15 @@ healEnemy = -2
 fallDamageTaken = -500
 statueDamageTaken = -10
 manualBonus = 0
-victory = 600
-loss = -600
+victory = 800
+loss = -800
 tie = 0
 teamSpirit = 0
 timeScaling = 0.5
 
 [bt_config]
 elitism = true
-number_of_elites = 2
+number_of_elites = 6
 crossover = true
 mutation = true
 mutation_rate = 0.2

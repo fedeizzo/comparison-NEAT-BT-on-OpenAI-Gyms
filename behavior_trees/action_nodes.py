@@ -19,6 +19,11 @@ class ActionNode(BehaviorNode):
     def __init__(self, parameters):
         super().__init__(BehaviorNodeTypes.ACT, parameters)
 
+    def copy(self):
+        self_class = self.__class__
+        copy = self_class(self.parameters)
+        return copy
+
 
 class MoveNode(ActionNode):
     "Action node that moves the Derks front or back"

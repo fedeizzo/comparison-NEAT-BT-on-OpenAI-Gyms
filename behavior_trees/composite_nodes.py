@@ -5,6 +5,8 @@ import copy
 
 """Maybe, implement decorators.
 Not sure that we need them... only inverter?
+
+#! implement a maximum depth limit for node generation
 """
 
 
@@ -13,6 +15,7 @@ class CompositeNode(BehaviorNode):
         super().__init__(type, parameters)
         # composite nodes do have children
         self.children: list[BehaviorNode] = list()
+        self.last_child_ticked = 0
 
     def insert_child(self, child: BehaviorNode, position: int = -1):
         if position == -1:
@@ -59,30 +62,16 @@ class CompositeNode(BehaviorNode):
         if random.random() < prob:
             np.random.shuffle(self.children)
 
-        # mutate child
-        tmp = len(self.children)
-        tmp_children = copy.deepcopy((self.children))
-        tmp_self = self
-
-        #! left here to test effectiveness of solution
         to_mutate = list()
-        for i in range(tmp):
+        for i in range(len(self.children)):
             if random.random() < prob:
                 if self.children[i].type == BehaviorNodeTypes.ACT:
                     self.children[i].mutate(prob)
                 else:
                     to_mutate.append(self.children[i])
-        
+
         for mutating in to_mutate:
-            try:
-                mutating.mutate(prob)
-            except:
-                import pdb
-                pdb.set_trace()
-                print(f"tmp: {tmp}")
-                print(f"tmp_children  : {tmp_children}")
-                print(f"self.children : {self.children}")
-                raise Exception("Problem with the mutation of children")
+            mutating.mutate(prob)
 
     def __str__(self, indent=0) -> str:
         string_form = super().__str__(indent)
@@ -90,6 +79,16 @@ class CompositeNode(BehaviorNode):
             child_str = child.__str__(indent + 1)
             string_form += "\n" + child_str
         return string_form
+
+    def copy(self):
+        """Manual implementation of deepcopy.
+        """
+        self_class = self.__class__
+        copy = self_class(self.parameters)
+        copy.children = []
+        for child in self.children:
+            copy.children.append(child.copy())
+        return copy
 
 
 class SequenceNode(CompositeNode):
@@ -209,15 +208,18 @@ if __name__ == "__main__":
     #     sn.mutate(0.5)
     #     print(sn)
 
-    fb = FallbackNode.get_random_node()
-    fb.insert_child(CastNode.get_random_node(), len(fb.children))
+    fb = FallbackNode.get_random_node(num_children=3)
     # fb.insert_child(CastNode.get_random_node(), len(fb.children))
-    # for _ in range(3):
-    #     fb.mutate(0.5)
+    # # fb.insert_child(CastNode.get_random_node(), len(fb.children))
+    # # for _ in range(3):
+    # #     fb.mutate(0.5)
+    # print(fb)
+    # sample_input = np.zeros((64))
+    # sample_input[InputIndex.Ability0Ready] = 0
+    # sample_input[InputIndex.Ability1Ready] = 0
+    # sample_input[InputIndex.Ability2Ready] = 1
+    # result = fb.tick(sample_input)
+    # print(result)
+    fbcopy = fb.copy()
     print(fb)
-    sample_input = np.zeros((64))
-    sample_input[InputIndex.Ability0Ready] = 0
-    sample_input[InputIndex.Ability1Ready] = 0
-    sample_input[InputIndex.Ability2Ready] = 1
-    result = fb.tick(sample_input)
-    print(result)
+    print(fbcopy)

@@ -1,6 +1,7 @@
 from enum import IntEnum, Enum
 import numpy as np
-import abc
+from abc import ABC, abstractmethod
+import itertools
 
 
 class BehaviorStates(Enum):
@@ -92,11 +93,14 @@ class OutputIndex(IntEnum):
     ChangeFocus = 4
 
 
-class BehaviorNode:
+class BehaviorNode(ABC):
+    BEHAVIOR_NODE_ID = itertools.count()
+
     def __init__(self, type, parameters) -> None:
         self.type = type
         self.parameters = parameters
         self.status = None
+        self.id = next(BehaviorNode.BEHAVIOR_NODE_ID)
 
     def tick(self, input):
         """Launches the tick to the node, it implements the starndard routine
@@ -117,7 +121,7 @@ class BehaviorNode:
         self.status = result[0]
         return result
 
-    @abc.abstractmethod
+    @abstractmethod
     def applicable(self, input):
         """Check if the node run is executable.
 
@@ -126,7 +130,7 @@ class BehaviorNode:
         """
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def run(self, input):
         """Runs the node.
         In composite nodes it will tick the children and implement the logic of
@@ -143,12 +147,12 @@ class BehaviorNode:
         pass
 
     @staticmethod
-    @abc.abstractmethod
+    @abstractmethod
     def get_random_node():
         """Generate a random instance of the BehaviorNode."""
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def mutate(self, prob):
         """Randomly mutates the node with probability prob.
 
@@ -159,8 +163,29 @@ class BehaviorNode:
 
     def __str__(self, indent=0) -> str:
         string_form = "\t" * indent
-        string_form += f"{self.__class__.__name__}\tparams: {self.parameters}"
+        string_form += f"{self.__class__.__name__}#{self.id}\tparams: {self.parameters}"
         return string_form
+
+    def is_regular(self):
+        """Checks if the tree is regular, namely if it does not contain two 
+        times the very same node.
+        """
+        tree_nodes: set[BehaviorNode] = set()
+        nodes = [self]
+        while len(nodes) > 0:
+            node = nodes.pop()
+            if hasattr(node, "children"):
+                for child in node.children:
+                    nodes.append(child)
+            if node.id in tree_nodes:
+                return False
+            tree_nodes.add(node.id)
+        return True
+
+    def copy(self):
+        """Manual implementation of deepcopy.
+        """
+        pass
 
 
 if __name__ == "__main__":

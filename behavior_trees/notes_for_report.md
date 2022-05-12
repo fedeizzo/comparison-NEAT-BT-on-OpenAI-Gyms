@@ -25,3 +25,20 @@ We developed and braind new BT platform for BTs specialized for this very task. 
 ## Evolution in BTs
 
 ## Differens Strategies for Evolution
+
+Finally, we implemented a class to manage evolution of the population of behavior trees, these are the main functionalities:
+
+1.  generate initial population
+2.  get evaluated population after each episode and refine evaluation
+3.  evolve the population
+4.  return the evolved population
+
+To generate the initial population we can adopt two strategies:
+
+-   create the population randomly
+-   include in the population a list of pre-trained trees (or even hadcrafted trees), in this second case we are pushing towards exploitation, and, therefore, we may loose some well-performing models.
+
+The evaluation of the population is performed mainly by the environment of the game, which has its own reward system.
+In our implementation it is possible to specify also the parameter `no_big_trees` which is used to obtain a debuff on the fitness of big behavior trees: it is multiplied by the size of the tree (depth or nr. of nodes) and then subtracted from the tree's fitness.
+
+The evolution of the population is performed ...

@@ -1,18 +1,13 @@
-import pickle
-from time import time
+from behavior_tree_evolution import BehaviorTreeEvolution
 from behavior_tree import BehaviorTree
-from behavior_node import OutputIndex
+from behavior_tree_evolution import *
 from argparse import ArgumentParser
 from gym_derk.envs import DerkEnv
-from scipy.special import softmax
+from time import time
 import numpy as np
 import os.path
 import toml
 import os
-from behavior_tree_evolution import *
-import copy
-import random
-random.seed(42)
 
 """To evolve behavior trees we use genetic programming we use Genetic 
 Algorithms principles, therefore we need:
@@ -82,6 +77,8 @@ def main_dinosaurs(
         ],
     )
 
+    evolution_engine = BehaviorTreeEvolution(bt_config)
+
     # create players at gen 0
     if is_train:
         population_size = number_of_arenas * 6
@@ -104,6 +101,7 @@ def main_dinosaurs(
             total_reward = env.total_reward
             for player, reward in zip(players, list(total_reward)):
                 player.fitness = float(reward)
+            players = evolution_engine.penalize_big_trees(players)
             fitnesses = [p.fitness for p in players]
             print(f"Max fitness: {max(fitnesses)}")
             players.sort(key=lambda x: x.fitness, reverse=True)

@@ -3,7 +3,8 @@ from behavior_node import *
 import random
 import copy
 
-"""Maybe, implement decorators.
+"""
+May implement decorators.
 Not sure that we need them... only inverter?
 
 #! implement a maximum depth limit for node generation
@@ -90,6 +91,19 @@ class CompositeNode(BehaviorNode):
             copy.children.append(child.copy())
         return copy
 
+    def get_size(self):
+        """Returns a tuple (depth,count) where depth is the level of the node
+        starting from the leaves, and count is the count of nodes below+this 
+        node.
+        """
+        depth = -1
+        count = 0
+        for child in self.children:
+            c_depth, c_count = child.get_size()
+            count += c_count
+            depth = max(depth, c_depth)
+        return (depth, count+1)
+
 
 class SequenceNode(CompositeNode):
     """I decide to implement the sequence node as node with memory in this
@@ -97,7 +111,7 @@ class SequenceNode(CompositeNode):
     tick where it ended and start again from that point.
     """
 
-    def __init__(self, parameters={}) -> None:
+    def __init__(self, parameters={}):
         super().__init__(BehaviorNodeTypes.SEQ, parameters)
         self.last_child_ticked = 0
 
@@ -149,7 +163,7 @@ class SequenceNode(CompositeNode):
 class FallbackNode(CompositeNode):
     """Fallback node with memory"""
 
-    def __init__(self, parameters={}) -> None:
+    def __init__(self, parameters={}):
         super().__init__(BehaviorNodeTypes.FALL, parameters)
         self.last_child_ticked = 0
 

@@ -1,9 +1,9 @@
 [game]
 fast_mode = true
-number_of_arenas = 5
+number_of_arenas = 10
 train = true
-episodes_number = 5
-bt_best_player_name = 'perfection.json'
+episodes_number = 100
+bt_best_player_name = 'whatiiiisit.json'
 
 [reward-function]
 damageEnemyStatue = 1
@@ -36,3 +36,4 @@ crossover = true
 mutation = true
 mutation_rate = 0.2
 tournament_size = 3
+no_big_trees = 20

@@ -17,9 +17,10 @@ class BehaviorTree:
     Contains utility method to manage a single complete tree.
     """
 
-    def __init__(self) -> None:
+    def __init__(self):
         root_class: BehaviorNode = np.random.choice(composite_node_classes)
         self.root: CompositeNode = root_class.get_random_node()
+        self.fitness = 0
 
     def __str__(self) -> str:
         return self.root.__str__()
@@ -187,6 +188,9 @@ class BehaviorTree:
         copy = BehaviorTree()
         copy.root = self.root.copy()
         return copy
+
+    def get_size(self):
+        return self.root.get_size()
 
 
 if __name__ == "__main__":

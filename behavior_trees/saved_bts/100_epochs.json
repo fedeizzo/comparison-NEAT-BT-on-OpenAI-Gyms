@@ -1,0 +1,207 @@
+{
+    "0": {
+        "class": "SequenceNode",
+        "parameters": {},
+        "children": [1, 2, 3, 4, 5]
+    },
+    "1": { "class": "SequenceNode", "parameters": {}, "children": [6, 7] },
+    "2": {
+        "class": "MoveNode",
+        "parameters": { "move_x": -0.6165802027514855 },
+        "children": []
+    },
+    "3": { "class": "FallbackNode", "parameters": {}, "children": [8] },
+    "4": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
+        "children": []
+    },
+    "5": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
+        "children": []
+    },
+    "6": {
+        "class": "ChangeFocusNode",
+        "parameters": { "focus": 5 },
+        "children": []
+    },
+    "7": { "class": "SequenceNode", "parameters": {}, "children": [9, 10] },
+    "8": { "class": "FallbackNode", "parameters": {}, "children": [11] },
+    "9": {
+        "class": "SequenceNode",
+        "parameters": {},
+        "children": [12, 13, 14, 15]
+    },
+    "10": {
+        "class": "SequenceNode",
+        "parameters": {},
+        "children": [16, 17, 18, 19, 20]
+    },
+    "11": {
+        "class": "RotateNode",
+        "parameters": { "rotate": 0.21696714662913275 },
+        "children": []
+    },
+    "12": { "class": "FallbackNode", "parameters": {}, "children": [21] },
+    "13": { "class": "SequenceNode", "parameters": {}, "children": [22] },
+    "14": { "class": "FallbackNode", "parameters": {}, "children": [23, 24] },
+    "15": { "class": "SequenceNode", "parameters": {}, "children": [25] },
+    "16": {
+        "class": "ChangeFocusNode",
+        "parameters": { "focus": 5 },
+        "children": []
+    },
+    "17": {
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.87938728680291 },
+        "children": []
+    },
+    "18": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
+        "children": []
+    },
+    "19": {
+        "class": "MoveNode",
+        "parameters": { "move_x": -0.7184317240985647 },
+        "children": []
+    },
+    "20": { "class": "FallbackNode", "parameters": {}, "children": [26] },
+    "21": {
+        "class": "FallbackNode",
+        "parameters": {},
+        "children": [27, 28, 29, 30, 31, 32, 33, 34, 35]
+    },
+    "22": {
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.8623039525845102 },
+        "children": []
+    },
+    "23": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 2 },
+        "children": []
+    },
+    "24": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 3 },
+        "children": []
+    },
+    "25": { "class": "FallbackNode", "parameters": {}, "children": [36] },
+    "26": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 3 },
+        "children": []
+    },
+    "27": {
+        "class": "MoveNode",
+        "parameters": { "move_x": 0.03466944233493763 },
+        "children": []
+    },
+    "28": {
+        "class": "MoveNode",
+        "parameters": { "move_x": 0.4757549013122355 },
+        "children": []
+    },
+    "29": { "class": "FallbackNode", "parameters": {}, "children": [37, 38] },
+    "30": { "class": "SequenceNode", "parameters": {}, "children": [39] },
+    "31": {
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.7339817887507227 },
+        "children": []
+    },
+    "32": {
+        "class": "MoveNode",
+        "parameters": { "move_x": 0.03466944233493763 },
+        "children": []
+    },
+    "33": { "class": "SequenceNode", "parameters": {}, "children": [40, 41] },
+    "34": {
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.87938728680291 },
+        "children": []
+    },
+    "35": {
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.3296034452821013 },
+        "children": []
+    },
+    "36": {
+        "class": "RotateNode",
+        "parameters": { "rotate": 0.9009817723484244 },
+        "children": []
+    },
+    "37": {
+        "class": "FallbackNode",
+        "parameters": {},
+        "children": [42, 43, 44, 45, 46, 47, 48]
+    },
+    "38": {
+        "class": "MoveNode",
+        "parameters": { "move_x": -0.033575220919843884 },
+        "children": []
+    },
+    "39": {
+        "class": "ChangeFocusNode",
+        "parameters": { "focus": 2 },
+        "children": []
+    },
+    "40": {
+        "class": "ChangeFocusNode",
+        "parameters": { "focus": 5 },
+        "children": []
+    },
+    "41": { "class": "SequenceNode", "parameters": {}, "children": [49] },
+    "42": { "class": "SequenceNode", "parameters": {}, "children": [50, 51] },
+    "43": {
+        "class": "MoveNode",
+        "parameters": { "move_x": 0.03466944233493763 },
+        "children": []
+    },
+    "44": {
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.87938728680291 },
+        "children": []
+    },
+    "45": { "class": "FallbackNode", "parameters": {}, "children": [52] },
+    "46": { "class": "SequenceNode", "parameters": {}, "children": [53] },
+    "47": {
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.87938728680291 },
+        "children": []
+    },
+    "48": {
+        "class": "MoveNode",
+        "parameters": { "move_x": 0.03466944233493763 },
+        "children": []
+    },
+    "49": { "class": "FallbackNode", "parameters": {}, "children": [54] },
+    "50": {
+        "class": "ChangeFocusNode",
+        "parameters": { "focus": 5 },
+        "children": []
+    },
+    "51": { "class": "SequenceNode", "parameters": {}, "children": [55] },
+    "52": {
+        "class": "MoveNode",
+        "parameters": { "move_x": 0.03466944233493763 },
+        "children": []
+    },
+    "53": {
+        "class": "MoveNode",
+        "parameters": { "move_x": -0.6165802027514855 },
+        "children": []
+    },
+    "54": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 3 },
+        "children": []
+    },
+    "55": { "class": "FallbackNode", "parameters": {}, "children": [56] },
+    "56": {
+        "class": "CastNode",
+        "parameters": { "cast_ability": 3 },
+        "children": []
+    }
+}

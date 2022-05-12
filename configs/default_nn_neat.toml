@@ -1,9 +1,12 @@
 [game]
 fast_mode = true
-number_of_arenas = 1
+number_of_arenas = 2
 train = true
-episodes_number = 1
-neat_config = './configs/NEAT_NN.ini'
+episodes_number = 2
+best_stats = './weights/best_stats.pkl'
+extensive_stats = './weights/extensive_stats.pkl'
+species_stats = './weights/species_stats.pkl'
+neat_config = './configs/default_nn_neat.ini'
 weights_path = './weights/winner.pkl'
 
 [reward-function]

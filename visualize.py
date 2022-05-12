@@ -1,9 +1,11 @@
 import warnings
 
 import graphviz
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
+matplotlib.use('Agg')
 
 def plot_stats(statistics, ylog=False, view=False, filename="avg_fitness.svg"):
     """Plots the population's average and best fitness."""

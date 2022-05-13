@@ -220,7 +220,7 @@ class BehaviorNode(ABC):
         pass
 
     @abstractmethod
-    def mutate(self, prob):
+    def mutate(self, prob, all_mutations = False):
         """Randomly mutates the node with probability prob.
 
         Args:

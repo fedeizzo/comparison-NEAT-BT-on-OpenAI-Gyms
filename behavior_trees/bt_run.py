@@ -77,15 +77,14 @@ def main_dinosaurs(
         ],
     )
 
-    evolution_engine = BehaviorTreeEvolution(bt_config)
-
+    population_size = number_of_arenas * 6
+    evolution_engine = BehaviorTreeEvolution(bt_config, population_size)
     # create players at gen 0
     if is_train:
-        population_size = number_of_arenas * 6
         new_population = [
             BehaviorTree.generate(5) for _ in range(population_size)
         ]
-        best_player = new_population[0]
+
         for ep in range(episodes_number):
             start = time()
             players = new_population
@@ -101,38 +100,7 @@ def main_dinosaurs(
             total_reward = env.total_reward
             for player, reward in zip(players, list(total_reward)):
                 player.fitness = float(reward)
-            players = evolution_engine.penalize_big_trees(players)
-            fitnesses = [p.fitness for p in players]
-            print(f"Max fitness: {max(fitnesses)}")
-            players.sort(key=lambda x: x.fitness, reverse=True)
-            if max(fitnesses) > best_player.fitness:
-                best_player = players[0]
-            # create new population
-            new_population = list()
-
-            # is elitism used?
-            if bt_config["elitism"]:
-                new_population += players[: bt_config["number_of_elites"]]
-
-            print("building new population")
-            # using tournament directly
-            # implement crossover and mutation
-            if bt_config["crossover"]:
-                while len(new_population) < population_size:
-                    # choose 2 parents according to their fitness
-                    gen_a = tournament(players, bt_config["tournament_size"])
-                    gen_b = tournament(players, bt_config["tournament_size"])
-                    child = gen_b.recombination(gen_a)
-                    if bt_config["mutation"]:
-                        child.mutate(bt_config["mutation_rate"])
-                    new_population.append(child)
-            else:
-                while len(new_population) > population_size:
-                    gen_a = tournament(players, bt_config["tournament_size"])
-                    new_individual = gen_a.copy()
-                    if bt_config["mutation"]:
-                        new_individual.mutate(bt_config["mutation_rate"])
-                    new_population.append(new_individual)
+            new_population = evolution_engine.evolve_population(players)
             print(f"population mutated in {time()-start}s")
 
         agent_path = os.path.join(
@@ -140,7 +108,7 @@ def main_dinosaurs(
         )
 
         # save best player
-        best_player.to_json(agent_path)
+        evolution_engine.global_best_player.to_json(agent_path)
 
     else:
         assert False, "Test phase not implemented yet"

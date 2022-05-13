@@ -75,7 +75,7 @@ class CheckConditionNode(ConditionNode):
                 condition_type = 'greater'
         parameters = {"input_name":name,"input_index":index,'condition_type':condition_type,"condition_value": condition_value,}
         return CheckConditionNode(parameters)
-    def mutate(self, prob: float):
+    def mutate(self, prob: float, all_mutations):
         if random()<prob:
             index = randint(0,len(InputIndex)-1)
             name = next(name for name, value in vars(InputIndex).items() if value == index)

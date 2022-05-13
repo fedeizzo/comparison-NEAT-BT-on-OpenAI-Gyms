@@ -26,7 +26,7 @@ class CompositeNode(BehaviorNode):
     def remove_child(self, position):
         return self.children.pop(position)
 
-    def mutate(self, prob=0.2):
+    def mutate(self, prob=0.2, all_mutations=False):
         """Mutates the sequence node.
 
         Possible mutations:
@@ -45,34 +45,40 @@ class CompositeNode(BehaviorNode):
             prob (float): probability of the mutation, between 0 and 1.
         """
         self.last_child_ticked = 0
+        mutation_type = random.randint(0, 2)
 
         # add a node with probability prob
-        if random.random() < prob:
+        if (all_mutations or mutation_type == 0) and random.random() < prob:
             child_class: BehaviorNode = np.random.choice(candidate_classes)
             child = child_class.get_random_node()
             self.insert_child(child)
 
         # remove a node with probability prob
-        if random.random() < prob and len(self.children) > 1:
+        if (all_mutations or mutation_type == 1) and random.random() < prob and len(self.children) > 1:
             removing_index = random.randint(0, (len(self.children) - 1))
             # no need to update last child ticked
             # if the tree is reset at each play
             self.remove_child(removing_index)
 
         # swap children
-        if random.random() < prob:
+        if (all_mutations or mutation_type == 2) and random.random() < prob:
             np.random.shuffle(self.children)
 
-        to_mutate = list()
-        for i in range(len(self.children)):
-            if random.random() < prob:
-                if self.children[i].type == BehaviorNodeTypes.ACT:
-                    self.children[i].mutate(prob)
-                else:
-                    to_mutate.append(self.children[i])
+        # mutate children
+        for c in self.children:
+            c.mutate(prob)
 
-        for mutating in to_mutate:
-            mutating.mutate(prob)
+        #! remove
+        # to_mutate = list()
+        # for i in range(len(self.children)):
+        #     if random.random() < prob:
+        #         if self.children[i].type == BehaviorNodeTypes.ACT:
+        #             self.children[i].mutate(prob)
+        #         else:
+        #             to_mutate.append(self.children[i])
+
+        # for mutating in to_mutate:
+        #     mutating.mutate(prob)
 
     def __str__(self, indent=0) -> str:
         string_form = super().__str__(indent)
@@ -198,14 +204,14 @@ class FallbackNode(CompositeNode):
         return result
 
     @staticmethod
-    def get_random_node(num_children=1):
+    def get_random_node(num_children=2):
         """Generate a random instance of the BehaviorNode."""
         fallback = FallbackNode()
         candidate_classes = action_node_classes + composite_node_classes
         for _ in range(num_children):
             child_class: BehaviorNode = np.random.choice(candidate_classes)
             child = child_class.get_random_node()
-            fallback.insert_child(child, -1)
+            fallback.insert_child(child)
         return fallback
 
 

@@ -31,9 +31,9 @@ class BehaviorTree:
         with open(path, "wb") as outfile:
             pickle.dump(self, outfile)
 
-    def mutate(self, prob):
+    def mutate(self, prob, all_mutations = False):
         """Start mutation from the root, then propagate."""
-        self.root.mutate(prob)
+        self.root.mutate(prob, all_mutations)
 
     def recombination(self, other: "BehaviorTree"):
         """Recombination between two different behavior trees, it should be
@@ -85,7 +85,7 @@ class BehaviorTree:
         return new_bt
 
     @staticmethod
-    def generate(min_children=5):
+    def generate(min_children=3):
         """Create a new behavior tree with at least min_children child nodes.
         #! Would be great to set a minimum depth instead of width.
 

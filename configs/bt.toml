@@ -1,9 +1,9 @@
 [game]
 fast_mode = true
-number_of_arenas = 10
+number_of_arenas = 1
 train = true
-episodes_number = 100
-bt_best_player_name = 'whatiiiisit.json'
+episodes_number = 5
+bt_best_player_name = 'trial.json'
 
 [reward-function]
 damageEnemyStatue = 1
@@ -35,5 +35,11 @@ number_of_elites = 6
 crossover = true
 mutation = true
 mutation_rate = 0.2
-tournament_size = 3
 no_big_trees = 20
+initial_population = 'random'
+mu_lambda_strategy = 'plus'
+selection_strategy = 'tournament'
+tournament_size = 2
+parents_proportion = 0.5
+all_mutations = false
+monitor = true

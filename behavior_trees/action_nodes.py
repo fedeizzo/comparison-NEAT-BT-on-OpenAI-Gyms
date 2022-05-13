@@ -48,7 +48,7 @@ class MoveNode(ActionNode):
         parameters = {"move_x": random() * 2 - 1}
         return MoveNode(parameters)
 
-    def mutate(self, prob: float):
+    def mutate(self, prob: float, all_mutations):
         """Mutates the focusing ability with probability prob.
         Args:
             prob (float): probability of mutation.
@@ -77,7 +77,7 @@ class RotateNode(ActionNode):
         parameters = {"rotate": random() * 2 - 1}
         return RotateNode(parameters)
 
-    def mutate(self, prob: float):
+    def mutate(self, prob: float, all_mutations):
         """Mutates the focusing ability with probability prob.
         Args:
             prob (float): probability of mutation.
@@ -115,7 +115,7 @@ class CastNode(ActionNode):
         parameters = {"cast_ability": randint(1, 3)}
         return CastNode(parameters)
 
-    def mutate(self, prob: float):
+    def mutate(self, prob: float, all_mutations):
         """Mutates the casting ability with probability prob.
 
         Args:
@@ -154,7 +154,7 @@ class ChangeFocusNode(ActionNode):
         parameters = {"focus": randint(0, 7)}
         return ChangeFocusNode(parameters)
 
-    def mutate(self, prob: float):
+    def mutate(self, prob: float, all_mutations):
         """Mutates the focusing ability with probability prob.
 
         Args:
@@ -192,7 +192,7 @@ class ChaseFocusNode(ActionNode):
         parameters = {"chase_focus": random()}
         return ChaseFocusNode(parameters)
 
-    def mutate(self, prob: float):
+    def mutate(self, prob: float, all_mutations):
         """Mutates the focusing ability with probability prob.
 
         Args:

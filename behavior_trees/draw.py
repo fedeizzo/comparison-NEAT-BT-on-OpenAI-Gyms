@@ -133,7 +133,10 @@ class BtDrawer:
             labels[node] = type(node).__name__  # later change name by ID
             if hasattr(node, 'parameters'):
                 for key,label in node.parameters.items():
-                    labels[node] = labels[node]+' \n' + '{} = {:.2f}'.format(key, label)
+                    if type(label) == float:
+                        labels[node] = labels[node]+' \n' + '{} = {:.2f}'.format(key, label)
+                    elif type(label) == str:
+                        labels[node] = labels[node]+' \n' + '{} = {}'.format(key, label)
         # gets the positions where to draw each node
         positions = self.get_hierarchy_pos(self._bt_graph,root)
         plt.figure("Your Behavior Tree")
@@ -163,7 +166,7 @@ class BtDrawer:
         plt.tight_layout()  # this is to have less wasted space
         plt.show()  # display
 if __name__ == "__main__":
-    bt = BehaviorTree.generate(5)
+    bt = BehaviorTree.from_json('./try.json')
     print(bt)
     a = BtDrawer(bt.root)
     a.draw()

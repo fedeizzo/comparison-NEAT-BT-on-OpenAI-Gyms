@@ -1,14 +1,16 @@
 import json
+from condition_nodes import ConditionNode,CheckConditionNode
 from composite_nodes import composite_node_classes, CompositeNode
 from behavior_node import BehaviorNode, InputIndex, BehaviorNodeTypes
 from action_nodes import action_node_classes
+from condition_nodes import condition_node_classes
 import numpy as np
 import pickle
 import random
 import copy
 
 name_to_class = {
-    cl.__name__: cl for cl in (composite_node_classes + action_node_classes)
+    cl.__name__: cl for cl in (composite_node_classes + action_node_classes + condition_node_classes)
 }
 
 
@@ -52,7 +54,7 @@ class BehaviorTree:
         exchange_point_a = parent_a.root
         child_a = parent_a.root
         index_a = None
-        while child_a.type != BehaviorNodeTypes.ACT and random.random() < 0.8:
+        while child_a.type != BehaviorNodeTypes.ACT and child_a.type != BehaviorNodeTypes.COND and random.random() < 0.8:
             exchange_point_a = child_a
             index_a = random.randint(0, len(exchange_point_a.children) - 1)
             child_a = exchange_point_a.children[index_a]
@@ -60,7 +62,7 @@ class BehaviorTree:
         exchange_point_b = parent_b.root
         child_b = parent_b.root
         index_b = None
-        while child_b.type != BehaviorNodeTypes.ACT and random.random() < 0.8:
+        while child_b.type != BehaviorNodeTypes.ACT and child_b.type != BehaviorNodeTypes.COND and random.random() < 0.8:
             exchange_point_b = child_b
             index_b = random.randint(0, len(exchange_point_b.children) - 1)
             child_b = exchange_point_b.children[index_b]
@@ -95,7 +97,7 @@ class BehaviorTree:
             BehaviorTree: the newly instantiated behavior tree.
         """
         bt = BehaviorTree()
-        candidate_classes = action_node_classes + composite_node_classes
+        candidate_classes = action_node_classes + composite_node_classes + condition_node_classes
         for _ in range(min_children):
             child_class: BehaviorNode = np.random.choice(candidate_classes)
             child = child_class.get_random_node()
@@ -194,7 +196,7 @@ class BehaviorTree:
 
 
 if __name__ == "__main__":
-    bt = BehaviorTree.generate(2)
+    bt = BehaviorTree.generate(10)
     print(bt)
     bt.to_json("try.json")
     print("===============")

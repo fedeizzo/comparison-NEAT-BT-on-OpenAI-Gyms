@@ -35,7 +35,7 @@ def evolutionary_selection(individuals, tournament_size, elitism, number_of_elit
     individuals.sort(key=lambda x: x.fitness, reverse=True)
     # select the best individuals
     if elitism > 0:
-        offsprings.append(individuals[:number_of_elites])
+        offsprings = individuals[:number_of_elites]
     while len(offsprings) < len(individuals):
         # select the rest of the individuals using tournament selection
         parent_a = tournament(individuals, tournament_size)
@@ -104,24 +104,24 @@ def main_dinosaurs(
         population = [
             BehaviorTree.generate(5) for _ in range(population_size)
         ]
+        population_home = population[:population_size//2]
+        population_away = population[population_size//2:]
         for i in range(episodes_number):
-            players_home = population[:population_size//2]
-            players_away = population[population_size//2:]
             observation_n = env.reset()
             while True:
-                actions_home = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(players_home)])
-                actions_away = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(players_away)])
+                actions_home = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(population_home)])
+                actions_away = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(population_away)])
                 actions = np.asarray([*actions_home,*actions_away])
                 observation_n, reward_n, done_n, _ = env.step(actions)
                 if all(done_n):
-                    print(f"Episode finished{i}")
+                    print(f"Episode {i} finished")
                     break
             total_reward = env.total_reward
             for player, reward in zip(population, list(total_reward)):
                 player.fitness = float(reward)
             # create new population and evolve
-            population_home = evolutionary_selection(players_home,config['bt_config']['tournament_size'],config['bt_config']['elitism'],config['bt_config']['number_of_elites'])
-            population_away = evolutionary_selection(players_home,config['bt_config']['tournament_size'],config['bt_config']['elitism'],config['bt_config']['number_of_elites'])
+            population_home = evolutionary_selection(population_home,config['bt_config']['tournament_size'],config['bt_config']['elitism'],config['bt_config']['number_of_elites'])
+            population_away = evolutionary_selection(population_away,config['bt_config']['tournament_size'],config['bt_config']['elitism'],config['bt_config']['number_of_elites'])
         agent_path = os.path.join(
             os.getcwd(), "behavior_trees", "saved_bts", bt_best_player_name
         )

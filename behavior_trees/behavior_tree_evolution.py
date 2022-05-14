@@ -102,8 +102,9 @@ class BehaviorTreeEvolution:
             print(f'\tFitness: min={self.stats[f"iteration#{self.iteration_nr}"]["min_fitness"]} max={self.stats[f"iteration#{self.iteration_nr}"]["max_fitness"]}  avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_fitness"]}')
             print(f'\tSize:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_size"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_size"]}')
             print(f'\tDepth:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_depth"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_depth"]}')
-            drawer = BtDrawer(population[0].root)
-            drawer.draw()
+            if (self.config["draw_best"]):
+                drawer = BtDrawer(population[0].root)
+                drawer.draw()
 
         new_population = list()
         # select the pool from which extract the parents
@@ -210,7 +211,7 @@ class BehaviorTreeEvolution:
         elif self.config["selection_strategy"] == "hall_of_fame":
             selected_parents = self.hall_of_fame_selection(pool)
         # update previous parents
-        self.previous_parents = [p.copy for p in selected_parents]
+        self.previous_parents = [p.copy() for p in selected_parents]
         return selected_parents
 
     def fitness_proportionate_selection(self, pool):
@@ -224,14 +225,15 @@ class BehaviorTreeEvolution:
         # max_fitness = max(fitnesses)
         # fitnesses = fitnesses + ((max_fitness/100)*5)
         probabilities = softmax(fitnesses)
-        return np.radom.choice(a=pool, size=(self.number_of_parents), p=probabilities)
+        return np.random.choice(a=pool, size=(self.number_of_parents), p=probabilities)
 
     def ranking_selection(self, pool):
         pool.sort(key=lambda x: x.fitness, reverse=True)
-        dividendum = (len(pool)**2-1)/2
+        dividendum = sum([i+1 for i in range(len(pool))])
         probabilities = [(1-(i/dividendum)) for i in range(1, (len(pool)+1))]
-        print(f"probabilities: {probabilities}")
-        return np.radom.choice(a=pool, size=(self.number_of_parents), p=probabilities)
+        from scipy.special import softmax
+        probabilities = softmax(probabilities)
+        return np.random.choice(a=pool, size=(self.number_of_parents), p=probabilities)
 
     def truncated_ranking_selection(self, pool):
         pool.sort(key=lambda x: x.fitness, reverse=True)
@@ -242,8 +244,10 @@ class BehaviorTreeEvolution:
         while len(selected_parents) < self.number_of_parents:
             partecipants = list(np.random.choice(
                 a=pool, size=self.config["tournament_size"], replace=False))
+            # import pdb
+            # pdb.set_trace()
             partecipants.sort(key=lambda x: x.fitness, reverse=True)
-            selected_parents.append(partecipants[0])
+            selected_parents.append(partecipants[0].copy())
         return selected_parents
 
     def hall_of_fame_selection(self, pool):

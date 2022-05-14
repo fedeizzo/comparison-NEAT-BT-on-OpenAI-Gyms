@@ -66,7 +66,7 @@ class CompositeNode(BehaviorNode):
 
         # mutate children
         for c in self.children:
-            c.mutate(prob)
+            c.mutate(prob, all_mutations)
 
         #! remove
         # to_mutate = list()

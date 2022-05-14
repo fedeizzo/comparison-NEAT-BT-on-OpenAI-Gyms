@@ -108,7 +108,7 @@ if __name__ == "__main__":
     
     print(copy_condition)
     
-    copy_condition.mutate(0.5)
+    copy_condition.mutate(0.5, True)
     
     print(copy_condition)
     print(random_condition)

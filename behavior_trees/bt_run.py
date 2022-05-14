@@ -94,14 +94,14 @@ def main_dinosaurs(
                                      for i, player in enumerate(players)])
                 observation_n, reward_n, done_n, _ = env.step(actions)
                 if all(done_n):
-                    print(f"Episode {ep} finished in {time()-start}s")
+                    print(f"Episode {ep} finished in {int(time()-start)}s")
                     break
             start = time()
             total_reward = env.total_reward
             for player, reward in zip(players, list(total_reward)):
                 player.fitness = float(reward)
             new_population = evolution_engine.evolve_population(players)
-            print(f"population mutated in {time()-start}s")
+            print(f"population mutated in {int(time()-start)}s")
 
         agent_path = os.path.join(
             os.getcwd(), "behavior_trees", "saved_bts", bt_best_player_name

@@ -1,8 +1,8 @@
 [game]
 fast_mode = true
-number_of_arenas = 1
+number_of_arenas = 5
 train = true
-episodes_number = 5
+episodes_number = 10
 bt_best_player_name = 'trial.json'
 
 [reward-function]
@@ -38,8 +38,9 @@ mutation_rate = 0.2
 no_big_trees = 20
 initial_population = 'random'
 mu_lambda_strategy = 'plus'
-selection_strategy = 'tournament'
-tournament_size = 2
+selection_strategy = 'hall_of_fame'
+tournament_size = 5
 parents_proportion = 0.5
 all_mutations = false
 monitor = true
+draw_best = false

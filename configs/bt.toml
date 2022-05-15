@@ -31,7 +31,7 @@ timeScaling = 0.5
 
 [bt_config]
 elitism = true
-number_of_elites = 6
+number_of_elites = 3
 crossover = true
 mutation = true
 mutation_rate = 0.2

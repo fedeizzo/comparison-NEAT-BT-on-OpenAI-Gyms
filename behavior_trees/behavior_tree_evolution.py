@@ -90,21 +90,29 @@ class BehaviorTreeEvolution:
             depths.append(depth)
         self.stats[f"iteration#{self.iteration_nr}"]["min_fitness"] = min(fitnesses)
         self.stats[f"iteration#{self.iteration_nr}"]["max_fitness"] = max(fitnesses)
-        self.stats[f"iteration#{self.iteration_nr}"]["avg_fitness"] = sum(fitnesses)/len(fitnesses)
+        self.stats[f"iteration#{self.iteration_nr}"]["avg_fitness"] = sum(
+            fitnesses)/len(fitnesses)
         self.stats[f"iteration#{self.iteration_nr}"]["max_size"] = max(sizes)
         self.stats[f"iteration#{self.iteration_nr}"]["avg_size"] = sum(sizes)/len(sizes)
         self.stats[f"iteration#{self.iteration_nr}"]["max_depth"] = max(depths)
-        self.stats[f"iteration#{self.iteration_nr}"]["avg_depth"] = sum(depths)/len(depths)
+        self.stats[f"iteration#{self.iteration_nr}"]["avg_depth"] = sum(
+            depths)/len(depths)
         # sort population, useful later
         penalized_size_population.sort(key=lambda x: x.fitness, reverse=True)
         if (self.config["monitor"]):
             print(f"iteration {self.iteration_nr}")
-            print(f'\tFitness: min={self.stats[f"iteration#{self.iteration_nr}"]["min_fitness"]} max={self.stats[f"iteration#{self.iteration_nr}"]["max_fitness"]}  avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_fitness"]}')
-            print(f'\tSize:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_size"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_size"]}')
-            print(f'\tDepth:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_depth"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_depth"]}')
+            print(
+                f'\tFitness: min={self.stats[f"iteration#{self.iteration_nr}"]["min_fitness"]} max={self.stats[f"iteration#{self.iteration_nr}"]["max_fitness"]}  avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_fitness"]}')
+            print(
+                f'\tSize:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_size"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_size"]}')
+            print(
+                f'\tDepth:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_depth"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_depth"]}')
             if (self.config["draw_best"]):
                 drawer = BtDrawer(population[0].root)
                 drawer.draw()
+        # save global best player
+        if self.global_best_player is None or self.global_best_player.fitness < penalized_size_population[0].fitness:
+            self.global_best_player = penalized_size_population[0].copy()
 
         new_population = list()
         # select the pool from which extract the parents
@@ -112,9 +120,6 @@ class BehaviorTreeEvolution:
         # select the parents implementing one of the thousand strategies
         # fitness proportionate, ranking, hall of fame ...
         selected_parents = self.select_parents(parent_selection_pool)
-        # save global best player
-        if self.global_best_player is None or self.global_best_player.fitness < penalized_size_population[0].fitness:
-            self.global_best_player = penalized_size_population[0].copy()
         # implement elitism
         if self.config["elitism"]:
             new_population += penalized_size_population[:self.config["number_of_elites"]]

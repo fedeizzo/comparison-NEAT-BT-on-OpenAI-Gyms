@@ -5,22 +5,22 @@
 
 ## Game base rules
 The games is played in "episodes" or "epochs", for each episode the agents are fixed, but if they "learn" through RL or other mechanisms, they can improve from the environment. 
-Each episode is split in steps, where each step is a "tick". An agent has a fixed set of actions, and the environment is updated accordingly when the agents perfom one action among all possible ones. This is repeated for each tick of an episode.
+Each episode is split in steps, where each step is a "tick". An agent has a fixed set of actions, and the environment is updated accordingly when the agents perform one action among all possible ones. This is repeated for each tick of an episode.
 
 After each episode ends, agents and environment are cleared.
 
 ## Default configuration
-Two teams composed by three agents and one totem. Each agent is generated with random equipment ( arms , misc, tail). Each slot may be filled or not, giving each agent different "abilities". Our network should be able to correctly exploit any of these abilities and come up with a "good" strategy to destroy the enemy and win.
+Two teams composed by three agents and one totem. Each agent is generated with random equipment (arms, misc, tail). Each slot may be filled or not, giving each agent different "abilities". Our network should be able to correctly exploit any of these abilities and come up with a "good" strategy to destroy the enemy and win.
 
-Win is defined by whichever team has the most points when times is up. Standard reward function promotes killing and destroying totems. All other actions have 0 reward.
+Win is defined by whichever team has the most points when time is up. Standard reward function promotes killing and destroying totems. All other actions have 0 reward.
 
-Colors and aesthetics are present but randomly initalized and are not meaningful for the outcome. However they are useful to distinguish the agents.
+Colors and aesthetics are present but randomly initialized and are not meaningful for the outcome. However, they are useful to distinguish the agents.
 
 ## IO of an agent
 The main goal of an agent is to take an action that maximizes his reward given the current environment.
 
 ### Input
-A tuple of four element:
+A tuple of four elements:
 
 1. a numpy array of shape `(n_agents_per_team, n_observation)`: this represents observations made by all agents of one team. Given the fact that this is part of the input for the decision mechanism it seems that agents of the same team can share all information (all possible observation can be found [here](http://docs.gym.derkgame.com/#gym_derk.ObservationKeys)).
 2. a numpy array of shape `(n_agents_per_team)`: this represents rewards associated to each team member of the same team. This is the fitness function computed by the library and the value can be negative, for this reason a NN with ReLU could cut some information.
@@ -38,7 +38,7 @@ An array where each cell is the decision taken by an agent of a team. The decisi
     - 1: cast ability 1
     - 2: cast ability 2
     - 3: cast ability 3
-5. an integer: change focus, if (we need to understand why there is two integer for focusing other entities and if there is difference between the two values)
+5. an integer: change focus, if (we need to understand why there are two integers for focusing other entities and if there is difference between the two values)
 	- 0: keep current focus
 	- 1: focus home statue
 	- 2-3: focus teammates
@@ -48,7 +48,7 @@ An array where each cell is the decision taken by an agent of a team. The decisi
 ## Config parser
 To improve reproducibility and readability of the code a `toml` config parser is used in the project. A toml file contains:
 
-- the required information for the initilization of the game;
+- the required information for the initialization of the game;
 - the type of players that should be used;
 - the required information for the initialization of each player;
 
@@ -56,7 +56,7 @@ To improve reproducibility and readability of the code a `toml` config parser is
 #### game
 In game section there are four variables:
 
-- fast_mode: enalbe or disable the fast mode;
+- fast_mode: enable or disable the fast mode;
 - number\_of\_arenas: define the number of concurrent runs;
 - train: enable or disable train mode;
 - episodes\_number: number of episodes;
@@ -172,7 +172,7 @@ args1 = 1
 args2 = 3
 ```
 
-Required fiels are:
+Required files are:
 
 - path: the namefile in which the class is contained, an example is [bot](./agent/bot.py);
 - name: the name class in the file indicated by path, an example is [DerkPlayer](./agent/bot.py);
@@ -184,6 +184,6 @@ During train phase it is required to have same player for both teams, instead fo
 Configuration for neural network neat can be found [here](./configs/default_nn_neat.toml) and [here](./configs/default_nn_neat.ini).
 
 ##### Revisited Deep Q Learning with NEAT
-Configuration for revisited depp q learning with neat can be found [here](./configs/q_learning_neat.toml) and [here](./configs/q_learning_neat_config.ini).
+Configuration for revisited deep q learning with neat can be found [here](./configs/q_learning_neat.toml) and [here](./configs/q_learning_neat_config.ini).
 
-In order to avoid a mess of config files inside the repo all files ending with `.toml` are not pushed to the repo expect for the onse contained inside `configs` directory (do not abuse of this power!!).
+In order to avoid a mess of config files inside the repo all files ending with `.toml` are not pushed to the repo expect for the once contained inside `configs` directory (do not abuse of this power!!).

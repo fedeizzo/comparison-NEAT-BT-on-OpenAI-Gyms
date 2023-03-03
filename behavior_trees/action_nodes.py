@@ -99,7 +99,7 @@ class CastNode(ActionNode):
             input (np.ndarray): observations input array.
 
         Returns:
-            boolean: True if the ability is ready, false otherwise.
+            boolean: True if the ability is ready, False otherwise.
         """
         # watch out, the input indexes ability with -1 w.r.t. the actual ability
         ability_name = f"Ability{self.parameters['cast_ability']-1}Ready"
@@ -112,6 +112,7 @@ class CastNode(ActionNode):
 
     @staticmethod
     def get_random_node():
+        # players can be 1, 2 or 3
         parameters = {"cast_ability": randint(1, 3)}
         return CastNode(parameters)
 
@@ -122,6 +123,7 @@ class CastNode(ActionNode):
             prob (float): probability of mutation.
         """
         if random() < prob:
+            # players can be 1, 2 or 3
             self.parameters["cast_ability"] = randint(1, 3)
 
 

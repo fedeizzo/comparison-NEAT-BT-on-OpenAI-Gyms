@@ -1,7 +1,9 @@
-from enum import IntEnum, Enum
-import numpy as np
 from abc import ABC, abstractmethod
+from enum import IntEnum, Enum
+
 import itertools
+
+import numpy as np
 
 
 class BehaviorStates(Enum):
@@ -85,7 +87,7 @@ class InputIndex(IntEnum):
     UnusedExtraSense31 = 63
 
 
-class InputProperties():
+class InputProperties:
     Hitpoints = {'min':0,'max':1,'type':float}
     Ability0Ready = {'min':0,'max':1,'type':bool,}
     FriendStatueDistance = {'min':0,'max':1,'type':float,}
@@ -170,8 +172,8 @@ class BehaviorNode(ABC):
         self.id = next(BehaviorNode.BEHAVIOR_NODE_ID)
 
     def tick(self, input):
-        """Launches the tick to the node, it implements the starndard routine
-        with the check of applicable and the call to method run adterwards.
+        """Launches the tick to the node, it implements the standard routine
+        with the check of applicable and the call to method run afterwards.
 
         Args:
             input (np.ndarray): observations input array.

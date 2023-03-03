@@ -1,13 +1,12 @@
 import json
-from condition_nodes import ConditionNode,CheckConditionNode
-from composite_nodes import composite_node_classes, CompositeNode
-from behavior_node import BehaviorNode, InputIndex, BehaviorNodeTypes
-from action_nodes import action_node_classes
-from condition_nodes import condition_node_classes
-import numpy as np
 import pickle
 import random
-import copy
+import numpy as np
+
+from action_nodes import action_node_classes
+from behavior_node import BehaviorNode, BehaviorNodeTypes
+from composite_nodes import composite_node_classes, CompositeNode
+from condition_nodes import condition_node_classes
 
 name_to_class = {
     cl.__name__: cl for cl in (composite_node_classes + action_node_classes + condition_node_classes)

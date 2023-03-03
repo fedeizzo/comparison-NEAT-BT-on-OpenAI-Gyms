@@ -2,7 +2,7 @@
     "0": { "class": "SequenceNode", "parameters": {}, "children": [21, 22, 23, 24] },
     "1": {
         "class": "CheckConditionNode",
-        "parameters": { "input_name": "Enemy1Distance", "input_index": 10, "condition_type": "lesser", "condition_value": 0.5 },
+        "parameters": { "input_name": "Enemy1Distance", "input_index": 10, "condition_type": "LESS", "condition_value": 0.5 },
         "children": []
     },
     "2": { "class": "SequenceNode", "parameters": {}, "children": [3, 4, 5] },
@@ -23,7 +23,7 @@
     },
     "6": {
         "class": "CheckConditionNode",
-        "parameters": { "input_name": "Enemy2Distance", "input_index": 12, "condition_type": "lesser", "condition_value": 0.5 },
+        "parameters": { "input_name": "Enemy2Distance", "input_index": 12, "condition_type": "LESS", "condition_value": 0.5 },
         "children": []
     },
     "7": { "class": "SequenceNode", "parameters": {}, "children": [8, 9, 10] },
@@ -44,7 +44,7 @@
     },
     "11": {
         "class": "CheckConditionNode",
-        "parameters": { "input_name": "Enemy3Distance", "input_index": 14, "condition_type": "lesser", "condition_value": 0.5 },
+        "parameters": { "input_name": "Enemy3Distance", "input_index": 14, "condition_type": "LESS", "condition_value": 0.5 },
         "children": []
     },
     "12": { "class": "SequenceNode", "parameters": {}, "children": [13, 14, 15] },
@@ -65,7 +65,7 @@
     },
     "16": {
         "class": "CheckConditionNode",
-        "parameters": { "input_name": "EnemyStatueDistance", "input_index": 8, "condition_type": "lesser", "condition_value": 0.5 },
+        "parameters": { "input_name": "EnemyStatueDistance", "input_index": 8, "condition_type": "LESS", "condition_value": 0.5 },
         "children": []
     },
     "17": { "class": "SequenceNode", "parameters": {}, "children": [18, 19, 20] },

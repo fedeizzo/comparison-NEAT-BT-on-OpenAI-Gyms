@@ -1,7 +1,10 @@
-from action_nodes import ActionNode, action_node_classes, CastNode
-from behavior_node import *
 import random
-import copy
+from typing import Optional
+
+import numpy as np
+from action_nodes import action_node_classes
+from behavior_node import BehaviorNode, BehaviorNodeTypes, BehaviorStates
+from condition_nodes import condition_node_classes
 
 """
 May implement decorators.
@@ -15,34 +18,32 @@ class CompositeNode(BehaviorNode):
     def __init__(self, type, parameters):
         super().__init__(type, parameters)
         # composite nodes do have children
-        self.children: list[BehaviorNode] = list()
+        self.children: list[BehaviorNode] = []
         self.last_child_ticked = 0
 
-    def insert_child(self, child: BehaviorNode, position: int = -1):
-        if position == -1:
+    def insert_child(self, child: BehaviorNode, position: Optional[int]=None):
+        if position is None:
             position = len(self.children)
         self.children.insert(position, child)
 
     def remove_child(self, position):
         return self.children.pop(position)
 
-    def mutate(self, prob=0.2, all_mutations=False):
+    def mutate(self, prob: int=0.2, all_mutations: bool=False):
         """Mutates the sequence node.
 
         Possible mutations:
-        - addition of a node
-        - removal of a node (check at least one child)
-        - change order of the nodes
-        - call mutate on child
-
-        Implementded:
-        - all of them, just need to select which ones to use
+        1. addition of a node
+        2. removal of a node (check at least one child)
+        3. change order of the nodes
+        4. call mutate on all children
 
         Possible improvement: mutation probability for children may be divided
         by the number of children.
 
         Args:
             prob (float): probability of the mutation, between 0 and 1.
+            all_mutations (bool): perform all possible type of mutations.
         """
         self.last_child_ticked = 0
         mutation_type = random.randint(0, 2)
@@ -64,23 +65,11 @@ class CompositeNode(BehaviorNode):
         if (all_mutations or mutation_type == 2) and random.random() < prob:
             np.random.shuffle(self.children)
 
-        # mutate children
+        # mutate all children
         for c in self.children:
             c.mutate(prob, all_mutations)
 
-        #! remove
-        # to_mutate = list()
-        # for i in range(len(self.children)):
-        #     if random.random() < prob:
-        #         if self.children[i].type == BehaviorNodeTypes.ACT:
-        #             self.children[i].mutate(prob)
-        #         else:
-        #             to_mutate.append(self.children[i])
-
-        # for mutating in to_mutate:
-        #     mutating.mutate(prob)
-
-    def __str__(self, indent=0) -> str:
+    def __str__(self, indent:int=0) -> str:
         string_form = super().__str__(indent)
         for child in self.children:
             child_str = child.__str__(indent + 1)
@@ -135,12 +124,8 @@ class SequenceNode(CompositeNode):
         Args:
             input (np.ndarray): observations input array.
         """
-        result = (
-            BehaviorStates.SUCCESS,
-            np.zeros(
-                5,
-            ),
-        )
+        result = (BehaviorStates.SUCCESS, np.zeros(5,))
+
         for i in range(self.last_child_ticked, len(self.children)):
             self.last_child_ticked += 1
             result = self.children[i].tick(input)
@@ -148,7 +133,11 @@ class SequenceNode(CompositeNode):
                 self.last_child_ticked = 0
                 break
             if result[0] == BehaviorStates.RUNNING:
+                # wait for the next derk environment iteration to continue
                 break
+            if result[0] == BehaviorStates.SUCCESS:  # condition nodes are always either success or failure
+                continue
+
         # ticked all children: restart from 0
         if self.last_child_ticked == len(self.children):
             self.last_child_ticked = 0
@@ -156,18 +145,17 @@ class SequenceNode(CompositeNode):
 
     @staticmethod
     def get_random_node(num_children=1):
-        """Generate a random instance of the BehaviorNode."""
+        """Generate a random instance of the SequenceNode."""
         sequence = SequenceNode()
-        candidate_classes = action_node_classes + composite_node_classes
         for _ in range(num_children):
-            child_class: BehaviorNode = np.random.choice(candidate_classes)
+            child_class = np.random.choice(candidate_classes)
             child = child_class.get_random_node()
-            sequence.insert_child(child, -1)
+            sequence.insert_child(child)
         return sequence
 
 
 class FallbackNode(CompositeNode):
-    """Fallback node with memory"""
+    """Fallback node with memory. It executes all children in order until one succeeds."""
 
     def __init__(self, parameters={}):
         super().__init__(BehaviorNodeTypes.FALL, parameters)
@@ -184,12 +172,7 @@ class FallbackNode(CompositeNode):
         Args:
             input (np.ndarray): observations input array.
         """
-        result = (
-            BehaviorStates.SUCCESS,
-            np.zeros(
-                5,
-            ),
-        )
+        result = (BehaviorStates.SUCCESS, np.zeros(5))
         for i in range(self.last_child_ticked, len(self.children)):
             self.last_child_ticked += 1
             result = self.children[i].tick(input)
@@ -197,6 +180,9 @@ class FallbackNode(CompositeNode):
                 result[0] == BehaviorStates.SUCCESS
                 or result[0] == BehaviorStates.RUNNING
             ):
+                # TODO: this is wrong when the fallback node has a sequence node as child
+                self.last_child_ticked = 0
+                # self.last_child_ticked -= 1
                 break
         # ticked all children: restart from 0
         if self.last_child_ticked == len(self.children):
@@ -207,7 +193,6 @@ class FallbackNode(CompositeNode):
     def get_random_node(num_children=2):
         """Generate a random instance of the BehaviorNode."""
         fallback = FallbackNode()
-        candidate_classes = action_node_classes + composite_node_classes
         for _ in range(num_children):
             child_class: BehaviorNode = np.random.choice(candidate_classes)
             child = child_class.get_random_node()
@@ -217,7 +202,7 @@ class FallbackNode(CompositeNode):
 
 composite_node_classes = [SequenceNode, FallbackNode]
 
-candidate_classes = action_node_classes + composite_node_classes
+candidate_classes = action_node_classes + composite_node_classes + condition_node_classes
 
 
 if __name__ == "__main__":

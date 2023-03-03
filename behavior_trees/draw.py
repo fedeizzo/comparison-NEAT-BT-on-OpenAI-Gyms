@@ -177,7 +177,7 @@ class BtDrawer:
 
 
 if __name__ == "__main__":
-    bt = BehaviorTree.from_json('./try.json')
+    bt = BehaviorTree.from_json('./behavior_trees/saved_bts/dummy.json')
     print(bt)
     a = BtDrawer(bt.root)
     a.draw()

@@ -50,29 +50,29 @@ def main_dinosaurs(
         home_team=[
             {
                 "primaryColor": "#ce03fc",
-                "slots": ["Blaster", "FrogLegs", "HealingGland"],
+                "slots": ["Pistol", "FrogLegs", "HealingGland"],
             },
             {
                 "primaryColor": "#8403fc",
-                "slots": ["Blaster", "FrogLegs", "HealingGland"],
+                "slots": ["Pistol", "FrogLegs", "HealingGland"],
             },
             {
                 "primaryColor": "#0331fc",
-                "slots": ["Blaster", "FrogLegs", "HealingGland"],
+                "slots": ["Pistol", "FrogLegs", "HealingGland"],
             },
         ],
         away_team=[
             {
                 "primaryColor": "#fc1c03",
-                "slots": ["Blaster", "FrogLegs", "HealingGland"],
+                "slots": ["Pistol", "FrogLegs", "HealingGland"],
             },
             {
                 "primaryColor": "#fc6f03",
-                "slots": ["Blaster", "FrogLegs", "HealingGland"],
+                "slots": ["Pistol", "FrogLegs", "HealingGland"],
             },
             {
                 "primaryColor": "#fcad03",
-                "slots": ["Blaster", "FrogLegs", "HealingGland"],
+                "slots": ["Pistol", "FrogLegs", "HealingGland"],
             },
         ],
     )
@@ -82,17 +82,26 @@ def main_dinosaurs(
     # create players at gen 0
     if is_train:
         new_population = [
-            BehaviorTree.generate(5) for _ in range(population_size)
+            # BehaviorTree.generate(5) for _ in range(population_size)
+            BehaviorTree.from_json('./behavior_trees/saved_bts/dummy.json') for _ in range(population_size)
         ]
 
         for ep in range(episodes_number):
             start = time()
             players = new_population
+
+            for index, player in enumerate(players):
+                player.to_json(f"./behavior_trees/saved_bts/dummy_gen_{ep}_player_{index}.json")
+
+
             observation_n = env.reset()
             while True:
                 actions = np.asarray([player.tick(observation_n[i])[1]
                                      for i, player in enumerate(players)])
                 observation_n, reward_n, done_n, _ = env.step(actions)
+
+                # import pdb; pdb.set_trace()
+
                 if all(done_n):
                     print(f"Episode {ep} finished in {int(time()-start)}s")
                     break

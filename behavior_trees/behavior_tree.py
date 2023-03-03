@@ -132,7 +132,7 @@ class BehaviorTree:
                     fifo.append((str(node_global_index), child))
                     node_global_index += 1
         with open(filename, "w") as outfile:
-            json.dump(all_nodes, outfile)
+            json.dump(all_nodes, outfile, indent=2)
 
     @staticmethod
     def from_json(filename):

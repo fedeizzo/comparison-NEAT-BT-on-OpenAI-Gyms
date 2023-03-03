@@ -1,6 +1,6 @@
 [game]
 fast_mode = true
-number_of_arenas = 5
+number_of_arenas = 1
 train = true
 episodes_number = 10
 bt_best_player_name = 'trial.json'

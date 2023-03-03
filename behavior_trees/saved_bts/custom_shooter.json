@@ -1,5 +1,5 @@
 {
-    "0": { "class": "SequenceNode", "parameters": {}, "children": [21, 22, 23, 24] },
+    "0": { "class": "FallbackNode", "parameters": {}, "children": [21, 22, 23, 24] },
     "1": {
         "class": "CheckConditionNode",
         "parameters": { "input_name": "Enemy1Distance", "input_index": 10, "condition_type": "LESS", "condition_value": 0.5 },
@@ -12,13 +12,13 @@
         "children": []
     },
     "4": {
-        "class": "ChaseFocusNode",
-        "parameters": { "chase_focus": 0.99 },
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
         "children": []
     },
     "5": {
-        "class": "CastNode",
-        "parameters": { "cast_ability": 1 },
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.99 },
         "children": []
     },
     "6": {
@@ -33,13 +33,13 @@
         "children": []
     },
     "9": {
-        "class": "ChaseFocusNode",
-        "parameters": { "chase_focus": 0.99 },
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
         "children": []
     },
     "10": {
-        "class": "CastNode",
-        "parameters": { "cast_ability": 1 },
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.99 },
         "children": []
     },
     "11": {
@@ -54,13 +54,13 @@
         "children": []
     },
     "14": {
-        "class": "ChaseFocusNode",
-        "parameters": { "chase_focus": 0.99 },
+        "class": "CastNode",
+        "parameters": { "cast_ability": 1 },
         "children": []
     },
     "15": {
-        "class": "CastNode",
-        "parameters": { "cast_ability": 1 },
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.99 },
         "children": []
     },
     "16": {
@@ -75,17 +75,17 @@
         "children": []
     },
     "19": {
-        "class": "ChaseFocusNode",
-        "parameters": { "chase_focus": 0.99 },
-        "children": []
-    },
-    "20": {
         "class": "CastNode",
         "parameters": { "cast_ability": 1 },
         "children": []
     },
-    "21": { "class": "FallbackNode", "parameters": {}, "children": [1, 2] },
-    "22": { "class": "FallbackNode", "parameters": {}, "children": [6, 7] },
-    "23": { "class": "FallbackNode", "parameters": {}, "children": [11, 12] },
-    "24": { "class": "FallbackNode", "parameters": {}, "children": [16, 17] }
+    "20": {
+        "class": "ChaseFocusNode",
+        "parameters": { "chase_focus": 0.99 },
+        "children": []
+    },
+    "21": { "class": "SequenceNode", "parameters": {}, "children": [1, 2] },
+    "22": { "class": "SequenceNode", "parameters": {}, "children": [6, 7] },
+    "23": { "class": "SequenceNode", "parameters": {}, "children": [11, 12] },
+    "24": { "class": "SequenceNode", "parameters": {}, "children": [16, 17] }
 }

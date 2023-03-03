@@ -1,10 +1,9 @@
 import random
-import numpy
+from enum import Enum
 
-from sre_constants import FAILURE, SUCCESS
-
-from action_nodes import ActionNode
-from behavior_node import *
+import numpy as np
+from behavior_node import (BehaviorNode, BehaviorNodeTypes, BehaviorStates,
+                           InputIndex, InputProperties)
 
 """
 Implement all condition check nodes.

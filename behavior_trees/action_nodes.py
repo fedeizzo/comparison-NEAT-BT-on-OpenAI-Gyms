@@ -205,8 +205,8 @@ class ChaseFocusNode(ActionNode):
 
 
 action_node_classes = [
-    MoveNode,
-    RotateNode,
+    # MoveNode,
+    # RotateNode,
     CastNode,
     ChangeFocusNode,
     ChaseFocusNode,

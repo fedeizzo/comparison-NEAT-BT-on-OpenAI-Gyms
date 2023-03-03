@@ -4,7 +4,6 @@ from behavior_tree import BehaviorTree
 from behavior_node import BehaviorNode
 
 class BtDrawer:
-
     def __init__(self, root):
         self._root = root
         self._max_level = 1
@@ -16,7 +15,7 @@ class BtDrawer:
         final_nodes = []
         nodes = [self._root]
 
-        while bool(nodes):  # children != [] or len(children) != 0
+        while nodes:  # children != [] or len(children) != 0
             new_nodes = []
             for node in nodes:
                 if hasattr(node, 'children'):
@@ -26,23 +25,27 @@ class BtDrawer:
                 # save a node and its edges
                 final_edges.append((node, children))
                 final_nodes.append((node, self._max_level))
-                [final_nodes.append((child, self._max_level+1)) for child in children]
-                [new_nodes.append(child) for child in children if bool(child)]
+
+                for child in children:
+                    final_nodes.append((child, self._max_level+1))
+                    if child:
+                        new_nodes.append(child)
+
             # update nodes for recursive iteration
             nodes = new_nodes
             self._max_level += 1
 
         # removing duplicates
-        [self._final_nodes.append(
-            node) for node in final_nodes if node not in self._final_nodes]
+        for node in final_nodes:
+            if node not in self._final_nodes:
+                self._final_nodes.append(node)
 
         # list comprehensionwith with double iterations
-        self._bt_graph.add_edges_from([(node, child) for (
-            node, children) in final_edges for child in children])
+        self._bt_graph.add_edges_from(
+            [(node, child) for (node, children) in final_edges for child in children])
 
     @staticmethod
     def get_hierarchy_pos(G, root=None, width=1., vert_gap = 0.2, vert_loc = 0, leaf_vs_root_factor = 0.5):
-        
         """
         param G: the graph (must be a tree)
         root: the root node of the tree 
@@ -106,10 +109,7 @@ class BtDrawer:
         for node in pos:
             pos[node]= (pos[node][0]*width/x_max, pos[node][1])
         return pos
-    # to add different shapes
-    @staticmethod
-    def shape_map(node:BehaviorNode):
-        return 
+
     def draw(self):
         self.pre_draw()
         # x,y are the coordinates/size of the drawing
@@ -154,17 +154,28 @@ class BtDrawer:
 
         # Draw the nodes for each shape with the shape specified
         for shape in set(node_shapes):
-            node_list = [node for node in self._bt_graph.nodes(
-            ) if self._bt_graph.nodes[node]['shape'] == shape]
-            node_sizes = [1000 for i in node_list]
-            node_colors = ["#FFFFFF" for i in node_list]
-            edge_colors = ["#000000" for i in self._bt_graph.edges()]
-            nx.draw_networkx_nodes(self._bt_graph, positions, nodelist=node_list, node_color=node_colors,
-                                   node_size=node_sizes, node_shape=shape, edgecolors=edge_colors)
+            node_list = [
+                node for node in self._bt_graph.nodes()
+                if self._bt_graph.nodes[node]['shape'] == shape
+            ]
+            node_sizes = [1000] * len(node_list)
+            node_colors = ["#FFFFFF"] * len(node_list)
+            edge_colors = ["#000000"] * len(self._bt_graph.edges())
+            nx.draw_networkx_nodes(
+                self._bt_graph,
+                positions,
+                nodelist=node_list,
+                node_color=node_colors,
+                node_size=node_sizes,
+                node_shape=shape,
+                edgecolors=edge_colors
+            )
 
         # plt.axis('off') # this removes border
         plt.tight_layout()  # this is to have less wasted space
         plt.show()  # display
+
+
 if __name__ == "__main__":
     bt = BehaviorTree.from_json('./try.json')
     print(bt)

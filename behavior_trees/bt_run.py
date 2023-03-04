@@ -90,17 +90,23 @@ def main_dinosaurs(
             start = time()
             players = new_population
 
-            for index, player in enumerate(players):
-                player.to_json(f"./behavior_trees/saved_bts/dummy_gen_{ep}_player_{index}.json")
+            # for index, player in enumerate(players):
+            #     player.to_json(f"./behavior_trees/saved_bts/dummy_gen_{ep}_player_{index}.json")
 
 
             observation_n = env.reset()
             while True:
-                actions = np.asarray([player.tick(observation_n[i])[1]
-                                     for i, player in enumerate(players)])
-                observation_n, reward_n, done_n, _ = env.step(actions)
+                print(f"+ Episode {ep} -- New Step")
 
-                # import pdb; pdb.set_trace()
+                actions = []
+                for i, player in enumerate(players):
+                    print(f"- Player {i}")
+                    actions.append(player.tick(observation_n[i])[1])
+                    # import pdb; pdb.set_trace()
+
+                actions = np.asarray(actions)
+
+                observation_n, reward_n, done_n, _ = env.step(actions)
 
                 if all(done_n):
                     print(f"Episode {ep} finished in {int(time()-start)}s")

@@ -136,9 +136,9 @@ class BehaviorTree:
 
     @staticmethod
     def from_json(filename):
-        """Creates a BT give a certain json which specifies the strucutre of
+        """Creates a BT give a certain json which specifies the structure of
         the nodes. The format of the json must be the same as returned from
-        method to_json().
+        method to_json(). There must be a node with index 0, which is the root.
 
         Args:
             filename (str): path to the file containing the json description.
@@ -157,8 +157,7 @@ class BehaviorTree:
                 relations[index] = node_children
             all_nodes[index] = node
         # then append children to the composite nodes
-        for composite_idx in relations.keys():
-            children_idxs = relations[composite_idx]
+        for composite_idx, children_idxs in relations.items():
             for child_idx in children_idxs:
                 all_nodes[composite_idx].insert_child(all_nodes[str(child_idx)])
         # finally, create a new bt

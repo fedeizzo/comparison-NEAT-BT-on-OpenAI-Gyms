@@ -129,18 +129,29 @@ class SequenceNode(CompositeNode):
         for i in range(self.last_child_ticked, len(self.children)):
             self.last_child_ticked += 1
             result = self.children[i].tick(input)
+            # print(self.__str__(0))
+            # print(result)
+            # print(i, self.last_child_ticked)
+            # import pdb; pdb.set_trace()
             if result[0] == BehaviorStates.FAILURE:
                 self.last_child_ticked = 0
                 break
-            if result[0] == BehaviorStates.RUNNING:
+            elif result[0] == BehaviorStates.RUNNING:
                 # wait for the next derk environment iteration to continue
                 break
-            if result[0] == BehaviorStates.SUCCESS:  # condition nodes are always either success or failure
+            elif result[0] == BehaviorStates.SUCCESS:  # condition nodes are always either success or failure
                 continue
+            elif result[0] == BehaviorStates.PARTIAL:
+                self.last_child_ticked -= 1
+                break
 
         # ticked all children: restart from 0
         if self.last_child_ticked == len(self.children):
             self.last_child_ticked = 0
+        else:
+            if result[0] == BehaviorStates.RUNNING:
+                result = (BehaviorStates.PARTIAL, result[1])
+
         return result
 
     @staticmethod
@@ -176,14 +187,22 @@ class FallbackNode(CompositeNode):
         for i in range(self.last_child_ticked, len(self.children)):
             self.last_child_ticked += 1
             result = self.children[i].tick(input)
+            # print(self.__str__(0))
+            # print(result)
+            # print(i, self.last_child_ticked)
+            # import pdb; pdb.set_trace()
             if (
                 result[0] == BehaviorStates.SUCCESS
                 or result[0] == BehaviorStates.RUNNING
             ):
-                # TODO: this is wrong when the fallback node has a sequence node as child
                 self.last_child_ticked = 0
-                # self.last_child_ticked -= 1
                 break
+            elif result[0] == BehaviorStates.FAILURE:
+                continue
+            elif result[0] == BehaviorStates.PARTIAL:
+                self.last_child_ticked -= 1
+                break
+
         # ticked all children: restart from 0
         if self.last_child_ticked == len(self.children):
             self.last_child_ticked = 0

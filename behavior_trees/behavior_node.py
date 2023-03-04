@@ -10,6 +10,7 @@ class BehaviorStates(Enum):
     SUCCESS = 0
     RUNNING = 1
     FAILURE = 2
+    PARTIAL = 3
 
 
 class BehaviorNodeTypes(Enum):

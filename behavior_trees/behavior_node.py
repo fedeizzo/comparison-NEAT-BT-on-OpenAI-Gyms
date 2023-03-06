@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from enum import IntEnum, Enum
 
 import itertools
+from typing import Tuple
 
 import numpy as np
 
@@ -10,7 +11,6 @@ class BehaviorStates(Enum):
     SUCCESS = 0
     RUNNING = 1
     FAILURE = 2
-    PARTIAL = 3
 
 
 class BehaviorNodeTypes(Enum):
@@ -201,7 +201,7 @@ class BehaviorNode(ABC):
         pass
 
     @abstractmethod
-    def run(self, input):
+    def run(self, input) -> Tuple[BehaviorStates, np.ndarray]:
         """Runs the node.
         In composite nodes it will tick the children and implement the logic of
         the switch between the various children and the combination of returns.
@@ -214,7 +214,7 @@ class BehaviorNode(ABC):
         Args:
             input (np.ndarray): observations input array.
         """
-        pass
+        ...
 
     @staticmethod
     @abstractmethod

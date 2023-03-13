@@ -119,12 +119,12 @@ class CheckConditionNode(ConditionNode):
                 # avoid equal condition for floats
                 condition_type = random.choice([ConditionType.LESS, ConditionType.GREATER])
 
-                self.parameters = {
-                    "input_name": name,
-                    "input_index": index,
-                    "condition_type": condition_type.name,
-                    "condition_value": condition_value,
-                }
+            self.parameters = {
+                "input_name": name,
+                "input_index": index,
+                "condition_type": condition_type.name,
+                "condition_value": condition_value,
+            }
 
 
 condition_node_classes = [CheckConditionNode,]

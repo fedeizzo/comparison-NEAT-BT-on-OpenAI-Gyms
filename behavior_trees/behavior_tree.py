@@ -2,7 +2,9 @@ import json
 import pickle
 import random
 import numpy as np
-
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from action_nodes import action_node_classes
 from behavior_node import BehaviorNode, BehaviorNodeTypes
 from composite_nodes import composite_node_classes, CompositeNode

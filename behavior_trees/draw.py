@@ -1,7 +1,8 @@
-import networkx as nx
 import matplotlib.pyplot as plt
-from behavior_tree import BehaviorTree
+import networkx as nx
 from behavior_node import BehaviorNode
+from behavior_tree import BehaviorTree
+
 
 class BtDrawer:
     def __init__(self, root):

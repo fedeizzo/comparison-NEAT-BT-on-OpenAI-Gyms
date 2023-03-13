@@ -2,8 +2,8 @@ import random
 from enum import Enum
 
 import numpy as np
-from behavior_node import (BehaviorNode, BehaviorNodeTypes, BehaviorStates,
-                           InputIndex, InputProperties)
+from behavior_node import (BehaviorNode, BehaviorNodeTypes,
+                           BehaviorStates, InputIndex, InputProperties)
 
 """
 Implement all condition check nodes.

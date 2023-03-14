@@ -1,9 +1,7 @@
-from behavior_tree_evolution import BehaviorTreeEvolution
 from behavior_tree import BehaviorTree
-from behavior_tree_evolution import *
+from behavior_node import OutputIndex
 from argparse import ArgumentParser
 from gym_derk.envs import DerkEnv
-from time import time
 import numpy as np
 import os.path
 import toml
@@ -19,7 +17,7 @@ Algorithms principles, therefore we need:
 6. recombination strategy (implemented in the BT classes)
 Once we have all of these, we can start the evolution process.
 
-try with python .\behavior_trees\bt_run.py -c .\configs\bt.toml
+try with python .\behavior_trees\bt_run.py -c .\configs\sam.toml
 """
 
 
@@ -39,7 +37,7 @@ def main_dinosaurs(
     )
     env = DerkEnv(
         mode="normal",
-        n_arenas=number_of_arenas if is_train else 6,
+        n_arenas=number_of_arenas if is_train else 1,
         reward_function=reward_function,
         turbo_mode=is_turbo,
         app_args={
@@ -49,81 +47,68 @@ def main_dinosaurs(
         },
         home_team=[
             {
-                "primaryColor": "#ce03fc",
-                "slots": ["Pistol", "FrogLegs", "HealingGland"],
+                "primaryColor": "#adfc03",
+                "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
             {
-                "primaryColor": "#8403fc",
-                "slots": ["Pistol", "FrogLegs", "HealingGland"],
+                "primaryColor": "#3dfc03",
+                "slots": ["Cleavers", "FrogLegs", "HealingGland"],
             },
             {
-                "primaryColor": "#0331fc",
-                "slots": ["Pistol", "FrogLegs", "HealingGland"],
+                "primaryColor": "#03fc73",
+                "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
         ],
         away_team=[
             {
                 "primaryColor": "#fc1c03",
-                "slots": ["Pistol", "FrogLegs", "HealingGland"],
+                "slots": ["Cleavers", "FrogLegs", "HealingGland"],
             },
             {
                 "primaryColor": "#fc6f03",
-                "slots": ["Pistol", "FrogLegs", "HealingGland"],
+                "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
             {
                 "primaryColor": "#fcad03",
-                "slots": ["Pistol", "FrogLegs", "HealingGland"],
+                "slots": ["Blaster", "FrogLegs", "HealingGland"],
             },
         ],
     )
 
-    population_size = number_of_arenas * 6
-    evolution_engine = BehaviorTreeEvolution(bt_config, population_size)
     # create players at gen 0
     if is_train:
-        new_population = [
-            # BehaviorTree.generate(5) for _ in range(population_size)
-            BehaviorTree.from_json('./behavior_trees/saved_bts/dummy.json') for _ in range(population_size)
-        ]
-
-        for ep in range(episodes_number):
-            start = time()
-            players = new_population
-
-            # for index, player in enumerate(players):
-            #     player.to_json(f"./behavior_trees/saved_bts/dummy_gen_{ep}_player_{index}.json")
-
-
+        population_size = number_of_arenas * 6
+        
+        try:
+            population = [BehaviorTree.from_json(bt_config['game']['starting_config']) for _ in range(population_size)]
+        except (KeyError, FileNotFoundError):
+            population = [BehaviorTree.generate(5) for _ in range(population_size)]
+            
+        population_home = population[:population_size//2]
+        population_away = population[population_size//2:]
+        
+        for i in range(episodes_number):
             observation_n = env.reset()
             while True:
-                print(f"+ Episode {ep} -- New Step")
-
-                actions = []
-                for i, player in enumerate(players):
-                    print(f"- Player {i}")
-                    actions.append(player.tick(observation_n[i])[1])
-                    # import pdb; pdb.set_trace()
-
-                actions = np.asarray(actions)
-
+                actions_home = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(population_home)])
+                actions_away = np.asarray([player.tick(observation_n[i])[1]for i, player in enumerate(population_away)])
+                actions = np.asarray([*actions_home,*actions_away])
                 observation_n, reward_n, done_n, _ = env.step(actions)
-
                 if all(done_n):
-                    print(f"Episode {ep} finished in {int(time()-start)}s")
+                    print(f"Episode {i} finished")
                     break
-            start = time()
             total_reward = env.total_reward
-            for player, reward in zip(players, list(total_reward)):
+            for player, reward in zip(population, list(total_reward)):
                 player.fitness = float(reward)
-            new_population = evolution_engine.evolve_population(players)
-            print(f"population mutated in {int(time()-start)}s")
-
+            # create new population and evolve
         agent_path = os.path.join(
             os.getcwd(), "behavior_trees", "saved_bts", bt_best_player_name
         )
-
+        players = [*population_home, *population_away]
+        players.sort(key=lambda x: x.fitness, reverse=True)
         # save best player
-        evolution_engine.global_best_player.to_json(agent_path)
+        print(players[0])
+        players[0].to_json(agent_path)
 
     else:
         assert False, "Test phase not implemented yet"

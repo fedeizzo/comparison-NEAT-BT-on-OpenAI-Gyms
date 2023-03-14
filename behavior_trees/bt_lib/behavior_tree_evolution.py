@@ -1,8 +1,7 @@
-from behavior_tree import BehaviorTree
-from scipy.special import softmax
 import numpy as np
+from behavior_tree import BehaviorTree
 from draw import BtDrawer
-
+from scipy.special import softmax
 
 """Class to manage evolution of the population of behavior trees.
 Functionalities:
@@ -64,7 +63,7 @@ class BehaviorTreeEvolution:
             penalize_big_trees => mu_lambda => select_parents => mutate => crossover => return new population
         where the result of each phase is fed in the following phase as input.
 
-        Monitor: 
+        Monitor:
         - fitness (average, maximum, variance)
         - size (average, max)
         - depth (average, max)
@@ -91,27 +90,37 @@ class BehaviorTreeEvolution:
         self.stats[f"iteration#{self.iteration_nr}"]["min_fitness"] = min(fitnesses)
         self.stats[f"iteration#{self.iteration_nr}"]["max_fitness"] = max(fitnesses)
         self.stats[f"iteration#{self.iteration_nr}"]["avg_fitness"] = sum(
-            fitnesses)/len(fitnesses)
+            fitnesses
+        ) / len(fitnesses)
         self.stats[f"iteration#{self.iteration_nr}"]["max_size"] = max(sizes)
-        self.stats[f"iteration#{self.iteration_nr}"]["avg_size"] = sum(sizes)/len(sizes)
+        self.stats[f"iteration#{self.iteration_nr}"]["avg_size"] = sum(sizes) / len(
+            sizes
+        )
         self.stats[f"iteration#{self.iteration_nr}"]["max_depth"] = max(depths)
-        self.stats[f"iteration#{self.iteration_nr}"]["avg_depth"] = sum(
-            depths)/len(depths)
+        self.stats[f"iteration#{self.iteration_nr}"]["avg_depth"] = sum(depths) / len(
+            depths
+        )
         # sort population, useful later
         penalized_size_population.sort(key=lambda x: x.fitness, reverse=True)
-        if (self.config["monitor"]):
+        if self.config["monitor"]:
             print(f"iteration {self.iteration_nr}")
             print(
-                f'\tFitness: min={self.stats[f"iteration#{self.iteration_nr}"]["min_fitness"]} max={self.stats[f"iteration#{self.iteration_nr}"]["max_fitness"]}  avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_fitness"]}')
+                f'\tFitness: min={self.stats[f"iteration#{self.iteration_nr}"]["min_fitness"]} max={self.stats[f"iteration#{self.iteration_nr}"]["max_fitness"]}  avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_fitness"]}'
+            )
             print(
-                f'\tSize:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_size"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_size"]}')
+                f'\tSize:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_size"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_size"]}'
+            )
             print(
-                f'\tDepth:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_depth"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_depth"]}')
-            if (self.config["draw_best"]):
+                f'\tDepth:    max={self.stats[f"iteration#{self.iteration_nr}"]["max_depth"]} avg={self.stats[f"iteration#{self.iteration_nr}"]["avg_depth"]}'
+            )
+            if self.config["draw_best"]:
                 drawer = BtDrawer(population[0].root)
                 drawer.draw()
         # save global best player
-        if self.global_best_player is None or self.global_best_player.fitness < penalized_size_population[0].fitness:
+        if (
+            self.global_best_player is None
+            or self.global_best_player.fitness < penalized_size_population[0].fitness
+        ):
             self.global_best_player = penalized_size_population[0].copy()
 
         new_population = list()
@@ -122,7 +131,9 @@ class BehaviorTreeEvolution:
         selected_parents = self.select_parents(parent_selection_pool)
         # implement elitism
         if self.config["elitism"]:
-            new_population += penalized_size_population[:self.config["number_of_elites"]]
+            new_population += penalized_size_population[
+                : self.config["number_of_elites"]
+            ]
         # grow the population with recombination and mutation
         tmp = 0
         while len(new_population) < self.pop_size:
@@ -130,7 +141,8 @@ class BehaviorTreeEvolution:
             if self.config["crossover"]:
                 # select randomly two parents from the parent pool and recombine them
                 (gen_a, gen_b) = np.random.choice(
-                    a=selected_parents, size=2, replace=False)
+                    a=selected_parents, size=2, replace=False
+                )
                 # no change in parents here because recombination works on deep copies
                 child = gen_a.recombination(gen_b)
             else:
@@ -149,7 +161,7 @@ class BehaviorTreeEvolution:
 
     def penalize_big_trees(self, forest: "list[BehaviorTree]"):
         """This function is used to penalize those trees that are too deep (or
-        too big). By now we account for depth, maybe in future we'll account 
+        too big). By now we account for depth, maybe in future we'll account
         for width.
 
         Args:
@@ -157,12 +169,12 @@ class BehaviorTreeEvolution:
         """
         for tree in forest:
             depth, count = tree.get_size()
-            tree.fitness -= (self.config["no_big_trees"]*depth)
+            tree.fitness -= self.config["no_big_trees"] * depth
         return forest
 
-    def mu_lambda_strategy(self,  population: "list[BehaviorTree]"):
+    def mu_lambda_strategy(self, population: "list[BehaviorTree]"):
         """Generates the next population, by taking into account the parameters
-        mu and lambda. It can therefore choose how many parents to keep in the 
+        mu and lambda. It can therefore choose how many parents to keep in the
         next population.
 
         It can deal also with elitism constraints.
@@ -196,7 +208,7 @@ class BehaviorTreeEvolution:
         - hall of fame
 
         Args:
-            pool (list[BehaviorTree]): current (evaluated) parent selection 
+            pool (list[BehaviorTree]): current (evaluated) parent selection
             pool.
 
         Returns:
@@ -223,9 +235,9 @@ class BehaviorTreeEvolution:
         fitnesses = [genome.fitness for genome in pool]
         # possible negative fitnesses
         min_fitness = min(fitnesses)
-        if(min_fitness < 0):
+        if min_fitness < 0:
             min_fitness = -min_fitness
-            fitnesses = fitnesses+min_fitness
+            fitnesses = fitnesses + min_fitness
         # # try solve problem with zeros when there's too much variance in fitnesses
         # max_fitness = max(fitnesses)
         # fitnesses = fitnesses + ((max_fitness/100)*5)
@@ -234,23 +246,25 @@ class BehaviorTreeEvolution:
 
     def ranking_selection(self, pool):
         pool.sort(key=lambda x: x.fitness, reverse=True)
-        dividendum = sum([i+1 for i in range(len(pool))])
-        probabilities = [(1-(i/dividendum)) for i in range(1, (len(pool)+1))]
+        dividendum = sum([i + 1 for i in range(len(pool))])
+        probabilities = [(1 - (i / dividendum)) for i in range(1, (len(pool) + 1))]
         from scipy.special import softmax
+
         probabilities = softmax(probabilities)
         return np.random.choice(a=pool, size=(self.number_of_parents), p=probabilities)
 
     def truncated_ranking_selection(self, pool):
         pool.sort(key=lambda x: x.fitness, reverse=True)
-        return pool[:self.number_of_parents]
+        return pool[: self.number_of_parents]
 
     def tournament_selection(self, pool):
         selected_parents = list()
         while len(selected_parents) < self.number_of_parents:
-            partecipants = list(np.random.choice(
-                a=pool, size=self.config["tournament_size"], replace=False))
-            # import pdb
-            # pdb.set_trace()
+            partecipants = list(
+                np.random.choice(
+                    a=pool, size=self.config["tournament_size"], replace=False
+                )
+            )
             partecipants.sort(key=lambda x: x.fitness, reverse=True)
             selected_parents.append(partecipants[0].copy())
         return selected_parents
@@ -275,13 +289,12 @@ class BehaviorTreeEvolution:
         # order hall of fame
         self.hall_of_fame.sort(key=lambda x: x.fitness, reverse=True)
         # extract the hall of fame
-        selected_parents = self.hall_of_fame[:self.number_of_parents]
+        selected_parents = self.hall_of_fame[: self.number_of_parents]
         # if not enough, select from current pool
         while len(selected_parents) < self.number_of_parents:
             selected_parents.append(pool.pop(0))
         return selected_parents
 
     def print_stats(self):
-        """To be definined, print to json stats.
-        """
+        """To be definined, print to json stats."""
         pass

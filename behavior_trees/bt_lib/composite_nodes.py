@@ -6,9 +6,9 @@ from typing import Optional
 import numpy as np
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from action_nodes import action_node_classes
+from action_nodes import ActionNode
 from behavior_node import BehaviorNode, BehaviorNodeTypes, BehaviorStates
-from condition_nodes import condition_node_classes
+from condition_nodes import ConditionNode
 
 """
 May implement decorators.
@@ -25,7 +25,7 @@ class CompositeNode(BehaviorNode):
         self.children: list[BehaviorNode] = []
         self.last_child_ticked = 0
 
-    def insert_child(self, child: BehaviorNode, position: Optional[int]=None):
+    def insert_child(self, child: BehaviorNode, position: Optional[int] = None):
         if position is None:
             position = len(self.children)
         self.children.insert(position, child)
@@ -33,7 +33,12 @@ class CompositeNode(BehaviorNode):
     def remove_child(self, position):
         return self.children.pop(position)
 
-    def mutate(self, prob: int=0.2, all_mutations: bool=False):
+    def mutate(
+        self,
+        candidate_classes: list[type[BehaviorNode]],
+        prob: float = 0.2,
+        all_mutations: bool = False,
+    ):
         """Mutates the sequence node.
 
         Possible mutations:
@@ -59,7 +64,11 @@ class CompositeNode(BehaviorNode):
             self.insert_child(child)
 
         # remove a node with probability prob
-        if (all_mutations or mutation_type == 1) and random.random() < prob and len(self.children) > 1:
+        if (
+            (all_mutations or mutation_type == 1)
+            and random.random() < prob
+            and len(self.children) > 1
+        ):
             removing_index = random.randint(0, (len(self.children) - 1))
             # no need to update last child ticked
             # if the tree is reset at each play
@@ -73,7 +82,7 @@ class CompositeNode(BehaviorNode):
         for c in self.children:
             c.mutate(prob, all_mutations)
 
-    def __str__(self, indent:int=0) -> str:
+    def __str__(self, indent: int = 0) -> str:
         string_form = super().__str__(indent)
         for child in self.children:
             child_str = child.__str__(indent + 1)
@@ -81,8 +90,7 @@ class CompositeNode(BehaviorNode):
         return string_form
 
     def copy(self):
-        """Manual implementation of deepcopy.
-        """
+        """Manual implementation of deepcopy."""
         self_class = self.__class__
         copy = self_class(self.parameters)
         copy.children = []
@@ -92,7 +100,7 @@ class CompositeNode(BehaviorNode):
 
     def get_size(self):
         """Returns a tuple (depth,count) where depth is the level of the node
-        starting from the leaves, and count is the count of nodes below+this 
+        starting from the leaves, and count is the count of nodes below+this
         node.
         """
         depth = -1
@@ -101,7 +109,7 @@ class CompositeNode(BehaviorNode):
             c_depth, c_count = child.get_size()
             count += c_count
             depth = max(depth, c_depth)
-        return (depth, count+1)
+        return (depth, count + 1)
 
 
 class SequenceNode(CompositeNode):
@@ -128,7 +136,12 @@ class SequenceNode(CompositeNode):
         Args:
             input (np.ndarray): observations input array.
         """
-        result = (BehaviorStates.SUCCESS, np.zeros(5,))
+        result = (
+            BehaviorStates.SUCCESS,
+            np.zeros(
+                5,
+            ),
+        )
 
         for i in range(self.last_child_ticked, len(self.children)):
             self.last_child_ticked += 1
@@ -155,12 +168,33 @@ class SequenceNode(CompositeNode):
         return result
 
     @staticmethod
-    def get_random_node(num_children=1):
-        """Generate a random instance of the SequenceNode."""
+    def get_random_node(
+        action_node_classes: list[type[ActionNode]],
+        condition_node_classes: list[type[ConditionNode]],
+        composite_node_classes: list[type[CompositeNode]],
+        num_children: int = 1,
+    ):
+        """Generate a random instance of the SequenceNode.
+        Args:
+            candidate_classes (list[BehaviorNode]): list of classes to choose from.
+            num_children (int): number of children to generate.
+        """
         sequence = SequenceNode()
         for _ in range(num_children):
-            child_class = np.random.choice(candidate_classes)
-            child = child_class.get_random_node()
+            child_class: BehaviorNode = np.random.choice(
+                action_node_classes + condition_node_classes + composite_node_classes
+            )
+
+            # only composite nodes require class types when generating random nodes
+            if child_class in composite_node_classes:
+                child = child_class.get_random_node(
+                    action_node_classes,
+                    condition_node_classes,
+                    composite_node_classes,
+                    num_children,
+                )
+            else:
+                child = child_class.get_random_node()
             sequence.insert_child(child)
         return sequence
 
@@ -208,30 +242,51 @@ class FallbackNode(CompositeNode):
         return result
 
     @staticmethod
-    def get_random_node(num_children=2):
-        """Generate a random instance of the BehaviorNode."""
+    def get_random_node(
+        action_node_classes: list[type[ActionNode]],
+        condition_node_classes: list[type[ConditionNode]],
+        composite_node_classes: list[type[CompositeNode]],
+        num_children: int = 2,
+    ):
+        """Generate a random instance of the BehaviorNode.
+        Args:
+            candidate_classes (list[BehaviorNode]): list of classes to choose from.
+            num_children (int): number of children to generate.
+        """
         fallback = FallbackNode()
         for _ in range(num_children):
-            child_class: BehaviorNode = np.random.choice(candidate_classes)
-            child = child_class.get_random_node()
+            child_class: BehaviorNode = np.random.choice(
+                action_node_classes + condition_node_classes + composite_node_classes
+            )
+            # composite nodes require class types when generating random nodes
+            if child_class in composite_node_classes:
+                child = child_class.get_random_node(
+                    action_node_classes,
+                    condition_node_classes,
+                    composite_node_classes,
+                    num_children-1,
+                )
+            else:
+                child = child_class.get_random_node()
             fallback.insert_child(child)
         return fallback
 
 
 composite_node_classes = [SequenceNode, FallbackNode]
 
-candidate_classes = action_node_classes + composite_node_classes + condition_node_classes
-
 
 if __name__ == "__main__":
-    # sn = SequenceNode.get_random_node()
-    # sn.insert_child(CastNode.get_random_node(), len(sn.children))
-    # sn.insert_child(CastNode.get_random_node(), len(sn.children))
-    # for _ in range(3):
-    #     sn.mutate(0.5)
-    #     print(sn)
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from derk.action_nodes import action_node_classes
+    from derk.condition_nodes import condition_node_classes
 
-    fb = FallbackNode.get_random_node(num_children=3)
+    candidate_classes = (
+        action_node_classes + condition_node_classes + composite_node_classes
+    )
+    name_to_class = {cl.__name__: cl for cl in (candidate_classes)}
+
+    fb = FallbackNode.get_random_node(action_node_classes, condition_node_classes, composite_node_classes, num_children=2)
+
     # fb.insert_child(CastNode.get_random_node(), len(fb.children))
     # # fb.insert_child(CastNode.get_random_node(), len(fb.children))
     # # for _ in range(3):
@@ -246,3 +301,6 @@ if __name__ == "__main__":
     fbcopy = fb.copy()
     print(fb)
     print(fbcopy)
+    sq = SequenceNode.get_random_node(action_node_classes, condition_node_classes, composite_node_classes, num_children=2)
+
+    print(sq)

@@ -1,51 +1,14 @@
-import os
-import random
+import gymnasium as gym 
+import os 
 import sys
-from enum import Enum
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
-from behavior_node import (BehaviorNode, BehaviorNodeTypes,
-                           BehaviorStates, InputIndex, InputProperties)
+import random
 
-"""
-Implement all condition check nodes.
-There will be for enemy distance, enemy angle, distance from border and others.
-Here massively use the input observations.
-
-All condition nodes are the derived from ConditionNode class.
-"""
-
-class ConditionType(Enum):
-    """Enum for the type of condition.
-    """
-    EQUAL = 1
-    GREATER = 2
-    LESS = 3
-    GREATER_EQUAL = 4
-    LESS_EQUAL = 5
-    NOT_EQUAL = 6
-
-
-class ConditionNode(BehaviorNode):
-    """Condition nodes perform an atomic condition check.
-    They return as state FAILURE or SUCCESS.
-    """
-
-    def __init__(self, parameters):
-        super().__init__(BehaviorNodeTypes.COND, parameters)
-    def copy(self):
-        """Manual implementation of deepcopy.
-        """
-        self_class = self.__class__
-        copy = self_class(self.parameters)
-        return copy
-    def get_size(self):
-        """Returns a tuple (depth,count) where depth is the level of the node
-        starting from the leaves, and count is the count of nodes below+this 
-        node.
-        """
-        return (1, 1)
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from behavior_trees.condition_nodes import ConditionNode
+from behavior_trees.behavior_node import BehaviorStates
+from behavior_trees.condition_nodes import ConditionType
+from input_output_lunar_lander import LanderInputIndex, LanderInputProperties
 
 class CheckConditionNode(ConditionNode):
 
@@ -61,36 +24,34 @@ class CheckConditionNode(ConditionNode):
         condition_value = self.parameters["condition_value"]
 
         input_value = input[self.parameters["input_index"]]
-        if input_value == 2:
-            return (BehaviorStates.FAILURE, np.zeros(shape=(5,)))
 
         condition_type = ConditionType[self.parameters['condition_type']]
         if condition_type == ConditionType.EQUAL:
             if input_value == condition_value:
-                return (BehaviorStates.SUCCESS, np.zeros(shape=(5,)))
+                return (BehaviorStates.SUCCESS, np.zeros(shape=(1,)))
         if condition_type == ConditionType.GREATER:
             if input_value > condition_value:
-                return (BehaviorStates.SUCCESS, np.zeros(shape=(5,)))
+                return (BehaviorStates.SUCCESS, np.zeros(shape=(1,)))
         if condition_type == ConditionType.LESS:
             if input_value < condition_value:
-                return (BehaviorStates.SUCCESS, np.zeros(shape=(5,)))
+                return (BehaviorStates.SUCCESS, np.zeros(shape=(1,)))
         if condition_type == ConditionType.GREATER_EQUAL:
             if input_value >= condition_value:
-                return (BehaviorStates.SUCCESS, np.zeros(shape=(5,)))
+                return (BehaviorStates.SUCCESS, np.zeros(shape=(1,)))
         if condition_type == ConditionType.LESS_EQUAL:
             if input_value <= condition_value:
-                return (BehaviorStates.SUCCESS, np.zeros(shape=(5,)))
+                return (BehaviorStates.SUCCESS, np.zeros(shape=(1,)))
         if condition_type == ConditionType.NOT_EQUAL:
             if input_value != condition_value:
-                return (BehaviorStates.SUCCESS, np.zeros(shape=(5,)))
+                return (BehaviorStates.SUCCESS, np.zeros(shape=(1,)))
         
-        return (BehaviorStates.FAILURE, np.zeros(shape=(5,)))
+        return (BehaviorStates.FAILURE, np.zeros(shape=(1,)))
     
     @staticmethod
     def get_random_node():
-        index = random.randint(0, len(InputIndex)-1)
-        name = next(name for name, value in vars(InputIndex).items() if value == index)
-        input_properties = getattr(InputProperties, name)
+        index = random.randint(0, len(LanderInputIndex)-1)
+        name = next(name for name, value in vars(LanderInputIndex).items() if value == index)
+        input_properties = getattr(LanderInputProperties, name)
 
         if input_properties['type'] == bool:
             condition_value = random.choice([True, False])
@@ -110,9 +71,9 @@ class CheckConditionNode(ConditionNode):
     def mutate(self, prob: float, all_mutations):
         # TODO: reuse get_random_node
         if random.random() < prob:
-            index = random.randint(0, len(InputIndex)-1)
-            name = next(name for name, value in vars(InputIndex).items() if value == index)
-            input_properties = getattr(InputProperties, name)
+            index = random.randint(0, len(LanderInputIndex)-1)
+            name = next(name for name, value in vars(LanderInputIndex).items() if value == index)
+            input_properties = getattr(LanderInputProperties, name)
 
             if input_properties['type'] == bool:
                 condition_value = random.choice([True, False])
@@ -128,28 +89,10 @@ class CheckConditionNode(ConditionNode):
                 "condition_type": condition_type.name,
                 "condition_value": condition_value,
             }
-
-
 condition_node_classes = [CheckConditionNode,]
-
-
 if __name__ == "__main__":
-    sample_input = np.zeros((64,))
-    sample_input[InputIndex.Ability1Ready] = 1
-    sample_input[InputIndex.HasFocus] = 1
-
-    random_condition = CheckConditionNode.get_random_node()
-    print(random_condition)
-    print(sample_input)
-
-    a = random_condition.tick(sample_input)
-    print(random_condition)
-    print(a)
-     
-    copy_condition = random_condition.copy()
-    print(copy_condition)
-    
-    copy_condition.mutate(0.5, True)
-    
-    print(copy_condition)
-    print(random_condition)
+    # test
+    node = CheckConditionNode.get_random_node()
+    print (node.parameters)
+    node.tick(np.zeros(shape=(8,)))
+    print (node)

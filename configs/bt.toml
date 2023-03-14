@@ -1,9 +1,10 @@
 [game]
 fast_mode = true
-number_of_arenas = 1
+number_of_arenas = 10
 train = true
 episodes_number = 10
 bt_best_player_name = 'trial.json'
+starting_config = 'dummy.json'
 
 [reward-function]
 damageEnemyStatue = 1

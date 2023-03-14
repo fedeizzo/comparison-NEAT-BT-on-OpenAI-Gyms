@@ -7,14 +7,10 @@ import sys
 import numpy as np
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from action_nodes import action_node_classes
+from action_nodes import ActionNode
 from behavior_node import BehaviorNode, BehaviorNodeTypes
-from composite_nodes import CompositeNode, composite_node_classes
-from condition_nodes import condition_node_classes
-
-name_to_class = {
-    cl.__name__: cl for cl in (composite_node_classes + action_node_classes + condition_node_classes)
-}
+from composite_nodes import CompositeNode
+from condition_nodes import ConditionNode
 
 
 class BehaviorTree:
@@ -22,10 +18,25 @@ class BehaviorTree:
     Contains utility method to manage a single complete tree.
     """
 
-    def __init__(self):
-        root_class: BehaviorNode = np.random.choice(composite_node_classes)
-        self.root: CompositeNode = root_class.get_random_node()
+    def __init__(
+        self,
+        action_node_classes: list[type[ActionNode]],
+        condition_node_classes: list[type[ConditionNode]],
+        composite_node_classes: list[type[CompositeNode]],
+    ):
+
         self.fitness = 0
+        self.action_node_classes = action_node_classes
+        self.condition_node_classes = condition_node_classes
+        self.composite_node_classes = composite_node_classes
+
+        root_class = np.random.choice(self.composite_node_classes)
+        self.root: CompositeNode = root_class.get_random_node(
+            self.action_node_classes,
+            self.condition_node_classes,
+            self.composite_node_classes,
+            1
+        )
 
     def __str__(self) -> str:
         return self.root.__str__()
@@ -34,7 +45,7 @@ class BehaviorTree:
         with open(path, "wb") as outfile:
             pickle.dump(self, outfile)
 
-    def mutate(self, prob, all_mutations = False):
+    def mutate(self, prob, all_mutations=False):
         """Start mutation from the root, then propagate."""
         self.root.mutate(prob, all_mutations)
 
@@ -57,7 +68,11 @@ class BehaviorTree:
         exchange_point_a = parent_a.root
         child_a = parent_a.root
         index_a = None
-        while child_a.type != BehaviorNodeTypes.ACT and child_a.type != BehaviorNodeTypes.COND and random.random() < 0.8:
+        while (
+            child_a.type != BehaviorNodeTypes.ACT
+            and child_a.type != BehaviorNodeTypes.COND
+            and random.random() < 0.8
+        ):
             exchange_point_a = child_a
             index_a = random.randint(0, len(exchange_point_a.children) - 1)
             child_a = exchange_point_a.children[index_a]
@@ -65,7 +80,11 @@ class BehaviorTree:
         exchange_point_b = parent_b.root
         child_b = parent_b.root
         index_b = None
-        while child_b.type != BehaviorNodeTypes.ACT and child_b.type != BehaviorNodeTypes.COND and random.random() < 0.8:
+        while (
+            child_b.type != BehaviorNodeTypes.ACT
+            and child_b.type != BehaviorNodeTypes.COND
+            and random.random() < 0.8
+        ):
             exchange_point_b = child_b
             index_b = random.randint(0, len(exchange_point_b.children) - 1)
             child_b = exchange_point_b.children[index_b]
@@ -88,29 +107,42 @@ class BehaviorTree:
         return new_bt
 
     @staticmethod
-    def generate(min_children=3):
+    def generate(
+        action_node_classes: list[type[ActionNode]],
+        condition_node_classes: list[type[ConditionNode]],
+        composite_node_classes: list[type[CompositeNode]],
+        min_children: int = 3,
+    ):
         """Create a new behavior tree with at least min_children child nodes.
         #! Would be great to set a minimum depth instead of width.
 
         Args:
-            min_children (int, optional): minimum number of children for the
-            root. Defaults to 5.
+            action_node_classes list[type[ActionNode]]: list of available classes for action nodes,
+            condition_node_classes list[type[ConditionNode]]: list of available classes for condition nodes,
+            composite_node_classes list[type[CompositeNode]]: list of available classes for composite nodes,
+            min_children (int, optional): minimum number of children for the root
 
         Returns:
             BehaviorTree: the newly instantiated behavior tree.
         """
-        bt = BehaviorTree()
-        candidate_classes = action_node_classes + composite_node_classes + condition_node_classes
+        bt = BehaviorTree(
+            action_node_classes, condition_node_classes, composite_node_classes
+        )
         for _ in range(min_children):
-            child_class: BehaviorNode = np.random.choice(candidate_classes)
-            child = child_class.get_random_node()
+            child_class: type[BehaviorNode] = np.random.choice(candidate_classes)
+            if child_class in composite_node_classes:
+                child = child_class.get_random_node(
+                    action_node_classes, condition_node_classes, composite_node_classes
+                )
+            else:
+                child = child_class.get_random_node()
             bt.root.insert_child(child, len(bt.root.children))
         return bt
 
     def tick(self, input):
         return self.root.tick(input)
 
-    def to_json(self, filename):
+    def to_json(self, filename: str):
         """Saves the tree into a json file in almost human-readable format.
         For each node it saves:
         - class
@@ -122,7 +154,7 @@ class BehaviorTree:
         """
         all_nodes = {}
         fifo: list[tuple[str, BehaviorNode]] = list()
-        fifo.append(('0', self.root))
+        fifo.append(("0", self.root))
         node_global_index = 1
         while len(fifo) > 0:
             index, node = fifo.pop(0)
@@ -139,7 +171,7 @@ class BehaviorTree:
             json.dump(all_nodes, outfile, indent=2)
 
     @staticmethod
-    def from_json(filename):
+    def from_json(filename: str, name_to_class):
         """Creates a BT give a certain json which specifies the structure of
         the nodes. The format of the json must be the same as returned from
         method to_json(). There must be a node with index 0, which is the root.
@@ -170,8 +202,8 @@ class BehaviorTree:
         new_bt.root = all_nodes["0"]
         return new_bt
 
-    def is_regular(self):
-        """Checks if the tree is regular, namely if it does not contain two 
+    def is_regular(self) -> bool:
+        """Checks if the tree is regular, namely if it does not contain two
         times the very same node.
         """
         tree_nodes: set[BehaviorNode] = set()
@@ -187,23 +219,32 @@ class BehaviorTree:
         return True
 
     def copy(self):
-        """Manual implementation of deepcopy.
-        """
+        """Manual implementation of deepcopy."""
         copy = BehaviorTree()
         copy.root = self.root.copy()
         return copy
 
-    def get_size(self):
+    def get_size(self) -> int:
         return self.root.get_size()
 
 
 if __name__ == "__main__":
-    bt = BehaviorTree.generate(10)
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from bt_lib.composite_nodes import composite_node_classes
+    from derk.action_nodes import action_node_classes
+    from derk.condition_nodes import condition_node_classes
+
+    candidate_classes = (
+        action_node_classes + condition_node_classes + composite_node_classes
+    )
+    name_to_class = {cl.__name__: cl for cl in (candidate_classes)}
+
+    bt = BehaviorTree.generate(action_node_classes, condition_node_classes, composite_node_classes,3)
     print(bt)
-    bt.to_json("try.json")
-    print("===============")
-    loaded = BehaviorTree.from_json("try.json")
-    print(loaded)
+    # bt.to_json("try.json")
+    # print("===============")
+    # loaded = BehaviorTree.from_json("try.json",name_to_class)
+    # print(loaded)
     # sample_input = np.zeros((64))
     # sample_input[InputIndex.Ability0Ready] = 1
     # sample_input[InputIndex.Ability1Ready] = 1

@@ -1,6 +1,9 @@
+import os
 import random
+import sys
 from enum import Enum
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import numpy as np
 from behavior_node import (BehaviorNode, BehaviorNodeTypes,
                            BehaviorStates, InputIndex, InputProperties)

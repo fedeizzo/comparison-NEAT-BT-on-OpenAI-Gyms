@@ -1,7 +1,11 @@
+import os
 import random
+import sys
 from typing import Optional
 
 import numpy as np
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from action_nodes import action_node_classes
 from behavior_node import BehaviorNode, BehaviorNodeTypes, BehaviorStates
 from condition_nodes import condition_node_classes

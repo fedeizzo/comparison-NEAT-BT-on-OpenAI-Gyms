@@ -1,7 +1,6 @@
-from abc import ABC, abstractmethod
-from enum import IntEnum, Enum
-
 import itertools
+from abc import ABC, abstractmethod
+from enum import Enum, IntEnum
 from typing import Tuple
 
 import numpy as np

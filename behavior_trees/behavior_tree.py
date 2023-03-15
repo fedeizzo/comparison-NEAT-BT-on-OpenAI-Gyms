@@ -1,11 +1,15 @@
 import json
+import os
 import pickle
 import random
+import sys
+
 import numpy as np
 
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from action_nodes import action_node_classes
 from behavior_node import BehaviorNode, BehaviorNodeTypes
-from composite_nodes import composite_node_classes, CompositeNode
+from composite_nodes import CompositeNode, composite_node_classes
 from condition_nodes import condition_node_classes
 
 name_to_class = {

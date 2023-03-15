@@ -1,6 +1,14 @@
+import os
+import sys
+
 import numpy as np
-from behavior_node import BehaviorNode, BehaviorNodeTypes, BehaviorStates, OutputIndex, InputIndex
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 from random import randint, random
+
+from behavior_node import (BehaviorNode, BehaviorNodeTypes,
+                           BehaviorStates, InputIndex, OutputIndex)
 
 
 class ActionNode(BehaviorNode):

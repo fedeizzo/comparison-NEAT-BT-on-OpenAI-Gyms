@@ -127,7 +127,7 @@ class BehaviorTree:
             action_node_classes, condition_node_classes, composite_node_classes
         )
         for _ in range(min_children):
-            child_class: type[BehaviorNode] = np.random.choice(candidate_classes)
+            child_class: type[BehaviorNode] = np.random.choice(action_node_classes+ condition_node_classes+ composite_node_classes)
             if child_class in composite_node_classes:
                 child = child_class.get_random_node(
                     action_node_classes, condition_node_classes, composite_node_classes

@@ -1,7 +1,6 @@
 import itertools
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Tuple
 
 import numpy as np
 
@@ -23,13 +22,13 @@ class BehaviorNodeTypes(Enum):
 class BehaviorNode(ABC):
     BEHAVIOR_NODE_ID = itertools.count()
 
-    def __init__(self, type, parameters):
+    def __init__(self, type: BehaviorNodeTypes, parameters: dict):
         self.type = type
         self.parameters = parameters
         self.status = None
         self.id = next(BehaviorNode.BEHAVIOR_NODE_ID)
 
-    def tick(self, input):
+    def tick(self, input: np.ndarray) -> tuple[BehaviorStates, np.ndarray]:
         """Launches the tick to the node, it implements the standard routine
         with the check of applicable and the call to method run afterwards.
 
@@ -49,16 +48,16 @@ class BehaviorNode(ABC):
         return result
 
     @abstractmethod
-    def applicable(self, input):
+    def applicable(self, input: np.ndarray) -> bool:
         """Check if the node run is executable.
 
         Args:
             input (np.ndarray): observations input array.
         """
-        pass
+        ...
 
     @abstractmethod
-    def run(self, input) -> Tuple[BehaviorStates, np.ndarray]:
+    def run(self, input: np.ndarray) -> tuple[BehaviorStates, np.ndarray]:
         """Runs the node.
         In composite nodes it will tick the children and implement the logic of
         the switch between the various children and the combination of returns.
@@ -75,26 +74,26 @@ class BehaviorNode(ABC):
 
     @staticmethod
     @abstractmethod
-    def get_random_node():
+    def get_random_node() -> "BehaviorNode":
         """Generate a random instance of the BehaviorNode."""
-        pass
+        ...
 
     @abstractmethod
-    def mutate(self, prob, all_mutations = False):
+    def mutate(self, prob: float, all_mutations: bool = False):
         """Randomly mutates the node with probability prob.
 
         Args:
             prob (float): probability of the mutation, between 0 and 1.
         """
-        pass
+        ...
 
-    def __str__(self, indent=0) -> str:
+    def __str__(self, indent: int = 0) -> str:
         string_form = "\t" * indent
         string_form += f"{self.__class__.__name__}#{self.id}\tparams: {self.parameters}"
         return string_form
 
-    def is_regular(self):
-        """Checks if the tree is regular, namely if it does not contain two 
+    def is_regular(self) -> bool:
+        """Checks if the tree is regular, namely if it does not contain two
         times the very same node.
         """
         tree_nodes: set[BehaviorNode] = set()
@@ -110,17 +109,17 @@ class BehaviorNode(ABC):
         return True
 
     @abstractmethod
-    def copy(self):
-        """Manual implementation of deepcopy.
-        """
-        pass
+    def copy(self) -> "BehaviorNode":
+        """Manual implementation of deepcopy."""
+        ...
 
     @abstractmethod
-    def get_size(self):
+    def get_size(self) -> tuple[int, int]:
         """Returns a tuple (depth,count) where depth is the level of the node
-        starting from the leaves, and count is the count of nodes below+this 
+        starting from the leaves, and count is the count of nodes below+this
         node.
         """
+        ...
 
 
 if __name__ == "__main__":

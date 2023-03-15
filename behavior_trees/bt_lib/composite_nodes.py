@@ -5,8 +5,7 @@ from typing import Optional
 
 import numpy as np
 from bt_lib.action_nodes import ActionNode
-from bt_lib.behavior_node import (BehaviorNode, BehaviorNodeTypes,
-                                  BehaviorStates)
+from bt_lib.behavior_node import BehaviorNode, BehaviorNodeTypes, BehaviorStates
 from bt_lib.condition_nodes import ConditionNode
 
 """
@@ -29,7 +28,7 @@ class CompositeNode(BehaviorNode):
             position = len(self.children)
         self.children.insert(position, child)
 
-    def remove_child(self, position):
+    def remove_child(self, position: int):
         return self.children.pop(position)
 
     def mutate(
@@ -88,7 +87,7 @@ class CompositeNode(BehaviorNode):
             string_form += "\n" + child_str
         return string_form
 
-    def copy(self):
+    def copy(self) -> "CompositeNode":
         """Manual implementation of deepcopy."""
         self_class = self.__class__
         copy = self_class(self.parameters)
@@ -97,7 +96,7 @@ class CompositeNode(BehaviorNode):
             copy.children.append(child.copy())
         return copy
 
-    def get_size(self):
+    def get_size(self) -> tuple[int, int]:
         """Returns a tuple (depth,count) where depth is the level of the node
         starting from the leaves, and count is the count of nodes below+this
         node.
@@ -201,15 +200,15 @@ class SequenceNode(CompositeNode):
 class FallbackNode(CompositeNode):
     """Fallback node with memory. It executes all children in order until one succeeds."""
 
-    def __init__(self, parameters={}):
+    def __init__(self, parameters: dict = {}):
         super().__init__(BehaviorNodeTypes.FALL, parameters)
         self.last_child_ticked = 0
 
-    def applicable(self, input):
+    def applicable(self, input: np.ndarray) -> bool:
         """Always true."""
         return True
 
-    def run(self, input):
+    def run(self, input: np.ndarray) -> tuple[BehaviorStates, np.ndarray]:
         """Runs the children in order as in self.children.
         It has memory of the last child run.
 
@@ -246,7 +245,7 @@ class FallbackNode(CompositeNode):
         condition_node_classes: list[type[ConditionNode]],
         composite_node_classes: list[type[CompositeNode]],
         num_children: int = 2,
-    ):
+    ) -> "FallbackNode":
         """Generate a random instance of the BehaviorNode.
         Args:
             candidate_classes (list[BehaviorNode]): list of classes to choose from.
@@ -263,7 +262,7 @@ class FallbackNode(CompositeNode):
                     action_node_classes,
                     condition_node_classes,
                     composite_node_classes,
-                    num_children-1,
+                    num_children - 1,
                 )
             else:
                 child = child_class.get_random_node()
@@ -284,7 +283,12 @@ if __name__ == "__main__":
     )
     name_to_class = {cl.__name__: cl for cl in (candidate_classes)}
 
-    fb = FallbackNode.get_random_node(action_node_classes, condition_node_classes, composite_node_classes, num_children=2)
+    fb = FallbackNode.get_random_node(
+        action_node_classes,
+        condition_node_classes,
+        composite_node_classes,
+        num_children=2,
+    )
 
     # fb.insert_child(CastNode.get_random_node(), len(fb.children))
     # # fb.insert_child(CastNode.get_random_node(), len(fb.children))
@@ -300,6 +304,11 @@ if __name__ == "__main__":
     fbcopy = fb.copy()
     print(fb)
     print(fbcopy)
-    sq = SequenceNode.get_random_node(action_node_classes, condition_node_classes, composite_node_classes, num_children=2)
+    sq = SequenceNode.get_random_node(
+        action_node_classes,
+        condition_node_classes,
+        composite_node_classes,
+        num_children=2,
+    )
 
     print(sq)

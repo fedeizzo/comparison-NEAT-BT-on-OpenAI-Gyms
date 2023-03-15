@@ -6,7 +6,7 @@ import sys
 
 import numpy as np
 from bt_lib.action_nodes import ActionNode
-from bt_lib.behavior_node import BehaviorNode, BehaviorNodeTypes
+from bt_lib.behavior_node import BehaviorNode, BehaviorNodeTypes, BehaviorStates
 from bt_lib.composite_nodes import CompositeNode
 from bt_lib.condition_nodes import ConditionNode
 
@@ -22,7 +22,6 @@ class BehaviorTree:
         condition_node_classes: list[type[ConditionNode]],
         composite_node_classes: list[type[CompositeNode]],
     ):
-
         self.fitness = 0
         self.action_node_classes = action_node_classes
         self.condition_node_classes = condition_node_classes
@@ -39,11 +38,11 @@ class BehaviorTree:
     def __str__(self) -> str:
         return self.root.__str__()
 
-    def save(self, path):
+    def save(self, path: str):
         with open(path, "wb") as outfile:
             pickle.dump(self, outfile)
 
-    def mutate(self, prob, all_mutations=False):
+    def mutate(self, prob: float, all_mutations: bool = False):
         """Start mutation from the root, then propagate."""
         self.root.mutate(prob, all_mutations)
 
@@ -110,7 +109,7 @@ class BehaviorTree:
         condition_node_classes: list[type[ConditionNode]],
         composite_node_classes: list[type[CompositeNode]],
         min_children: int = 3,
-    ):
+    ) -> "BehaviorTree":
         """Create a new behavior tree with at least min_children child nodes.
         #! Would be great to set a minimum depth instead of width.
 
@@ -127,7 +126,9 @@ class BehaviorTree:
             action_node_classes, condition_node_classes, composite_node_classes
         )
         for _ in range(min_children):
-            child_class: type[BehaviorNode] = np.random.choice(action_node_classes+ condition_node_classes+ composite_node_classes)
+            child_class: type[BehaviorNode] = np.random.choice(
+                action_node_classes + condition_node_classes + composite_node_classes
+            )
             if child_class in composite_node_classes:
                 child = child_class.get_random_node(
                     action_node_classes, condition_node_classes, composite_node_classes
@@ -137,7 +138,7 @@ class BehaviorTree:
             bt.root.insert_child(child, len(bt.root.children))
         return bt
 
-    def tick(self, input):
+    def tick(self, input: np.ndarray) -> tuple[BehaviorStates, np.ndarray]:
         return self.root.tick(input)
 
     def to_json(self, filename: str):
@@ -174,7 +175,7 @@ class BehaviorTree:
         action_node_classes: list[type[ActionNode]],
         condition_node_classes: list[type[ConditionNode]],
         composite_node_classes: list[type[CompositeNode]],
-    ):
+    ) -> "BehaviorTree":
         """Creates a BT give a certain json which specifies the structure of
         the nodes. The format of the json must be the same as returned from
         method to_json(). There must be a node with index 0, which is the root.
@@ -232,7 +233,7 @@ class BehaviorTree:
             tree_nodes.add(node.id)
         return True
 
-    def copy(self):
+    def copy(self) -> "BehaviorTree":
         """Manual implementation of deepcopy."""
         copy = BehaviorTree(
             self.action_node_classes,
@@ -242,7 +243,7 @@ class BehaviorTree:
         copy.root = self.root.copy()
         return copy
 
-    def get_size(self) -> int:
+    def get_size(self) -> tuple[int, int]:
         return self.root.get_size()
 
 

@@ -10,9 +10,10 @@ Here massively use the input observations.
 All condition nodes are the derived from ConditionNode class.
 """
 
+
 class ConditionType(Enum):
-    """Enum for the type of condition.
-    """
+    """Enum for the type of condition."""
+
     EQUAL = 1
     GREATER = 2
     LESS = 3
@@ -26,17 +27,18 @@ class ConditionNode(BehaviorNode):
     They return as state FAILURE or SUCCESS.
     """
 
-    def __init__(self, parameters):
+    def __init__(self, parameters: dict):
         super().__init__(BehaviorNodeTypes.COND, parameters)
-    def copy(self):
-        """Manual implementation of deepcopy.
-        """
+
+    def copy(self) -> "ConditionNode":
+        """Manual implementation of deepcopy."""
         self_class = self.__class__
         copy = self_class(self.parameters)
         return copy
-    def get_size(self):
+
+    def get_size(self) -> tuple[int, int]:
         """Returns a tuple (depth,count) where depth is the level of the node
-        starting from the leaves, and count is the count of nodes below+this 
+        starting from the leaves, and count is the count of nodes below+this
         node.
         """
         return (1, 1)

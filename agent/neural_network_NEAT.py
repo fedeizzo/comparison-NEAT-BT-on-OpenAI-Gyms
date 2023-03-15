@@ -73,6 +73,12 @@ input_node_names = [
     "UnusedExtraSense31",
 ]
 
+# we could remove movement and ration if we decide to use only chase, this simplifies the problem
+# if we decide to use only pistol the cast nodes can be reduced to cast0
+# chase between 0 and 1
+# cast0 either 0 or 1
+# focus one of [0, ..., 7] you have a total of 7 focusable items: 2 mates, 3 enemies, 2 towers; 0 keep current focus
+# if we decide to use only pistol we can [0, 4, 5, 6, 7]
 output_node_names = [
     "movement",
     "rotation",
@@ -121,8 +127,9 @@ class DerkNeatNNPlayer:
         cast, focus = (np.argmax(output[-12:-8]), np.argmax(output[-8:]))
         output = np.array(
             [
-                *output[:-12],
-                *[self.activation_functions[i](o) for i, o in enumerate([cast, focus])],
+                *[0, 0],  # move and rotate
+                output[2],  # chase
+                *[self.activation_functions[i](o) for i, o in enumerate([cast, focus])], # cast and focus
             ]
         ).flatten()
         if self.verbose:

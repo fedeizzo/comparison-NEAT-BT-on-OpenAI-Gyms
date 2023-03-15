@@ -193,12 +193,14 @@ def main_high_level(
 
         # ALL GENOMES STATS
         extensive_stats = []
+        # stats.generation_statistics has len() == number of iterations
         for gen, i in enumerate(stats.generation_statistics):
-            for net, fitness in i.items():
-                extensive_stats.append([gen, net, fitness[net]])
+            for species_id, members in i.items():
+                for net_id, fitness in members.items():
+                    extensive_stats.append([gen, species_id, net_id, fitness])
 
         extensive_stats = pd.DataFrame(
-            extensive_stats, columns=["generation", "genome", "fitness"]
+            extensive_stats, columns=["generation", "species", "genome", "fitness"]
         )
 
         # SPECIES STATS

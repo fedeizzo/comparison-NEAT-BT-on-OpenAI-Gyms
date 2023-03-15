@@ -53,7 +53,7 @@ def generate_actions(actions_space, move=-1, rot=-1, chase=-1):
             [0, 0.5, 0, 0, 0],     # turn half right
             [0, -0.5, 0, 0, 0],    # turn half left
             [0, -1, 0, 0, 0],      # turn left
-            [0, 0, 0, 0, 0],       # chase focus
+            [0, 0, 0, 0, 0],       # not chase focus
             [0, 0, 0.3, 0, 0],     # chase 1/3 focus
             [0, 0, 0.7, 0, 0],     # chase 2/3 focus
             [0, 0, 1, 0, 0],       # chase focus

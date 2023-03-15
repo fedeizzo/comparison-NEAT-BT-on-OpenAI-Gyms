@@ -40,3 +40,4 @@ websockets==10.3
 zipp==3.8.0
 
 isort
+jupyterlab

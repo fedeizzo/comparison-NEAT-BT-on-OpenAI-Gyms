@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import networkx as nx
-from behavior_node import BehaviorNode
-from behavior_tree import BehaviorTree
+from bt_lib.behavior_tree import BehaviorTree
 
 
 class BtDrawer:
@@ -179,8 +178,8 @@ class BtDrawer:
 
 if __name__ == "__main__":
     
-    import sys
     import os
+    import sys
     sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     from bt_lib.composite_nodes import composite_node_classes
     from derk.action_nodes import action_node_classes

@@ -1,6 +1,6 @@
 import numpy as np
-from behavior_tree import BehaviorTree
-from draw import BtDrawer
+from bt_lib.behavior_tree import BehaviorTree
+from bt_lib.draw import BtDrawer
 from scipy.special import softmax
 
 """Class to manage evolution of the population of behavior trees.

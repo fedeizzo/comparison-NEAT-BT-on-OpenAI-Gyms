@@ -1,4 +1,3 @@
-
 import os
 import os.path
 from argparse import ArgumentParser
@@ -8,6 +7,9 @@ import numpy as np
 import toml
 from bt_lib.behavior_tree import BehaviorTree
 from bt_lib.behavior_tree_evolution import BehaviorTreeEvolution
+from bt_lib.composite_nodes import composite_node_classes
+from derk.action_nodes import action_node_classes
+from derk.condition_nodes import condition_node_classes
 from gym_derk.envs import DerkEnv
 
 """To evolve behavior trees we use genetic programming we use Genetic 
@@ -35,18 +37,14 @@ def main_dinosaurs(
 ):
     # create game environment
     chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
-    chrome_executable = (
-        os.expandvars(chrome_executable) if chrome_executable else None
-    )
+    chrome_executable = os.expandvars(chrome_executable) if chrome_executable else None
     env = DerkEnv(
         mode="normal",
         n_arenas=number_of_arenas if is_train else 6,
         reward_function=reward_function,
         turbo_mode=is_turbo,
         app_args={
-            "chrome_executable": chrome_executable
-            if chrome_executable
-            else None
+            "chrome_executable": chrome_executable if chrome_executable else None
         },
         home_team=[
             {
@@ -84,7 +82,13 @@ def main_dinosaurs(
     if is_train:
         new_population = [
             # BehaviorTree.generate(5) for _ in range(population_size)
-            BehaviorTree.from_json('./behavior_trees/saved_bts/dummy.json') for _ in range(population_size)
+            BehaviorTree.from_json(
+                "behavior_trees/derk/saved_bts/dummy.json",
+                action_node_classes,
+                condition_node_classes,
+                composite_node_classes,
+            )
+            for _ in range(population_size)
         ]
 
         for ep in range(episodes_number):
@@ -93,7 +97,6 @@ def main_dinosaurs(
 
             # for index, player in enumerate(players):
             #     player.to_json(f"./behavior_trees/saved_bts/dummy_gen_{ep}_player_{index}.json")
-
 
             observation_n = env.reset()
             while True:

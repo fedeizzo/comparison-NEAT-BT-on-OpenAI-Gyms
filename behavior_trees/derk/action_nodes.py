@@ -1,19 +1,17 @@
 import os
 import sys
-
-import numpy as np
-
-
 from random import randint, random
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from bt_lib.behavior_node import BehaviorStates
+import numpy as np
 from bt_lib.action_nodes import ActionNode
+from bt_lib.behavior_node import BehaviorStates
+from derk.input_output import InputIndex, OutputIndex
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from input_output import OutputIndex, InputIndex
+
+# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 
 class MoveNode(ActionNode):
     "Action node that moves the Derks front or back"

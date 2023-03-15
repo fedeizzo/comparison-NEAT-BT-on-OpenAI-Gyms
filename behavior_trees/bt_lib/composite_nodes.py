@@ -4,11 +4,10 @@ import sys
 from typing import Optional
 
 import numpy as np
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from action_nodes import ActionNode
-from behavior_node import BehaviorNode, BehaviorNodeTypes, BehaviorStates
-from condition_nodes import ConditionNode
+from bt_lib.action_nodes import ActionNode
+from bt_lib.behavior_node import (BehaviorNode, BehaviorNodeTypes,
+                                  BehaviorStates)
+from bt_lib.condition_nodes import ConditionNode
 
 """
 May implement decorators.

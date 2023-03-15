@@ -2,15 +2,11 @@ import os
 import random
 import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 import numpy as np
 from bt_lib.behavior_node import (BehaviorNode, BehaviorNodeTypes,
                                   BehaviorStates)
 from bt_lib.condition_nodes import ConditionNode, ConditionType
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from input_output import InputIndex, InputProperties, OutputIndex
+from derk.input_output import InputIndex, InputProperties, OutputIndex
 
 
 class CheckConditionNode(ConditionNode):

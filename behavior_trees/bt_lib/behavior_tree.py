@@ -5,12 +5,10 @@ import random
 import sys
 
 import numpy as np
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from action_nodes import ActionNode
-from behavior_node import BehaviorNode, BehaviorNodeTypes
-from composite_nodes import CompositeNode
-from condition_nodes import ConditionNode
+from bt_lib.action_nodes import ActionNode
+from bt_lib.behavior_node import BehaviorNode, BehaviorNodeTypes
+from bt_lib.composite_nodes import CompositeNode
+from bt_lib.condition_nodes import ConditionNode
 
 
 class BehaviorTree:
@@ -236,7 +234,11 @@ class BehaviorTree:
 
     def copy(self):
         """Manual implementation of deepcopy."""
-        copy = BehaviorTree()
+        copy = BehaviorTree(
+            self.action_node_classes,
+            self.condition_node_classes,
+            self.composite_node_classes,
+        )
         copy.root = self.root.copy()
         return copy
 

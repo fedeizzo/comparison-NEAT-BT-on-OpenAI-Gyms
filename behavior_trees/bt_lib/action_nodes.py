@@ -1,9 +1,10 @@
 import os
 import sys
 
-from behavior_node import BehaviorNode, BehaviorNodeTypes
+from bt_lib.behavior_node import BehaviorNode, BehaviorNodeTypes
 
-# sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 
 class ActionNode(BehaviorNode):

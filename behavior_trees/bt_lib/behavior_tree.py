@@ -35,7 +35,7 @@ class BehaviorTree:
             self.action_node_classes,
             self.condition_node_classes,
             self.composite_node_classes,
-            1
+            1,
         )
 
     def __str__(self) -> str:
@@ -171,14 +171,28 @@ class BehaviorTree:
             json.dump(all_nodes, outfile, indent=2)
 
     @staticmethod
-    def from_json(filename: str, name_to_class):
+    def from_json(
+        filename: str,
+        action_node_classes: list[type[ActionNode]],
+        condition_node_classes: list[type[ConditionNode]],
+        composite_node_classes: list[type[CompositeNode]],
+    ):
         """Creates a BT give a certain json which specifies the structure of
         the nodes. The format of the json must be the same as returned from
         method to_json(). There must be a node with index 0, which is the root.
 
         Args:
             filename (str): path to the file containing the json description.
+            action_node_classes (list[type[ActionNode]]): list of available classes for action nodes,
+            condition_node_classes (list[type[ConditionNode]]): list of available classes for condition nodes,
+            composite_node_classes (list[type[CompositeNode]]): list of available classes for composite nodes,
         """
+        name_to_class = {
+            cl.__name__: cl
+            for cl in (
+                composite_node_classes + action_node_classes + condition_node_classes
+            )
+        }
         with open(filename, "r") as infile:
             json_description = json.load(infile)
         # first, create all the nodes
@@ -197,7 +211,9 @@ class BehaviorTree:
             for child_idx in children_idxs:
                 all_nodes[composite_idx].insert_child(all_nodes[str(child_idx)])
         # finally, create a new bt
-        new_bt = BehaviorTree()
+        new_bt = BehaviorTree(
+            action_node_classes, condition_node_classes, composite_node_classes
+        )
         # and set the root
         new_bt.root = all_nodes["0"]
         return new_bt
@@ -239,7 +255,9 @@ if __name__ == "__main__":
     )
     name_to_class = {cl.__name__: cl for cl in (candidate_classes)}
 
-    bt = BehaviorTree.generate(action_node_classes, condition_node_classes, composite_node_classes,3)
+    bt = BehaviorTree.generate(
+        action_node_classes, condition_node_classes, composite_node_classes, 3
+    )
     print(bt)
     # bt.to_json("try.json")
     # print("===============")

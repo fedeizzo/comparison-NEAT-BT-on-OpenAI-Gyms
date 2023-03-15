@@ -178,7 +178,14 @@ class BtDrawer:
 
 
 if __name__ == "__main__":
-    bt = BehaviorTree.from_json('./behavior_trees/saved_bts/dummy.json')
+    
+    import sys
+    import os
+    sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from bt_lib.composite_nodes import composite_node_classes
+    from derk.action_nodes import action_node_classes
+    from derk.condition_nodes import condition_node_classes
+    bt = BehaviorTree.from_json('./behavior_trees/derk/saved_bts/dummy.json', action_node_classes, condition_node_classes,composite_node_classes)
     print(bt)
     a = BtDrawer(bt.root)
     a.draw()

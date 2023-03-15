@@ -1,26 +1,22 @@
-import gymnasium as gym 
-import os 
-import sys
 import numpy as np
 import random
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from behavior_trees.action_nodes import ActionNode
-from behavior_trees.behavior_node import BehaviorStates
-from input_output_lunar_lander import LanderOutputIndex, LanderInputIndex, LanderInputProperties
+from bt_lib.action_nodes import ActionNode
+from bt_lib.behavior_node import BehaviorStates
+from lunar_lander.input_output import LanderOutputIndex, LanderInputIndex, LanderInputProperties
 
 
 class LanderAction(ActionNode):
-    """Action node that makes the derkling move in the direction of its focus."""
+    """Action node that makes the lander move in a direction."""
 
     def __init__(self, parameters):
         super().__init__(parameters, ticks_to_run=1)
 
     def applicable(self, input):
-        """Checks if the derkling can chase its focus."""
+        """Checks if the lander can do action"""
         return True
 
     def run(self, input):
-        """Returns an action with ChangeFocus set to self.parameters["chase_focus"].
+        """Returns an action according to the action type.
 
         Args:
             input (np.ndarray): observations input array.
@@ -28,7 +24,7 @@ class LanderAction(ActionNode):
         Returns:
             np.ndarray: action returned.
         """
-        action = np.zeros((1,))
+        action = self.parameters["lander_action"]
 
         if self.ticks_to_run == self.max_ticks_to_run:
             self.ticks_to_run -= 1
@@ -43,7 +39,7 @@ class LanderAction(ActionNode):
             return BehaviorStates.RUNNING, action
     @staticmethod
     def get_random_node():
-        parameters = {"lander_action": random.randint(0,4)}
+        parameters = {"lander_action": random.choice(list(LanderOutputIndex))}
         return LanderAction(parameters)
 
     def mutate(self, prob: float, all_mutations):

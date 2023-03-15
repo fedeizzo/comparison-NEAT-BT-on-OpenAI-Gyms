@@ -19,8 +19,8 @@ class LanderInputProperties:
     y_velocity = {'min':-5,'max':5,'type':float}
     angle = {'min':-3.14,'max':3.14,'type':float} # radians
     angular_velocity = {'min':0,'max':5,'type':float}
-    left_ground_contact = {'min':0,'max':1,'type':int}
-    right_ground_contact = {'min':0,'max':1,'type':int}
+    left_ground_contact = {'min':0,'max':1,'type':bool}
+    right_ground_contact = {'min':0,'max':1,'type':bool}
    
 class LanderOutputIndex(IntEnum):
     nothing = 0

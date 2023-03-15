@@ -1,14 +1,10 @@
-import gymnasium as gym 
-import os 
-import sys
 import numpy as np
 import random
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from behavior_trees.condition_nodes import ConditionNode
-from behavior_trees.behavior_node import BehaviorStates
-from behavior_trees.condition_nodes import ConditionType
-from input_output_lunar_lander import LanderInputIndex, LanderInputProperties
+from bt_lib.condition_nodes import ConditionNode
+from bt_lib.behavior_node import BehaviorStates
+from bt_lib.condition_nodes import ConditionType
+from lunar_lander.input_output import LanderInputIndex, LanderInputProperties
 
 class CheckConditionNode(ConditionNode):
 

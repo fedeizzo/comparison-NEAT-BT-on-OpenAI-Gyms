@@ -178,4 +178,7 @@ cython_debug/
 
 
 # vscode config files
-.vscode
+.vscode\
+
+# macOS trash
+*.DS_Store

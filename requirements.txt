@@ -34,11 +34,11 @@ toml==0.10.2
 tomli==2.0.1
 torch==1.11.0
 tqdm==4.64.0
-typing_extensions==4.2.0
+typing_extensions==4.3.0
 urllib3==1.26.9
 websockets==10.3
 zipp==3.8.0
-
+swig==4.1.1
 isort
 jupyterlab
 gym[box2d]

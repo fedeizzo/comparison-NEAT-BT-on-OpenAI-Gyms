@@ -1,8 +1,13 @@
-import numpy as np
 import random
+
+import numpy as np
 from bt_lib.action_nodes import ActionNode
 from bt_lib.behavior_node import BehaviorStates
-from lunar_lander.input_output import LanderOutputIndex, LanderInputIndex, LanderInputProperties
+from lunar_lander.input_output import (
+    LanderInputIndex,
+    LanderInputProperties,
+    LanderOutputIndex,
+)
 
 
 class LanderAction(ActionNode):
@@ -30,19 +35,20 @@ class LanderAction(ActionNode):
             self.ticks_to_run -= 1
             action = self.parameters["lander_action"]
             return BehaviorStates.RUNNING, action
-        
+
         if self.ticks_to_run == 0:
             self.ticks_to_run = self.max_ticks_to_run
             return BehaviorStates.SUCCESS, action
         else:
             self.ticks_to_run -= 1
             return BehaviorStates.RUNNING, action
+
     @staticmethod
     def get_random_node():
         parameters = {"lander_action": random.choice(list(LanderOutputIndex))}
         return LanderAction(parameters)
 
-    def mutate(self, prob: float, all_mutations):
+    def mutate(self, prob: float, all_mutations: bool):
         """Mutates the focusing ability with probability prob.
 
         Args:
@@ -52,7 +58,7 @@ class LanderAction(ActionNode):
             self.parameters["lander_action"] = random()
 
 
-action_node_classes = [ LanderAction ]
+action_node_classes = [LanderAction]
 
 
 if __name__ == "__main__":

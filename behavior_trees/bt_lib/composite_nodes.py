@@ -17,7 +17,7 @@ Not sure that we need them... only inverter?
 
 
 class CompositeNode(BehaviorNode):
-    def __init__(self, type, parameters):
+    def __init__(self, type: BehaviorNodeTypes, parameters: dict):
         super().__init__(type, parameters)
         # composite nodes do have children
         self.children: list[BehaviorNode] = []
@@ -116,11 +116,11 @@ class SequenceNode(CompositeNode):
     tick where it ended and start again from that point.
     """
 
-    def __init__(self, parameters={}):
+    def __init__(self, parameters: dict = {}):
         super().__init__(BehaviorNodeTypes.SEQ, parameters)
         self.last_child_ticked = 0
 
-    def applicable(self, input):
+    def applicable(self, input: np.ndarray) -> bool:
         """Always true."""
         return True
 
@@ -134,12 +134,7 @@ class SequenceNode(CompositeNode):
         Args:
             input (np.ndarray): observations input array.
         """
-        result = (
-            BehaviorStates.SUCCESS,
-            np.zeros(
-                5,
-            ),
-        )
+        result = (BehaviorStates.SUCCESS, None)
 
         for i in range(self.last_child_ticked, len(self.children)):
             self.last_child_ticked += 1
@@ -171,7 +166,7 @@ class SequenceNode(CompositeNode):
         condition_node_classes: list[type[ConditionNode]],
         composite_node_classes: list[type[CompositeNode]],
         num_children: int = 1,
-    ):
+    ) -> "SequenceNode":
         """Generate a random instance of the SequenceNode.
         Args:
             candidate_classes (list[BehaviorNode]): list of classes to choose from.
@@ -215,7 +210,7 @@ class FallbackNode(CompositeNode):
         Args:
             input (np.ndarray): observations input array.
         """
-        result = (BehaviorStates.SUCCESS, np.zeros(5))
+        result = (BehaviorStates.SUCCESS, None)
         for i in range(self.last_child_ticked, len(self.children)):
             self.last_child_ticked += 1
             result = self.children[i].tick(input)
@@ -262,7 +257,7 @@ class FallbackNode(CompositeNode):
                     action_node_classes,
                     condition_node_classes,
                     composite_node_classes,
-                    num_children - 1,
+                    num_children,
                 )
             else:
                 child = child_class.get_random_node()

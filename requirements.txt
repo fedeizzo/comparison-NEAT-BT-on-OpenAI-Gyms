@@ -41,3 +41,4 @@ zipp==3.8.0
 
 isort
 jupyterlab
+gym[box2d]

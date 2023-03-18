@@ -42,7 +42,14 @@ class LanderAction(ActionNode):
         else:
             self.ticks_to_run -= 1
             return BehaviorStates.RUNNING, action
-
+        
+    def mutate(self, prob: float, all_mutations):
+        """Mutates the action with another random action.
+        Args:
+            prob (float): probability of mutation.
+        """
+        if random.random() < prob:
+            self.parameters["lander_action"] = random.choice(list(LanderOutputIndex))
     @staticmethod
     def get_random_node():
         parameters = {"lander_action": random.choice(list(LanderOutputIndex))}
@@ -54,8 +61,8 @@ class LanderAction(ActionNode):
         Args:
             prob (float): probability of mutation.
         """
-        if random() < prob:
-            self.parameters["lander_action"] = random()
+        if random.random() < prob:
+            self.parameters["lander_action"] = random.random()
 
 
 action_node_classes = [LanderAction]

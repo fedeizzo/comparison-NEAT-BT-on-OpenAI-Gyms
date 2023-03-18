@@ -13,7 +13,6 @@ class ActionNode(BehaviorNode):
 
     def copy(self) -> "ActionNode":
         self_class = self.__class__
-        print(self_class)
         copy = self_class(self.parameters)
         return copy
 

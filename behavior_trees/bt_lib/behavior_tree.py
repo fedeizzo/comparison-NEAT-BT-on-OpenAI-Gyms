@@ -44,9 +44,18 @@ class BehaviorTree:
 
     def mutate(self, prob: float, all_mutations: bool = False):
         """Start mutation from the root, then propagate."""
-        self.root.mutate(prob, all_mutations)
+        if isinstance(self.root,CompositeNode):
+            self.root.mutate(
+                self.action_node_classes,
+                self.condition_node_classes,
+                self.composite_node_classes,
+                prob,
+                all_mutations,
+            )
+        else:
+            self.root.mutate(prob, all_mutations)
 
-    def recombination(self, other: "BehaviorTree"):
+    def recombination(self, other: "BehaviorTree", prob: float) -> "BehaviorTree":
         """Recombination between two different behavior trees, it should be
         a swap between two subtrees.
 
@@ -68,7 +77,7 @@ class BehaviorTree:
         while (
             child_a.type != BehaviorNodeTypes.ACT
             and child_a.type != BehaviorNodeTypes.COND
-            and random.random() < 0.8
+            and random.random() < prob
         ):
             exchange_point_a = child_a
             index_a = random.randint(0, len(exchange_point_a.children) - 1)
@@ -80,7 +89,7 @@ class BehaviorTree:
         while (
             child_b.type != BehaviorNodeTypes.ACT
             and child_b.type != BehaviorNodeTypes.COND
-            and random.random() < 0.8
+            and random.random() < prob
         ):
             exchange_point_b = child_b
             index_b = random.randint(0, len(exchange_point_b.children) - 1)

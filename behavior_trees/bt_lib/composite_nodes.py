@@ -33,7 +33,9 @@ class CompositeNode(BehaviorNode):
 
     def mutate(
         self,
-        candidate_classes: list[type[BehaviorNode]],
+        action_node_classes: list[type[ActionNode]],
+        condition_node_classes: list[type[ConditionNode]],
+        composite_node_classes: list[type["CompositeNode"]],
         prob: float = 0.2,
         all_mutations: bool = False,
     ):
@@ -57,8 +59,17 @@ class CompositeNode(BehaviorNode):
 
         # add a node with probability prob
         if (all_mutations or mutation_type == 0) and random.random() < prob:
-            child_class: BehaviorNode = np.random.choice(candidate_classes)
-            child = child_class.get_random_node()
+            child_class: BehaviorNode = random.choice(
+                action_node_classes + condition_node_classes + composite_node_classes
+            )
+            if child_class in composite_node_classes:
+                child = child_class.get_random_node(
+                    action_node_classes,
+                    condition_node_classes,
+                    composite_node_classes,
+                )
+            else:
+                child = child_class.get_random_node()
             self.insert_child(child)
 
         # remove a node with probability prob
@@ -78,7 +89,16 @@ class CompositeNode(BehaviorNode):
 
         # mutate all children
         for c in self.children:
-            c.mutate(prob, all_mutations)
+            if isinstance(c, CompositeNode):
+                c.mutate(
+                    action_node_classes,
+                    condition_node_classes,
+                    composite_node_classes,
+                    prob,
+                    all_mutations,
+                )
+            else:
+                c.mutate(prob, all_mutations)
 
     def __str__(self, indent: int = 0) -> str:
         string_form = super().__str__(indent)
@@ -184,7 +204,7 @@ class SequenceNode(CompositeNode):
                     action_node_classes,
                     condition_node_classes,
                     composite_node_classes,
-                    num_children,
+                    max(num_children - 1, 1),
                 )
             else:
                 child = child_class.get_random_node()
@@ -257,7 +277,7 @@ class FallbackNode(CompositeNode):
                     action_node_classes,
                     condition_node_classes,
                     composite_node_classes,
-                    num_children,
+                    max(num_children - 1, 1),
                 )
             else:
                 child = child_class.get_random_node()

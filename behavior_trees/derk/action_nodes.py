@@ -1,6 +1,6 @@
 import os
 import sys
-from random import randint, random
+import random
 
 import numpy as np
 from bt_lib.action_nodes import ActionNode
@@ -40,7 +40,7 @@ class MoveNode(ActionNode):
 
     @staticmethod
     def get_random_node():
-        parameters = {"move_x": random() * 2 - 1}
+        parameters = {"move_x": random.random() * 2 - 1}
         return MoveNode(parameters)
 
     def mutate(self, prob: float, all_mutations):
@@ -48,8 +48,8 @@ class MoveNode(ActionNode):
         Args:
             prob (float): probability of mutation.
         """
-        if random() < prob:
-            self.parameters["move_x"] = random() * 2 - 1
+        if random.random() < prob:
+            self.parameters["move_x"] = random.random() * 2 - 1
 
 
 class RotateNode(ActionNode):
@@ -79,7 +79,7 @@ class RotateNode(ActionNode):
 
     @staticmethod
     def get_random_node():
-        parameters = {"rotate": random() * 2 - 1}
+        parameters = {"rotate": random.random() * 2 - 1}
         return RotateNode(parameters)
 
     def mutate(self, prob: float, all_mutations):
@@ -87,8 +87,8 @@ class RotateNode(ActionNode):
         Args:
             prob (float): probability of mutation.
         """
-        if random() < prob:
-            self.parameters["rotate"] = random() * 2 - 1
+        if random.random() < prob:
+            self.parameters["rotate"] = random.random() * 2 - 1
 
 
 class CastNode(ActionNode):
@@ -131,7 +131,7 @@ class CastNode(ActionNode):
     @staticmethod
     def get_random_node():
         # players can be 1, 2 or 3
-        parameters = {"cast_ability": randint(1, 3)}
+        parameters = {"cast_ability": random.randint(1, 3)}
         return CastNode(parameters)
 
     def mutate(self, prob: float, all_mutations):
@@ -142,7 +142,7 @@ class CastNode(ActionNode):
         """
         if random() < prob:
             # players can be 1, 2 or 3
-            self.parameters["cast_ability"] = randint(1, 3)
+            self.parameters["cast_ability"] = random.randint(1, 3)
 
 
 class ChangeFocusNode(ActionNode):
@@ -184,7 +184,7 @@ class ChangeFocusNode(ActionNode):
 
     @staticmethod
     def get_random_node():
-        parameters = {"focus": randint(0, 7)}
+        parameters = {"focus": random.randint(0, 7)}
         return ChangeFocusNode(parameters)
 
     def mutate(self, prob: float, all_mutations):
@@ -194,7 +194,7 @@ class ChangeFocusNode(ActionNode):
             prob (float): probability of mutation.
         """
         if random() < prob:
-            self.parameters["focus"] = randint(0, 7)
+            self.parameters["focus"] = random.randint(0, 7)
 
 
 class ChaseFocusNode(ActionNode):

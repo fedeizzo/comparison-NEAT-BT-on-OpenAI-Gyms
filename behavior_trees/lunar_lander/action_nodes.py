@@ -55,14 +55,6 @@ class LanderAction(ActionNode):
         parameters = {"lander_action": random.choice(list(LanderOutputIndex))}
         return LanderAction(parameters)
 
-    def mutate(self, prob: float, all_mutations: bool):
-        """Mutates the focusing ability with probability prob.
-
-        Args:
-            prob (float): probability of mutation.
-        """
-        if random.random() < prob:
-            self.parameters["lander_action"] = random.random()
 
 
 action_node_classes = [LanderAction]

@@ -1,6 +1,6 @@
 [game]
 train = false # train or play
-folder_path = 'lander'
+folder_path = 'behavior_trees/lunar_lander_saved_bts/lander_mutation_only' # path to the folder where the best individual will be saved
 [bt_config]
 population_size = 200 # number of individuals in the population
 mutation_rate = 0.2 # probability of mutation

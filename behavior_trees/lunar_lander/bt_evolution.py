@@ -1,18 +1,16 @@
 import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import random
+import sys
 
 import gymnasium as gym
 from bt_lib.action_nodes import ActionNode
 from bt_lib.behavior_tree import BehaviorTree
 from bt_lib.composite_nodes import CompositeNode
 from bt_lib.condition_nodes import ConditionNode
+from PIL import Image, ImageDraw
 from tqdm import tqdm
 
 import wandb
-from PIL import Image, ImageDraw
 
 "class that implements the genetic algorithm for evolving behavior trees"
 
@@ -185,6 +183,7 @@ class BehaviorTreeEvolution:
         path:str = ""
     ):
         files = os.listdir(self.folder_path)
+        files = [file for file in files if file.endswith(".json")]
         files = sorted(files, key=lambda x: int(x.split("_")[-1].split(".")[0]))
         for file in files:
             generation = int(file.split("_")[-1].split(".")[0])

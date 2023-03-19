@@ -1,3 +1,5 @@
+import os
+import random
 from argparse import ArgumentParser
 
 import gymnasium as gym
@@ -6,7 +8,6 @@ from bt_lib.composite_nodes import composite_node_classes
 from lunar_lander.action_nodes import action_node_classes
 from lunar_lander.bt_evolution import BehaviorTreeEvolution
 from lunar_lander.condition_nodes import condition_node_classes
-import random
 
 
 def main_lander(lander_config):
@@ -46,7 +47,7 @@ def main_lander(lander_config):
             composite_node_classes,
             env,
             [0, 10, 50, 100, 500, 1000],
-            "results_gif",
+            os.path.join(lander_config["game"]["folder_path"],"results_gif"),
         )
 
 

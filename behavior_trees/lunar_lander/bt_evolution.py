@@ -86,9 +86,9 @@ class BehaviorTreeEvolution:
                 else:
                     action = 0  # do nothing
                 observation, reward, terminated, truncated, info = env.step(action)
+                fitness += reward
                 if terminated or truncated:
                     terminated = True
-                fitness += reward
         individual.fitness = (
             fitness / episodes_number
             - individual.get_size()[0] * self.tree_size_penalty

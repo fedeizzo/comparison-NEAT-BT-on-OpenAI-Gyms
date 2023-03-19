@@ -78,8 +78,8 @@ class BehaviorTreeEvolution:
         fitness = 0
         for _ in range(episodes_number):
             observation, info = env.reset(seed=self.seed)
-            terminated = False
-            while not terminated:
+            done = False
+            while not done:
                 state, action = individual.tick(observation)
                 if action is not None:
                     action = int(action)
@@ -88,12 +88,10 @@ class BehaviorTreeEvolution:
                 observation, reward, terminated, truncated, info = env.step(action)
                 fitness += reward
                 if terminated or truncated:
-                    terminated = True
-        individual.fitness = (
-            fitness / episodes_number
-            - individual.get_size()[0] * self.tree_size_penalty
-            - individual.get_size()[1] * self.tree_size_penalty
-        )
+                    done = True
+        depth_penalty = individual.get_size()[0] * self.tree_size_penalty
+        children_penalty = individual.get_size()[1] * self.tree_size_penalty
+        individual.fitness = fitness / episodes_number - depth_penalty - children_penalty
 
     def evaluate_population(self, episodes_number: int, env: gym.Env) -> None:
         for individual in self.population:

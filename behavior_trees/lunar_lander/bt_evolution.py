@@ -12,8 +12,9 @@ from bt_lib.condition_nodes import ConditionNode
 from tqdm import tqdm
 
 import wandb
+from PIL import Image, ImageDraw
 
-" cleaned up version of the code"
+"class that implements the genetic algorithm for evolving behavior trees"
 
 
 class BehaviorTreeEvolution:
@@ -27,7 +28,7 @@ class BehaviorTreeEvolution:
         tree_size_penalty: float = 0.0,
         number_generations: int = 100,
         episodes_number: int = 1,
-        seed=42,
+        seed=0,
         save_every=10,
         folder_path="",
         train=True,
@@ -64,6 +65,7 @@ class BehaviorTreeEvolution:
         composite_node_classes: list[type[CompositeNode]],
         max_depth: int,
     ):
+        """initialize the population with random trees"""
         self.population = []
         for _ in range(self.population_size):
             tree = BehaviorTree.generate(
@@ -76,8 +78,12 @@ class BehaviorTreeEvolution:
         self.best_tree = self.population[0]
 
     def evaluate_individual(
-        self, individual: BehaviorTree, episodes_number: int, env: gym.Env
+        self,
+        individual: BehaviorTree,
+        episodes_number: int,
+        env: gym.Env,
     ):
+        """Evaluate the fitness of an individual using the environment"""
         fitness = 0
         for _ in range(episodes_number):
             observation, info = env.reset(seed=self.seed)
@@ -98,8 +104,33 @@ class BehaviorTreeEvolution:
         individual.fitness = (
             fitness / episodes_number - depth_penalty - children_penalty
         )
-
+    def save_gif(self,individual : BehaviorTree, env: gym.Env, path="", generation=None):
+        """play the individual in the environment and save the gif"""
+        frames = []
+        observation, info = env.reset(seed=self.seed)
+        done = False
+        individual.reset()
+        while not done:
+            render = env.render()
+            img = Image.fromarray(render)
+            if generation is not None:
+                I1 = ImageDraw.Draw(img)
+                I1.text((img.width//16, img.height//16), f"Generation: {generation}", fill=(255, 255, 255))
+            frames.append(img)
+            state, action = individual.tick(observation)
+            if action is not None:
+                action = int(action)
+            else:
+                action = 0  # do nothing
+            observation, reward, terminated, truncated, info = env.step(action)
+            if terminated or truncated:
+                done = True
+                # stop saving frames after the first time
+                frames[0].save(path,
+                    save_all = True, append_images = frames[1::4],
+                    optimize = False, loop = False, fps = 60)
     def evaluate_population(self, episodes_number: int, env: gym.Env) -> None:
+        """ evaluate the whole population """
         self.best_fitness_current_gen = float("-inf")
         self.worst_fitness_current_gen = float("inf")
         self.mean_fitness_current_gen = 0
@@ -124,6 +155,7 @@ class BehaviorTreeEvolution:
     def evolve_population(
         self, episodes_number: int, env: gym.Env
     ) -> list[BehaviorTree]:
+        """ Applies simple ES to evolve the population"""
         self.evaluate_population(episodes_number, env)
         new_population = []
         sorted_pop_fitness = sorted(
@@ -137,7 +169,6 @@ class BehaviorTreeEvolution:
             parent2: BehaviorTree = self.select_individual()
             child: BehaviorTree = parent1.recombination(parent2, self.crossover_rate)
             child.mutate(self.mutation_rate)
-
             # ignore invalid mutations
             if isinstance(child.root, CompositeNode):
                 new_population.append(child)
@@ -150,18 +181,38 @@ class BehaviorTreeEvolution:
         condition_node_classes: list[type[ConditionNode]],
         composite_node_classes: list[type[CompositeNode]],
         env: gym.Env,
+        generations_to_save :list[int] = [],
+        path:str = ""
     ):
         files = os.listdir(self.folder_path)
         files = sorted(files, key=lambda x: int(x.split("_")[-1].split(".")[0]))
         for file in files:
-            bt = BehaviorTree.from_json(
-                os.path.join(self.folder_path, file),
-                action_node_classes,
-                condition_node_classes,
-                composite_node_classes,
-            )
-            self.evaluate_individual(bt, self.episodes_number, env)
-
+            generation = int(file.split("_")[-1].split(".")[0])
+            if generation in generations_to_save:
+                bt = BehaviorTree.from_json(
+                    os.path.join(self.folder_path, file),
+                    action_node_classes,
+                    condition_node_classes,
+                    composite_node_classes,
+                )
+                self.save_gif(bt, env, path=os.path.join(path, str(generation) + ".gif"), generation=generation)
+        self.concat_gifs(path, generations_to_save)
+    def concat_gifs(self, path, generations_to_save):
+        # extract all the frames from the gif
+        frames = []
+        for generation in generations_to_save:
+            with Image.open(os.path.join(path,f"{generation}.gif")) as im:
+                try:
+                    while 1:
+                        im.seek(im.tell() + 1)
+                        frames.append(im.copy())
+                except EOFError:
+                    pass  # end of sequence
+        # save the frames as a new gif
+        frames[0].save(os.path.join(path, "evolution.gif"),
+                save_all = True, append_images = frames[1:],
+                optimize = False, loop = 0, fps = 60)
+            
     def evolutionary_algorithm(self, env: gym.Env) -> BehaviorTree:
         pbar = tqdm(range(self.number_generations))
         pbar.set_description("Evolution progress")
@@ -171,12 +222,12 @@ class BehaviorTreeEvolution:
                 env,
             )
 
-            wandb.log({"best_fitness overall": self.best_tree.fitness})
-            wandb.log({"best_fitness": self.best_fitness_current_gen})
-            wandb.log({"mean_fitness": self.mean_fitness_current_gen})
-            wandb.log({"worst_fitness": self.worst_fitness_current_gen})
-            wandb.log({"best_tree_depth": self.best_tree.get_size()[0]})
-            wandb.log({"best_tree_children": self.best_tree.get_size()[1]})
+            wandb.log({"best_fitness overall": self.best_tree.fitness}, step=i)
+            wandb.log({"best_fitness": self.best_fitness_current_gen}, step=i)
+            wandb.log({"mean_fitness": self.mean_fitness_current_gen}, step=i)
+            wandb.log({"worst_fitness": self.worst_fitness_current_gen}, step=i)
+            wandb.log({"best_tree_depth": self.best_tree.get_size()[0]}, step=i)
+            wandb.log({"best_tree_children": self.best_tree.get_size()[1]}, step=i)
             if i % self.save_every == 0:
                 self.best_tree.to_json(
                     os.path.join(self.folder_path, f"best_tree_generation_{i}.json")

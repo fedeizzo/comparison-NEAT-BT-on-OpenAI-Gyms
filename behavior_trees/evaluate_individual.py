@@ -15,7 +15,7 @@ import random
 
 def main_lander(lander_config):
     random.seed(lander_config["bt_config"]["mutation_seed"])
-    env = gym.make("LunarLander-v2", render_mode="human")
+    env = gym.make("LunarLander-v2", render_mode="rgb_array")
     bt_evolution = BehaviorTreeEvolution(
         lander_config["bt_config"]["population_size"],
         lander_config["bt_config"]["mutation_rate"],
@@ -30,12 +30,12 @@ def main_lander(lander_config):
         lander_config["game"]["folder_path"],
         False,
     )
-    bt = BehaviorTree.from_json("lander/best_tree_generation_490.json",action_node_classes,condition_node_classes,
+    bt = BehaviorTree.from_json("lander/best_tree_generation_1000.json",action_node_classes,condition_node_classes,
                                 composite_node_classes)
 
-    for i in range(10):
-        bt_evolution.evaluate_individual(bt, 1, env)
-        print(bt.fitness)
+
+    bt_evolution.save_gif(bt,env,path="eval.gif",generation=1000)
+    print(bt.fitness)
 
 
 if __name__ == "__main__":

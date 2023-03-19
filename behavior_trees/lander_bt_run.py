@@ -8,6 +8,7 @@ from lunar_lander.bt_evolution import BehaviorTreeEvolution
 from lunar_lander.condition_nodes import condition_node_classes
 import random
 
+
 def main_lander(lander_config):
     random.seed(lander_config["bt_config"]["mutation_seed"])
     bt_evolution = BehaviorTreeEvolution(
@@ -38,9 +39,14 @@ def main_lander(lander_config):
         bt_evolution.evolutionary_algorithm(env)
         env.close()
     else:
-        env = gym.make("LunarLander-v2", render_mode="human")
+        env = gym.make("LunarLander-v2", render_mode="rgb_array")
         bt_evolution.evalutate_folder(
-            action_node_classes, condition_node_classes, composite_node_classes, env
+            action_node_classes,
+            condition_node_classes,
+            composite_node_classes,
+            env,
+            [0, 10, 50, 100, 500, 1000],
+            "results_gif",
         )
 
 

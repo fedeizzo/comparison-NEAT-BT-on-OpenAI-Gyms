@@ -1,0 +1,1966 @@
+{
+  "0": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95
+    ]
+  },
+  "1": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      96,
+      97
+    ]
+  },
+  "2": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "left_ground_contact",
+      "input_index": 6,
+      "condition_type": "EQUAL",
+      "condition_value": false
+    },
+    "children": []
+  },
+  "3": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "4": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "5": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "6": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "GREATER",
+      "condition_value": 0.3566260698915691
+    },
+    "children": []
+  },
+  "7": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "8": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "LESS",
+      "condition_value": 2.9908851857411993
+    },
+    "children": []
+  },
+  "9": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      98
+    ]
+  },
+  "10": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "11": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "12": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      99
+    ]
+  },
+  "13": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      100,
+      101
+    ]
+  },
+  "14": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 1.0146413027580827
+    },
+    "children": []
+  },
+  "15": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      102,
+      103
+    ]
+  },
+  "16": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      104
+    ]
+  },
+  "17": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "LESS",
+      "condition_value": -0.31393378636607294
+    },
+    "children": []
+  },
+  "18": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "19": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      105
+    ]
+  },
+  "20": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      106,
+      107,
+      108
+    ]
+  },
+  "21": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      109
+    ]
+  },
+  "22": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      110,
+      111,
+      112
+    ]
+  },
+  "23": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      113
+    ]
+  },
+  "24": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "LESS",
+      "condition_value": -2.8624735567200266
+    },
+    "children": []
+  },
+  "25": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "GREATER",
+      "condition_value": -0.29775939554697306
+    },
+    "children": []
+  },
+  "26": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "27": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "28": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      114,
+      115,
+      116,
+      117
+    ]
+  },
+  "29": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "30": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      118
+    ]
+  },
+  "31": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      119
+    ]
+  },
+  "32": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "33": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "LESS",
+      "condition_value": 3.4300708651039185
+    },
+    "children": []
+  },
+  "34": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      120,
+      121,
+      122
+    ]
+  },
+  "35": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      123,
+      124,
+      125,
+      126,
+      127
+    ]
+  },
+  "36": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "37": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 0.6168085084194015
+    },
+    "children": []
+  },
+  "38": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      128
+    ]
+  },
+  "39": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      129,
+      130
+    ]
+  },
+  "40": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "GREATER",
+      "condition_value": -3.669818992337431
+    },
+    "children": []
+  },
+  "41": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      131
+    ]
+  },
+  "42": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      132,
+      133,
+      134
+    ]
+  },
+  "43": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "LESS",
+      "condition_value": -0.29321540128942036
+    },
+    "children": []
+  },
+  "44": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      135,
+      136
+    ]
+  },
+  "45": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "LESS",
+      "condition_value": 1.7955276822684718
+    },
+    "children": []
+  },
+  "46": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      137,
+      138
+    ]
+  },
+  "47": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "48": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "GREATER",
+      "condition_value": 0.6474817001581306
+    },
+    "children": []
+  },
+  "49": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      139
+    ]
+  },
+  "50": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      140,
+      141
+    ]
+  },
+  "51": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "left_ground_contact",
+      "input_index": 6,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": false
+    },
+    "children": []
+  },
+  "52": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "LESS",
+      "condition_value": 0.6893656486435558
+    },
+    "children": []
+  },
+  "53": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "54": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "right_ground_contact",
+      "input_index": 7,
+      "condition_type": "EQUAL",
+      "condition_value": true
+    },
+    "children": []
+  },
+  "55": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "LESS",
+      "condition_value": 3.0765202102256968
+    },
+    "children": []
+  },
+  "56": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "GREATER",
+      "condition_value": 4.9275711050736275
+    },
+    "children": []
+  },
+  "57": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      142,
+      143
+    ]
+  },
+  "58": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 0.9933404425905668
+    },
+    "children": []
+  },
+  "59": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      144
+    ]
+  },
+  "60": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "61": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      145,
+      146,
+      147
+    ]
+  },
+  "62": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "63": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "64": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "65": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      148,
+      149,
+      150,
+      151
+    ]
+  },
+  "66": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      152
+    ]
+  },
+  "67": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      153
+    ]
+  },
+  "68": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "69": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "70": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "LESS",
+      "condition_value": -3.0419850765403464
+    },
+    "children": []
+  },
+  "71": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      154
+    ]
+  },
+  "72": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "right_ground_contact",
+      "input_index": 7,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": false
+    },
+    "children": []
+  },
+  "73": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      155
+    ]
+  },
+  "74": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      156
+    ]
+  },
+  "75": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "76": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      157,
+      158,
+      159,
+      160,
+      161,
+      162
+    ]
+  },
+  "77": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      163
+    ]
+  },
+  "78": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      164
+    ]
+  },
+  "79": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 0.9998607528010015
+    },
+    "children": []
+  },
+  "80": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      165
+    ]
+  },
+  "81": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "82": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      166
+    ]
+  },
+  "83": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      167,
+      168,
+      169,
+      170
+    ]
+  },
+  "84": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      171
+    ]
+  },
+  "85": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "86": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "87": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "LESS",
+      "condition_value": 0.04041791446652754
+    },
+    "children": []
+  },
+  "88": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      172
+    ]
+  },
+  "89": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      173
+    ]
+  },
+  "90": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      174
+    ]
+  },
+  "91": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "LESS",
+      "condition_value": 0.10359762120200267
+    },
+    "children": []
+  },
+  "92": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "right_ground_contact",
+      "input_index": 7,
+      "condition_type": "EQUAL",
+      "condition_value": false
+    },
+    "children": []
+  },
+  "93": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "94": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      175,
+      176,
+      177
+    ]
+  },
+  "95": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "96": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "LESS",
+      "condition_value": 0.3124119325126453
+    },
+    "children": []
+  },
+  "97": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      178,
+      179,
+      180
+    ]
+  },
+  "98": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "99": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      181,
+      182
+    ]
+  },
+  "100": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "101": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "102": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "left_ground_contact",
+      "input_index": 6,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": false
+    },
+    "children": []
+  },
+  "103": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "104": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      183
+    ]
+  },
+  "105": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      184
+    ]
+  },
+  "106": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      185
+    ]
+  },
+  "107": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "108": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "109": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "110": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      186
+    ]
+  },
+  "111": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "112": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "GREATER",
+      "condition_value": 4.674803868495808
+    },
+    "children": []
+  },
+  "113": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      187,
+      188
+    ]
+  },
+  "114": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "GREATER",
+      "condition_value": 0.012035624567946934
+    },
+    "children": []
+  },
+  "115": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "116": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_velocity",
+      "input_index": 3,
+      "condition_type": "GREATER",
+      "condition_value": -1.4574522829679113
+    },
+    "children": []
+  },
+  "117": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      189
+    ]
+  },
+  "118": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "GREATER",
+      "condition_value": 3.7402100293517897
+    },
+    "children": []
+  },
+  "119": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "120": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "LESS",
+      "condition_value": 0.876162350172599
+    },
+    "children": []
+  },
+  "121": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "122": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      190,
+      191,
+      192
+    ]
+  },
+  "123": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      193
+    ]
+  },
+  "124": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "125": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      194
+    ]
+  },
+  "126": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "GREATER",
+      "condition_value": -1.3109833972615335
+    },
+    "children": []
+  },
+  "127": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "128": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "GREATER",
+      "condition_value": 1.2381070286176867
+    },
+    "children": []
+  },
+  "129": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "130": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      195
+    ]
+  },
+  "131": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      196,
+      197
+    ]
+  },
+  "132": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "right_ground_contact",
+      "input_index": 7,
+      "condition_type": "EQUAL",
+      "condition_value": false
+    },
+    "children": []
+  },
+  "133": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "GREATER",
+      "condition_value": 1.0056145348038275
+    },
+    "children": []
+  },
+  "134": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      198,
+      199,
+      200
+    ]
+  },
+  "135": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      201
+    ]
+  },
+  "136": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      202,
+      203
+    ]
+  },
+  "137": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "138": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 0.09782719475854984
+    },
+    "children": []
+  },
+  "139": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "140": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "GREATER",
+      "condition_value": -2.0229729803048233
+    },
+    "children": []
+  },
+  "141": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "GREATER",
+      "condition_value": -3.8655198268709623
+    },
+    "children": []
+  },
+  "142": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      204
+    ]
+  },
+  "143": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      205,
+      206
+    ]
+  },
+  "144": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      207
+    ]
+  },
+  "145": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "146": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_velocity",
+      "input_index": 3,
+      "condition_type": "GREATER",
+      "condition_value": -2.6037709352395053
+    },
+    "children": []
+  },
+  "147": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "148": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "149": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "150": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "GREATER",
+      "condition_value": 0.734373640323871
+    },
+    "children": []
+  },
+  "151": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "LESS",
+      "condition_value": 0.7713924139398993
+    },
+    "children": []
+  },
+  "152": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "LESS",
+      "condition_value": 1.8460568272755173
+    },
+    "children": []
+  },
+  "153": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 0.1963402930308935
+    },
+    "children": []
+  },
+  "154": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      208
+    ]
+  },
+  "155": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      209
+    ]
+  },
+  "156": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "157": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "right_ground_contact",
+      "input_index": 7,
+      "condition_type": "EQUAL",
+      "condition_value": true
+    },
+    "children": []
+  },
+  "158": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      210
+    ]
+  },
+  "159": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "LESS",
+      "condition_value": 2.8965034524317024
+    },
+    "children": []
+  },
+  "160": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "161": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "162": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "163": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": -0.08327698225760649
+    },
+    "children": []
+  },
+  "164": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      211,
+      212
+    ]
+  },
+  "165": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "right_ground_contact",
+      "input_index": 7,
+      "condition_type": "EQUAL",
+      "condition_value": true
+    },
+    "children": []
+  },
+  "166": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "167": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "168": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "LESS",
+      "condition_value": 1.9138767930272134
+    },
+    "children": []
+  },
+  "169": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "GREATER",
+      "condition_value": 1.1962686421307231
+    },
+    "children": []
+  },
+  "170": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "LESS",
+      "condition_value": 0.8956896115446766
+    },
+    "children": []
+  },
+  "171": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "GREATER",
+      "condition_value": -1.9310409914958075
+    },
+    "children": []
+  },
+  "172": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      213
+    ]
+  },
+  "173": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "GREATER",
+      "condition_value": 1.589890433390081
+    },
+    "children": []
+  },
+  "174": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_velocity",
+      "input_index": 3,
+      "condition_type": "LESS",
+      "condition_value": 3.908298822424035
+    },
+    "children": []
+  },
+  "175": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "176": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "left_ground_contact",
+      "input_index": 6,
+      "condition_type": "EQUAL",
+      "condition_value": true
+    },
+    "children": []
+  },
+  "177": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": -0.49143825201768987
+    },
+    "children": []
+  },
+  "178": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "179": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "GREATER",
+      "condition_value": 0.4414000250948389
+    },
+    "children": []
+  },
+  "180": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "right_ground_contact",
+      "input_index": 7,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": false
+    },
+    "children": []
+  },
+  "181": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "182": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "183": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "184": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      214
+    ]
+  },
+  "185": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_velocity",
+      "input_index": 3,
+      "condition_type": "LESS",
+      "condition_value": 0.5213997500763394
+    },
+    "children": []
+  },
+  "186": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      215
+    ]
+  },
+  "187": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "GREATER",
+      "condition_value": -0.7531193218196277
+    },
+    "children": []
+  },
+  "188": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "189": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      216
+    ]
+  },
+  "190": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      217,
+      218
+    ]
+  },
+  "191": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "192": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "LESS",
+      "condition_value": -1.064837930839739
+    },
+    "children": []
+  },
+  "193": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "LESS",
+      "condition_value": 3.801031644665011
+    },
+    "children": []
+  },
+  "194": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "left_ground_contact",
+      "input_index": 6,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": true
+    },
+    "children": []
+  },
+  "195": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "196": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "197": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "LESS",
+      "condition_value": 4.879026941478856
+    },
+    "children": []
+  },
+  "198": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "199": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      219
+    ]
+  },
+  "200": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "201": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "202": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "LESS",
+      "condition_value": 4.165592106235275
+    },
+    "children": []
+  },
+  "203": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      220
+    ]
+  },
+  "204": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "LESS",
+      "condition_value": -0.9998073453328311
+    },
+    "children": []
+  },
+  "205": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_velocity",
+      "input_index": 2,
+      "condition_type": "GREATER",
+      "condition_value": -3.889965149106138
+    },
+    "children": []
+  },
+  "206": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "x_position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 1.3601659443696845
+    },
+    "children": []
+  },
+  "207": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      221,
+      222
+    ]
+  },
+  "208": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angular_velocity",
+      "input_index": 5,
+      "condition_type": "GREATER",
+      "condition_value": 0.7313928944501041
+    },
+    "children": []
+  },
+  "209": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "right_ground_contact",
+      "input_index": 7,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": false
+    },
+    "children": []
+  },
+  "210": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      223
+    ]
+  },
+  "211": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      224
+    ]
+  },
+  "212": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      225
+    ]
+  },
+  "213": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      226
+    ]
+  },
+  "214": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "215": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "216": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "217": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 2
+    },
+    "children": []
+  },
+  "218": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      227
+    ]
+  },
+  "219": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 0
+    },
+    "children": []
+  },
+  "220": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "221": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "LESS",
+      "condition_value": -0.48655943834422866
+    },
+    "children": []
+  },
+  "222": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 1
+    },
+    "children": []
+  },
+  "223": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "224": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "GREATER",
+      "condition_value": 1.0147216519787343
+    },
+    "children": []
+  },
+  "225": {
+    "class": "LanderAction",
+    "parameters": {
+      "lander_action": 3
+    },
+    "children": []
+  },
+  "226": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "y_position",
+      "input_index": 1,
+      "condition_type": "GREATER",
+      "condition_value": 1.0686910811876569
+    },
+    "children": []
+  },
+  "227": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "angle",
+      "input_index": 4,
+      "condition_type": "GREATER",
+      "condition_value": -2.814267341175519
+    },
+    "children": []
+  }
+}

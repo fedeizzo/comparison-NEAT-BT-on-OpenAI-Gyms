@@ -10,7 +10,7 @@ from bt_lib.behavior_tree import BehaviorTree
 from bt_lib.composite_nodes import CompositeNode
 from bt_lib.condition_nodes import ConditionNode
 from tqdm import tqdm
-
+from copy import deepcopy
 import wandb
 
 " cleaned up version of the code"
@@ -79,6 +79,7 @@ class BehaviorTreeEvolution:
         for _ in range(episodes_number):
             observation, info = env.reset(seed=self.seed)
             done = False
+            individual.reset()
             while not done:
                 state, action = individual.tick(observation)
                 if action is not None:
@@ -119,12 +120,15 @@ class BehaviorTreeEvolution:
         )
         while len(new_population) < self.population_size:
             parent1: BehaviorTree = self.select_individual()
-            parent2: BehaviorTree = self.select_individual()
-            child: BehaviorTree = parent1.recombination(parent2, self.crossover_rate)
-            child.mutate(self.mutation_rate, True)
+            child = deepcopy(parent1)
+            child.reset()
+            child.mutate(self.mutation_rate)
+            # parent2: BehaviorTree = self.select_individual()
+            # child: BehaviorTree = parent1.recombination(parent2, self.crossover_rate)
             # ignore non valid mutations
             if isinstance(child.root, CompositeNode):
                 new_population.append(child)
+        
         self.population = new_population
 
     def evalutate_folder(
@@ -153,6 +157,7 @@ class BehaviorTreeEvolution:
                 self.episodes_number,
                 env,
             )
+            
             wandb.log({"best_fitness": self.best_tree.fitness})
             if i % self.save_every == 0:
                 self.best_tree.to_json(

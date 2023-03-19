@@ -2,14 +2,15 @@
 train = true # train or play
 folder_path = 'lander'
 [bt_config]
-population_size = 250 # number of individuals in the population
+population_size = 200 # number of individuals in the population
 mutation_rate = 0.2 # probability of mutation
 crossover_rate = 0.8  # probability of crossover
 tournament_size = 5 # number of individuals to select for the tournament    
-elitism_rate = 0.5 # percentage of the best individuals to keep in the next generation
+elitism_rate = 0.05 # percentage of the best individuals to keep in the next generation
 max_depth = 100 # maximum depth of the tree in the initial population
 episodes_number = 1 # number of episodes to play for each individual
 number_generations = 1000  # number of generations to evolve
 tree_size_penalty = 0.25 # penalty for tree size
-seed = 42 # random seed
-save_every = 100 # save the best individual every n generations
+seed = 42 # random seed for gym
+mutation_seed = 42 # random seed for the mutation
+save_every = 10 # save the best individual every n generations

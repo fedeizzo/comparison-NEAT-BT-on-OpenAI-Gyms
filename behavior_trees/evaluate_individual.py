@@ -11,9 +11,10 @@ from bt_lib.composite_nodes import CompositeNode, composite_node_classes
 from lunar_lander.action_nodes import action_node_classes
 from lunar_lander.condition_nodes import condition_node_classes
 from lunar_lander.bt_evolution import BehaviorTreeEvolution
-
+import random
 
 def main_lander(lander_config):
+    random.seed(lander_config["bt_config"]["mutation_seed"])
     env = gym.make("LunarLander-v2", render_mode="human")
     bt_evolution = BehaviorTreeEvolution(
         lander_config["bt_config"]["population_size"],
@@ -29,7 +30,7 @@ def main_lander(lander_config):
         lander_config["game"]["folder_path"],
         False,
     )
-    bt = BehaviorTree.from_json("lander/best_tree_generation_100.json",action_node_classes,condition_node_classes,
+    bt = BehaviorTree.from_json("lander/best_tree_generation_490.json",action_node_classes,condition_node_classes,
                                 composite_node_classes)
 
     for i in range(10):

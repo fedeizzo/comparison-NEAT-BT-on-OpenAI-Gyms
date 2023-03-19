@@ -38,6 +38,9 @@ class BehaviorTreeEvolution:
         self.elitism_rate = elitism_rate
         self.population: list[BehaviorTree] = []
         self.best_tree: BehaviorTree = None
+        self.best_fitness_current_gen = float("-inf")
+        self.mean_fitness_current_gen = 0
+        self.worst_fitness_current_gen = float("inf")
         self.tournament_size = tournament_size
         self.tree_size_penalty = tree_size_penalty
         self.number_generations = number_generations
@@ -95,10 +98,20 @@ class BehaviorTreeEvolution:
         individual.fitness = fitness / episodes_number - depth_penalty - children_penalty
 
     def evaluate_population(self, episodes_number: int, env: gym.Env) -> None:
+        self.best_fitness_current_gen = float("-inf")
+        self.worst_fitness_current_gen = float("inf")
+        self.mean_fitness_current_gen = 0
         for individual in self.population:
             self.evaluate_individual(individual, episodes_number, env)
             if individual.fitness > self.best_tree.fitness:
                 self.best_tree = individual
+            if individual.fitness > self.best_fitness_current_gen:
+                self.best_fitness_current_gen = individual.fitness
+            if individual.fitness < self.worst_fitness_current_gen:
+                self.worst_fitness_current_gen = individual.fitness
+            self.mean_fitness_current_gen += individual.fitness
+        self.mean_fitness_current_gen /= self.population_size
+        
 
     def select_individual(self, tournament_size: int = 5) -> BehaviorTree:
         """
@@ -121,7 +134,6 @@ class BehaviorTreeEvolution:
         while len(new_population) < self.population_size:
             parent1: BehaviorTree = self.select_individual()
             child = deepcopy(parent1)
-            child.reset()
             child.mutate(self.mutation_rate)
             # parent2: BehaviorTree = self.select_individual()
             # child: BehaviorTree = parent1.recombination(parent2, self.crossover_rate)
@@ -158,7 +170,12 @@ class BehaviorTreeEvolution:
                 env,
             )
             
-            wandb.log({"best_fitness": self.best_tree.fitness})
+            wandb.log({"best_fitness overall": self.best_tree.fitness})
+            wandb.log({"best_fitness": self.best_fitness_current_gen})
+            wandb.log({"mean_fitness": self.mean_fitness_current_gen})
+            wandb.log({"worst_fitness": self.worst_fitness_current_gen})
+            wandb.log({"best_tree_depth": self.best_tree.get_size()[0]})
+            wandb.log({"best_tree_children": self.best_tree.get_size()[1]})
             if i % self.save_every == 0:
                 self.best_tree.to_json(
                     os.path.join(self.folder_path, f"best_tree_generation_{i}.json")
@@ -169,7 +186,7 @@ class BehaviorTreeEvolution:
             wandb.finish()
             self.best_tree.to_json(
                 os.path.join(
-                    self.folder_path, f"best_tree_{self.number_generations}.json"
+                    self.folder_path, f"best_tree_generation_{self.number_generations}.json"
                 )
             )
 

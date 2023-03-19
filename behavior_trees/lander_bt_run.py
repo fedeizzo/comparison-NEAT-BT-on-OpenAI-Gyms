@@ -6,9 +6,10 @@ from bt_lib.composite_nodes import composite_node_classes
 from lunar_lander.action_nodes import action_node_classes
 from lunar_lander.bt_evolution import BehaviorTreeEvolution
 from lunar_lander.condition_nodes import condition_node_classes
-
+import random
 
 def main_lander(lander_config):
+    random.seed(lander_config["bt_config"]["mutation_seed"])
     bt_evolution = BehaviorTreeEvolution(
         population_size=lander_config["bt_config"]["population_size"],
         mutation_rate=lander_config["bt_config"]["mutation_rate"],

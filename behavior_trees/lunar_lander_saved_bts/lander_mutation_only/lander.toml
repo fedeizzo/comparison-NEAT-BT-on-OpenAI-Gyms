@@ -1,0 +1,16 @@
+[game]
+train = false # train or play
+folder_path = 'behavior_trees/lunar_lander_saved_bts/lander_mutation_only' # path to the folder where the best individual will be saved
+[bt_config]
+population_size = 200 # number of individuals in the population
+mutation_rate = 0.2 # probability of mutation
+crossover_rate = 0.8  # probability of crossover
+tournament_size = 5 # number of individuals to select for the tournament    
+elitism_rate = 0.05 # percentage of the best individuals to keep in the next generation
+max_depth = 300 # maximum depth of the tree in the initial population
+episodes_number = 1 # number of episodes to play for each individual
+number_generations = 1000  # number of generations to evolve
+tree_size_penalty = 0.10 # penalty for tree size
+seed = 42 # random seed for gym
+mutation_seed = 42 # random seed for the mutation
+save_every = 10 # save the best individual every n generations

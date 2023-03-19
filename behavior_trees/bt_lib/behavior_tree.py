@@ -10,6 +10,7 @@ from bt_lib.behavior_node import BehaviorNode, BehaviorNodeTypes, BehaviorStates
 from bt_lib.composite_nodes import CompositeNode
 from bt_lib.condition_nodes import ConditionNode
 
+
 class BehaviorTree:
     """Wrapper class for the behavior tree.
     Contains utility method to manage a single complete tree.
@@ -43,7 +44,7 @@ class BehaviorTree:
 
     def mutate(self, prob: float, all_mutations: bool = False):
         """Start mutation from the root, then propagate."""
-        if isinstance(self.root,CompositeNode):
+        if isinstance(self.root, CompositeNode):
             self.root.mutate(
                 self.action_node_classes,
                 self.condition_node_classes,
@@ -66,8 +67,10 @@ class BehaviorTree:
             for recombination.
         """
         # deep copy to avoid "data race" condition
-        parent_a = self.copy()
-        parent_b = other.copy()
+        from copy import deepcopy
+
+        parent_a = deepcopy(self)
+        parent_b = deepcopy(other)
 
         # find exchange point in the first tree
         exchange_point_a = parent_a.root
@@ -82,6 +85,7 @@ class BehaviorTree:
             index_a = random.randint(0, len(exchange_point_a.children) - 1)
             child_a = exchange_point_a.children[index_a]
 
+        # find exchange point in the second tree
         exchange_point_b = parent_b.root
         child_b = parent_b.root
         index_b = None
@@ -154,6 +158,7 @@ class BehaviorTree:
         reset the memory of the tree
         """
         self.root.reset()
+
     def to_json(self, filename: str):
         """Saves the tree into a json file in almost human-readable format.
         For each node it saves:

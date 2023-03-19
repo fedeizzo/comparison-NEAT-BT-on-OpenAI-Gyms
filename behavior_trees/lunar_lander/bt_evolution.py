@@ -10,7 +10,7 @@ from bt_lib.behavior_tree import BehaviorTree
 from bt_lib.composite_nodes import CompositeNode
 from bt_lib.condition_nodes import ConditionNode
 from tqdm import tqdm
-from copy import deepcopy
+
 import wandb
 
 " cleaned up version of the code"
@@ -95,7 +95,9 @@ class BehaviorTreeEvolution:
                     done = True
         depth_penalty = individual.get_size()[0] * self.tree_size_penalty
         children_penalty = individual.get_size()[1] * self.tree_size_penalty
-        individual.fitness = fitness / episodes_number - depth_penalty - children_penalty
+        individual.fitness = (
+            fitness / episodes_number - depth_penalty - children_penalty
+        )
 
     def evaluate_population(self, episodes_number: int, env: gym.Env) -> None:
         self.best_fitness_current_gen = float("-inf")
@@ -111,7 +113,6 @@ class BehaviorTreeEvolution:
                 self.worst_fitness_current_gen = individual.fitness
             self.mean_fitness_current_gen += individual.fitness
         self.mean_fitness_current_gen /= self.population_size
-        
 
     def select_individual(self, tournament_size: int = 5) -> BehaviorTree:
         """
@@ -133,14 +134,14 @@ class BehaviorTreeEvolution:
         )
         while len(new_population) < self.population_size:
             parent1: BehaviorTree = self.select_individual()
-            child = deepcopy(parent1)
+            parent2: BehaviorTree = self.select_individual()
+            child: BehaviorTree = parent1.recombination(parent2, self.crossover_rate)
             child.mutate(self.mutation_rate)
-            # parent2: BehaviorTree = self.select_individual()
-            # child: BehaviorTree = parent1.recombination(parent2, self.crossover_rate)
-            # ignore non valid mutations
+
+            # ignore invalid mutations
             if isinstance(child.root, CompositeNode):
                 new_population.append(child)
-        
+
         self.population = new_population
 
     def evalutate_folder(
@@ -169,7 +170,7 @@ class BehaviorTreeEvolution:
                 self.episodes_number,
                 env,
             )
-            
+
             wandb.log({"best_fitness overall": self.best_tree.fitness})
             wandb.log({"best_fitness": self.best_fitness_current_gen})
             wandb.log({"mean_fitness": self.mean_fitness_current_gen})
@@ -186,7 +187,8 @@ class BehaviorTreeEvolution:
             wandb.finish()
             self.best_tree.to_json(
                 os.path.join(
-                    self.folder_path, f"best_tree_generation_{self.number_generations}.json"
+                    self.folder_path,
+                    f"best_tree_generation_{self.number_generations}.json",
                 )
             )
 

@@ -134,7 +134,7 @@ class CompositeNode(BehaviorNode):
             c_depth, c_count = child.get_size()
             count += c_count
             depth = max(depth, c_depth)
-        return (depth, count + 1)
+        return (depth + 1, count + 1)
 
 
 class SequenceNode(CompositeNode):

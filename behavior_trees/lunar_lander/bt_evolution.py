@@ -1,15 +1,17 @@
-import os, sys
+import os
+import sys
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import random
+
+import gymnasium as gym
+from bt_lib.action_nodes import ActionNode
 from bt_lib.behavior_tree import BehaviorTree
 from bt_lib.composite_nodes import CompositeNode
-from bt_lib.action_nodes import ActionNode
 from bt_lib.condition_nodes import ConditionNode
-import gymnasium as gym
-import numpy as np
-import random
-import wandb
 from tqdm import tqdm
+
+import wandb
 
 " cleaned up version of the code"
 
@@ -162,18 +164,21 @@ class BehaviorTreeEvolution:
     def __del__(self):
         if self.train:
             wandb.finish()
-            self.best_tree.to_json(os.path.join(self.folder_path, f"best_tree_{self.number_generations}.json"))
+            self.best_tree.to_json(
+                os.path.join(
+                    self.folder_path, f"best_tree_{self.number_generations}.json"
+                )
+            )
 
 
 if __name__ == "__main__":
 
     bt = BehaviorTreeEvolution(10, 0.1, 0.7, 5, 0.2)
     from bt_lib.action_nodes import ActionNode
+    from bt_lib.composite_nodes import CompositeNode, composite_node_classes
     from bt_lib.condition_nodes import ConditionNode
-    from bt_lib.composite_nodes import CompositeNode
     from lunar_lander.action_nodes import action_node_classes
     from lunar_lander.condition_nodes import condition_node_classes
-    from bt_lib.composite_nodes import composite_node_classes
 
     bt.initialize_population(
         action_node_classes, condition_node_classes, composite_node_classes, 5

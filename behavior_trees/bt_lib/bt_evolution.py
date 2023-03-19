@@ -162,7 +162,7 @@ class BehaviorTreeEvolution:
     def __del__(self):
         if self.train:
             wandb.finish()
-            self.best_tree.to_json(os.path.join(self.folder_path, "best_tree.json"))
+            self.best_tree.to_json(os.path.join(self.folder_path, f"best_tree_{self.number_generations}.json"))
 
 
 if __name__ == "__main__":

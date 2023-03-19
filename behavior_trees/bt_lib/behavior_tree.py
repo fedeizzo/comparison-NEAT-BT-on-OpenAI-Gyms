@@ -10,7 +10,6 @@ from bt_lib.behavior_node import BehaviorNode, BehaviorNodeTypes, BehaviorStates
 from bt_lib.composite_nodes import CompositeNode
 from bt_lib.condition_nodes import ConditionNode
 
-
 class BehaviorTree:
     """Wrapper class for the behavior tree.
     Contains utility method to manage a single complete tree.
@@ -150,6 +149,11 @@ class BehaviorTree:
     def tick(self, input: np.ndarray) -> tuple[BehaviorStates, np.ndarray]:
         return self.root.tick(input)
 
+    def reset(self):
+        """
+        reset the memory of the tree
+        """
+        self.root.reset()
     def to_json(self, filename: str):
         """Saves the tree into a json file in almost human-readable format.
         For each node it saves:

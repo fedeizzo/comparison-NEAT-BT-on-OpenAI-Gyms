@@ -22,3 +22,7 @@ class ActionNode(BehaviorNode):
         node.
         """
         return (1, 1)
+    
+    def reset(self):
+        """Resets the node to its initial state."""
+        self.ticks_to_run = self.max_ticks_to_run

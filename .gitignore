@@ -11,6 +11,8 @@ weights
 Digraph.gv
 Digraph.gv.png
 Digraph.gv.svg
+**/neat-checkpoint-*
+**.pickle
 
 # NIX and emacs
 .envrc
@@ -186,3 +188,6 @@ cython_debug/
 
 # wandb trash
 *wandb/
+
+# idea
+.idea

@@ -1,5 +1,5 @@
 # bio-inspired-mutant-battlegrounds
-![Game demo](./assets/game.gif)
+![Game demo](assets/images/game.gif)
 
 [Docs](http://docs.gym.derkgame.com/)
 
@@ -174,16 +174,16 @@ args2 = 3
 
 Required files are:
 
-- path: the namefile in which the class is contained, an example is [bot](./agent/bot.py);
-- name: the name class in the file indicated by path, an example is [DerkPlayer](./agent/bot.py);
+- path: the namefile in which the class is contained, an example is [bot](derk_gym/agent/bot.py);
+- name: the name class in the file indicated by path, an example is [DerkPlayer](derk_gym/agent/bot.py);
 - all other fields in this section are field passed to the init method of the class.
 
 During train phase it is required to have same player for both teams, instead for test phase it is possible to use different players.
 
 ##### Nueral Network NEAT
-Configuration for neural network neat can be found [here](./configs/default_nn_neat.toml) and [here](./configs/default_nn_neat.ini).
+Configuration for neural network neat can be found [here](configs/derk/default_nn_neat.toml) and [here](configs/derk/default_nn_neat.ini).
 
 ##### Revisited Deep Q Learning with NEAT
-Configuration for revisited deep q learning with neat can be found [here](./configs/q_learning_neat.toml) and [here](./configs/q_learning_neat_config.ini).
+Configuration for revisited deep q learning with neat can be found [here](configs/derk/q_learning_neat.toml) and [here](configs/derk/q_learning_neat_config.ini).
 
 In order to avoid a mess of config files inside the repo all files ending with `.toml` are not pushed to the repo expect for the once contained inside `configs` directory (do not abuse of this power!!).

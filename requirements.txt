@@ -34,7 +34,7 @@ fqdn==1.5.1
 gitdb==4.0.10
 GitPython==3.1.31
 graphviz==0.20
-gym==0.23.1
+gym==0.26.2
 gym-derk==1.1.1
 gym-notices==0.0.6
 gymnasium==0.27.1
@@ -142,3 +142,4 @@ websockets==10.3
 y-py==0.5.9
 ypy-websocket==0.8.2
 zipp==3.8.0
+wandb

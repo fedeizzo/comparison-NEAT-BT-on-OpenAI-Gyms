@@ -1,0 +1,116 @@
+[game]
+fast_mode = true
+number_of_arenas = 200
+train = true
+episodes_number = 500
+best_stats = './weights/best_stats.pkl'
+extensive_stats = './weights/extensive_stats.pkl'
+species_stats = './weights/species_stats.pkl'
+neat_config = './configs/default_nn_neat.ini'
+weights_path = './weights/winner.pkl'
+
+[reward-function]
+damageEnemyStatue = 5
+damageEnemyUnit = 5
+killEnemyStatue = 5
+killEnemyUnit = 5
+healFriendlyStatue = 3
+healTeammate1 = 2
+healTeammate2 = 2
+timeSpentHomeBase = 0
+timeSpentHomeTerritory = 0
+timeSpentAwayTerritory = 0
+timeSpentAwayBase = 0
+damageTaken = -1
+friendlyFire = -3
+healEnemy = -3
+fallDamageTaken = -1
+statueDamageTaken = -3
+manualBonus = 0
+victory = 5
+loss = -5
+tie = 0
+teamSpirit = 0
+timeScaling = 0.4
+
+[network_input]
+Hitpoints = true
+Ability0Ready = true
+FriendStatueDistance = true
+FriendStatueAngle = false
+Friend1Distance = true
+Friend1Angle = false
+Friend2Distance = true
+Friend2Angle = false
+EnemyStatueDistance = true
+EnemyStatueAngle = false
+Enemy1Distance = true
+Enemy1Angle = false
+Enemy2Distance = true
+Enemy2Angle = false
+Enemy3Distance = true
+Enemy3Angle = false
+HasFocus = true
+FocusRelativeRotation = false
+FocusFacingUs = false
+FocusFocusingBack = false
+FocusHitpoints = true
+Ability1Ready = true
+Ability2Ready = true
+FocusDazed = false
+FocusCrippled = false
+HeightFront1 = false
+HeightFront5 = false
+HeightBack2 = false
+PositionLeftRight = false
+PositionUpDown = false
+Stuck = false
+UnusedSense31 = false
+HasTalons = false
+HasBloodClaws = false
+HasCleavers = false
+HasCripplers = false
+HasHealingGland = false
+HasVampireGland = false
+HasFrogLegs = false
+HasPistol = false
+HasMagnum = false
+HasBlaster = false
+HasParalyzingDart = false
+HasIronBubblegum = false
+HasHeliumBubblegum = false
+HasShell = false
+HasTrombone = false
+FocusHasTalons = false
+FocusHasBloodClaws = false
+FocusHasCleavers = false
+FocusHasCripplers = false
+FocusHasHealingGland = false
+FocusHasVampireGland = false
+FocusHasFrogLegs = false
+FocusHasPistol = false
+FocusHasMagnum = false
+FocusHasBlaster = false
+FocusHasParalyzingDart = false
+FocusHasIronBubblegum = false
+FocusHasHeliumBubblegum = false
+FocusHasShell = false
+FocusHasTrombone = false
+UnusedExtraSense30 = false
+UnusedExtraSense31 = false
+
+[[players]]
+path = 'neural_network_NEAT'
+name = 'DerkNeatNNPlayer'
+verbose = false
+[players.activation_functions]
+0 = 'identity'
+1 = 'identity'
+
+[[players]]
+path = 'neural_network_NEAT'
+name = 'DerkNeatNNPlayer'
+verbose = false
+[players.activation_functions]
+0 = 'identity'
+1 = 'identity'

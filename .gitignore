@@ -13,6 +13,7 @@ Digraph.gv.png
 Digraph.gv.svg
 **/neat-checkpoint-*
 **.pickle
+!assets/weights
 
 # NIX and emacs
 .envrc

@@ -5,7 +5,7 @@ chromedata
 **/*.ini
 !configs/**/*.ini
 !configs/**/*.toml
-!behavior_trees/lunar_lander_saved_bts/**/*.toml
+!behavior_trees/**/*.toml
 **/*.npy
 weights
 Digraph.gv

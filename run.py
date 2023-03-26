@@ -46,10 +46,11 @@ if __name__ == "__main__":
             species_stats_path=config["game"]["species_stats"],
             weights_path=config["game"]["weights_path"],
         )
-    if args.environment == "lunarlander" and args.solver == "neat":
+    elif args.environment == "lunarlander" and args.solver == "neat":
         config = toml.load(args.config)
         if args.inference:
-            lunar_lander_inference(config["game"]["neat_config"], config["game"]["winner_pickle"])
+            lunar_lander_inference(config["game"]["neat_config"], config["game"]["winner_pickle"],
+                                   config["game"]["enable_wind"], config["game"]["wind_power"])
         else:
             lunar_lander_train(config["game"]["neat_config"], config["game"]["iterations"],
                                config["game"]["checkpoint_frequency"], config["game"]["use_wandb"],

@@ -1,10 +1,7 @@
-import os
 import pickle
-from argparse import ArgumentParser
 from configparser import ConfigParser
 
 import gymnasium as gym
-import gymnasium.wrappers as wrappers
 import neat
 import numpy as np
 import pandas as pd
@@ -14,6 +11,7 @@ import wandb
 
 
 def eval_genome(genome, config):
+    env = config.env
     net = neat.nn.FeedForwardNetwork.create(genome, config)
     fitnesses = []
     runs_per_net = 5
@@ -159,7 +157,7 @@ def lunar_lander_train(neat_config_path, iterations, checkpoint_frequency, use_w
         neat.DefaultReproduction,
         neat.DefaultSpeciesSet,
         neat.DefaultStagnation,
-        neat_config,
+        neat_config_path,
     )
     config.__setattr__("env", env)
     p = neat.Population(config)
@@ -191,8 +189,8 @@ def lunar_lander_train(neat_config_path, iterations, checkpoint_frequency, use_w
                          '../assets/images/neat_lunar_lander_evolution.gif')
 
 
-def lunar_lander_inference(neat_config_path, winner_pickle):
-    env = gym.make("LunarLander-v2", render_mode="human")
+def lunar_lander_inference(neat_config_path, winner_pickle, enable_wind, wind_power):
+    env = gym.make("LunarLander-v2", render_mode="human", enable_wind=enable_wind, wind_power=wind_power)
     genome = pickle.load(open(winner_pickle, 'rb'))
     config = neat.Config(
         neat.DefaultGenome,

@@ -1,0 +1,49 @@
+{
+  "0": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      1,
+      2
+    ]
+  },
+  "1": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "2": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      3,
+      4
+    ]
+  },
+  "3": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 8.0
+    },
+    "children": []
+  },
+  "4": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      5
+    ]
+  },
+  "5": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  }
+}

@@ -52,7 +52,7 @@ class BehaviorTreeEvolution:
         if train:
             wandb.init(
                 # set the wandb project where this run will be logged
-                project="Lander",
+                project="Lake",
                 # track hyperparameters and run metadata
                 config=self.__dict__,
             )
@@ -126,7 +126,7 @@ class BehaviorTreeEvolution:
                 I1.text(
                     (img.width // 16, img.height // 16),
                     f"Generation: {generation}",
-                    fill=(255, 255, 255),
+                    fill=(0, 0, 0),
                 )
             frames.append(img)
             state, action = individual.tick(observation)
@@ -245,7 +245,7 @@ class BehaviorTreeEvolution:
             append_images=frames[1:],
             optimize=False,
             loop=0,
-            fps=fps,
+            fps=10,
         )
 
     def evolutionary_algorithm(self, env: gym.Env) -> BehaviorTree:

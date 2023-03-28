@@ -1,0 +1,1742 @@
+{
+  "0": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101
+    ]
+  },
+  "1": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "2": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 3
+    },
+    "children": []
+  },
+  "3": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 7.0
+    },
+    "children": []
+  },
+  "4": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 14.0
+    },
+    "children": []
+  },
+  "5": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 4.0
+    },
+    "children": []
+  },
+  "6": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "7": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "8": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      102,
+      103
+    ]
+  },
+  "9": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      104,
+      105
+    ]
+  },
+  "10": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      106
+    ]
+  },
+  "11": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 6.0
+    },
+    "children": []
+  },
+  "12": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      107,
+      108
+    ]
+  },
+  "13": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      109
+    ]
+  },
+  "14": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      110,
+      111
+    ]
+  },
+  "15": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 3.0
+    },
+    "children": []
+  },
+  "16": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 13.0
+    },
+    "children": []
+  },
+  "17": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      112,
+      113
+    ]
+  },
+  "18": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "19": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 3
+    },
+    "children": []
+  },
+  "20": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 8.0
+    },
+    "children": []
+  },
+  "21": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "22": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "23": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "24": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      114,
+      115
+    ]
+  },
+  "25": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "26": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "27": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 6.0
+    },
+    "children": []
+  },
+  "28": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "29": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "30": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "31": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      116
+    ]
+  },
+  "32": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      117,
+      118
+    ]
+  },
+  "33": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 4.0
+    },
+    "children": []
+  },
+  "34": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      119
+    ]
+  },
+  "35": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 2.0
+    },
+    "children": []
+  },
+  "36": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      120
+    ]
+  },
+  "37": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 4.0
+    },
+    "children": []
+  },
+  "38": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "39": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 4.0
+    },
+    "children": []
+  },
+  "40": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "41": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      121
+    ]
+  },
+  "42": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "43": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      122
+    ]
+  },
+  "44": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      123
+    ]
+  },
+  "45": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 0.0
+    },
+    "children": []
+  },
+  "46": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 9.0
+    },
+    "children": []
+  },
+  "47": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 12.0
+    },
+    "children": []
+  },
+  "48": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      124,
+      125
+    ]
+  },
+  "49": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      126
+    ]
+  },
+  "50": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      127
+    ]
+  },
+  "51": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      128,
+      129
+    ]
+  },
+  "52": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 0.0
+    },
+    "children": []
+  },
+  "53": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "54": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 0.0
+    },
+    "children": []
+  },
+  "55": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 13.0
+    },
+    "children": []
+  },
+  "56": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 3
+    },
+    "children": []
+  },
+  "57": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 5.0
+    },
+    "children": []
+  },
+  "58": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      130
+    ]
+  },
+  "59": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "60": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 3.0
+    },
+    "children": []
+  },
+  "61": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      131,
+      132
+    ]
+  },
+  "62": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "63": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      133
+    ]
+  },
+  "64": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 6.0
+    },
+    "children": []
+  },
+  "65": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      134
+    ]
+  },
+  "66": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "67": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 3.0
+    },
+    "children": []
+  },
+  "68": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "69": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      135,
+      136
+    ]
+  },
+  "70": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 3
+    },
+    "children": []
+  },
+  "71": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 11.0
+    },
+    "children": []
+  },
+  "72": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      137,
+      138
+    ]
+  },
+  "73": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "74": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      139,
+      140
+    ]
+  },
+  "75": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 9.0
+    },
+    "children": []
+  },
+  "76": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 3.0
+    },
+    "children": []
+  },
+  "77": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      141,
+      142
+    ]
+  },
+  "78": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "79": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "80": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 1.0
+    },
+    "children": []
+  },
+  "81": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "82": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      143,
+      144
+    ]
+  },
+  "83": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      145,
+      146
+    ]
+  },
+  "84": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      147
+    ]
+  },
+  "85": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      148
+    ]
+  },
+  "86": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      149
+    ]
+  },
+  "87": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "88": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 3
+    },
+    "children": []
+  },
+  "89": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "90": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      150
+    ]
+  },
+  "91": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      151
+    ]
+  },
+  "92": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      152
+    ]
+  },
+  "93": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      153
+    ]
+  },
+  "94": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      154
+    ]
+  },
+  "95": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      155,
+      156
+    ]
+  },
+  "96": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 0.0
+    },
+    "children": []
+  },
+  "97": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 14.0
+    },
+    "children": []
+  },
+  "98": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 11.0
+    },
+    "children": []
+  },
+  "99": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      157,
+      158
+    ]
+  },
+  "100": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      159
+    ]
+  },
+  "101": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 14.0
+    },
+    "children": []
+  },
+  "102": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      160
+    ]
+  },
+  "103": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      161
+    ]
+  },
+  "104": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      162
+    ]
+  },
+  "105": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "106": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 4.0
+    },
+    "children": []
+  },
+  "107": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "108": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 9.0
+    },
+    "children": []
+  },
+  "109": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 2.0
+    },
+    "children": []
+  },
+  "110": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "111": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "112": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      163
+    ]
+  },
+  "113": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      164
+    ]
+  },
+  "114": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "115": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      165
+    ]
+  },
+  "116": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      166
+    ]
+  },
+  "117": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      167
+    ]
+  },
+  "118": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "119": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      168
+    ]
+  },
+  "120": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 13.0
+    },
+    "children": []
+  },
+  "121": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      169
+    ]
+  },
+  "122": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      170
+    ]
+  },
+  "123": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      171
+    ]
+  },
+  "124": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "125": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      172
+    ]
+  },
+  "126": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      173
+    ]
+  },
+  "127": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 7.0
+    },
+    "children": []
+  },
+  "128": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      174
+    ]
+  },
+  "129": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      175
+    ]
+  },
+  "130": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 12.0
+    },
+    "children": []
+  },
+  "131": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      176
+    ]
+  },
+  "132": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "133": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 0.0
+    },
+    "children": []
+  },
+  "134": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      177
+    ]
+  },
+  "135": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "136": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 6.0
+    },
+    "children": []
+  },
+  "137": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 3
+    },
+    "children": []
+  },
+  "138": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 3
+    },
+    "children": []
+  },
+  "139": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      178
+    ]
+  },
+  "140": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      179
+    ]
+  },
+  "141": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      180
+    ]
+  },
+  "142": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "143": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "144": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 3
+    },
+    "children": []
+  },
+  "145": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      181
+    ]
+  },
+  "146": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      182
+    ]
+  },
+  "147": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 11.0
+    },
+    "children": []
+  },
+  "148": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      183
+    ]
+  },
+  "149": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "150": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "151": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      184
+    ]
+  },
+  "152": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      185
+    ]
+  },
+  "153": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "154": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "155": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "156": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      186
+    ]
+  },
+  "157": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      187
+    ]
+  },
+  "158": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "159": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 6.0
+    },
+    "children": []
+  },
+  "160": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      188
+    ]
+  },
+  "161": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "162": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      189
+    ]
+  },
+  "163": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "164": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 3.0
+    },
+    "children": []
+  },
+  "165": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 8.0
+    },
+    "children": []
+  },
+  "166": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "167": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 2
+    },
+    "children": []
+  },
+  "168": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "169": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      190
+    ]
+  },
+  "170": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 3.0
+    },
+    "children": []
+  },
+  "171": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 8.0
+    },
+    "children": []
+  },
+  "172": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      191
+    ]
+  },
+  "173": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 14.0
+    },
+    "children": []
+  },
+  "174": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      192
+    ]
+  },
+  "175": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "176": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "177": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "178": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 7.0
+    },
+    "children": []
+  },
+  "179": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      193
+    ]
+  },
+  "180": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "181": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      194
+    ]
+  },
+  "182": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      195
+    ]
+  },
+  "183": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "184": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      196
+    ]
+  },
+  "185": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 11.0
+    },
+    "children": []
+  },
+  "186": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      197
+    ]
+  },
+  "187": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      198
+    ]
+  },
+  "188": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      199
+    ]
+  },
+  "189": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 3.0
+    },
+    "children": []
+  },
+  "190": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      200
+    ]
+  },
+  "191": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 10.0
+    },
+    "children": []
+  },
+  "192": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "EQUAL",
+      "condition_value": 0.0
+    },
+    "children": []
+  },
+  "193": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "194": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      201
+    ]
+  },
+  "195": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      202
+    ]
+  },
+  "196": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      203
+    ]
+  },
+  "197": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "198": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": 10.0
+    },
+    "children": []
+  },
+  "199": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      204
+    ]
+  },
+  "200": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  },
+  "201": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      205
+    ]
+  },
+  "202": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 1
+    },
+    "children": []
+  },
+  "203": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      206
+    ]
+  },
+  "204": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "GREATER",
+      "condition_value": 12.0
+    },
+    "children": []
+  },
+  "205": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "position",
+      "input_index": 0,
+      "condition_type": "LESS",
+      "condition_value": 3.0
+    },
+    "children": []
+  },
+  "206": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      207
+    ]
+  },
+  "207": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      208
+    ]
+  },
+  "208": {
+    "class": "LakeAction",
+    "parameters": {
+      "lake_action": 0
+    },
+    "children": []
+  }
+}

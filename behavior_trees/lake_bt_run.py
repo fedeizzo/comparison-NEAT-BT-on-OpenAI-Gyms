@@ -5,9 +5,9 @@ from argparse import ArgumentParser
 import gymnasium as gym
 import toml
 from bt_lib.composite_nodes import composite_node_classes
-from lunar_lander.action_nodes import action_node_classes
-from lunar_lander.bt_evolution import BehaviorTreeEvolution
-from lunar_lander.condition_nodes import condition_node_classes
+from frozen_lake.action_nodes import action_node_classes
+from frozen_lake.bt_evolution import BehaviorTreeEvolution
+from frozen_lake.condition_nodes import condition_node_classes
 
 def main_lander(lander_config):
     random.seed(lander_config["bt_config"]["mutation_seed"])
@@ -27,7 +27,7 @@ def main_lander(lander_config):
     )
 
     if lander_config["game"]["train"]:
-        env = gym.make("LunarLander-v2")
+        env = gym.make("FrozenLake-v1", is_slippery=False)
 
         bt_evolution.initialize_population(
             action_node_classes,
@@ -39,14 +39,16 @@ def main_lander(lander_config):
         bt_evolution.evolutionary_algorithm(env)
         env.close()
     else:
-        env = gym.make("LunarLander-v2", render_mode="rgb_array")
+        env = gym.make("FrozenLake-v1", render_mode="rgb_array")
         bt_evolution.evalutate_folder(
             action_node_classes,
             condition_node_classes,
             composite_node_classes,
             env,
-            [0, 10, 50, 100, 500, 1000],
+            [0, 10, 50, 100],
             os.path.join(lander_config["game"]["folder_path"],"results_gif"),
+            skip_frames=1,
+            fps=20
         )
 
 

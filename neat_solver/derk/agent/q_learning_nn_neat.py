@@ -1,9 +1,8 @@
-import neat
-import numpy as np
-
 from typing import List
 
-from lunar_lander.pytorch_neat import recurrent_net
+import neat
+import numpy as np
+from derk.agent.pytorch_neat import recurrent_net
 from scipy.special import softmax
 
 input_node_names = [

@@ -1,10 +1,9 @@
-import neat
-import numpy as np
-
 from typing import Dict
 
-from lunar_lander.pytorch_neat import recurrent_net
-from derk_gym import activation_functions as af
+import neat
+import numpy as np
+from derk import activation_functions as af
+from derk.agent.pytorch_neat import recurrent_net
 
 input_node_names = [
     "Hitpoints",
@@ -129,7 +128,9 @@ class DerkNeatNNPlayer:
             [
                 *[0, 0],  # move and rotate
                 output[2],  # chase
-                *[self.activation_functions[i](o) for i, o in enumerate([cast, focus])], # cast and focus
+                *[
+                    self.activation_functions[i](o) for i, o in enumerate([cast, focus])
+                ],  # cast and focus
             ]
         ).flatten()
         if self.verbose:

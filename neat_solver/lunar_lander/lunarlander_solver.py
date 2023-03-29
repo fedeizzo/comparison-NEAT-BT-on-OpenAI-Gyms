@@ -42,8 +42,8 @@ def eval_checkpoints(checkpoints, iterations, config, gif_path):
     frames = []
     env = gym.make("LunarLander-v2", render_mode="rgb_array")
     for generation in checkpoints:
-        filename = f'neat-checkpoint-{generation}'
-        gif_temp_filename = f'neat-checkpoint-{generation}.gif'
+        filename = f"neat-checkpoint-{generation}"
+        gif_temp_filename = f"neat-checkpoint-{generation}.gif"
         winner = neat.Checkpointer.restore_checkpoint(filename).run(eval_genomes, 1)
         winner = neat.nn.FeedForwardNetwork.create(winner, config)
         observation, info = env.reset(seed=1)
@@ -74,7 +74,7 @@ def eval_checkpoints(checkpoints, iterations, config, gif_path):
                     fps=60,
                 )
     for generation in checkpoints:
-        gif_temp_filename = f'neat-checkpoint-{generation}.gif'
+        gif_temp_filename = f"neat-checkpoint-{generation}.gif"
         with Image.open(gif_temp_filename) as im:
             try:
                 while 1:
@@ -136,20 +136,17 @@ def generate_stats(stats):
     species_stats = [
         [gen, curve] for gen, curve in enumerate(stats.get_species_sizes())
     ]
-    species_stats = pd.DataFrame(
-        species_stats, columns=["generation", "species_sizes"]
-    )
+    species_stats = pd.DataFrame(species_stats, columns=["generation", "species_sizes"])
     return extensive_stats, species_stats
 
 
-def lunar_lander_train(neat_config_path, iterations, checkpoint_frequency, use_wandb, evaluate_checkpoints):
+def lunar_lander_train(
+    neat_config_path, iterations, checkpoint_frequency, use_wandb, evaluate_checkpoints
+):
     neat_config = ConfigParser()
     neat_config.read(neat_config_path)
     if use_wandb:
-        wandb.init(
-            project="Lander",
-            config=neat_config.__dict__
-        )
+        wandb.init(project="Lander", config=neat_config.__dict__)
     env = gym.make("LunarLander-v2")
     observation, info = env.reset(seed=42)
     config = neat.Config(
@@ -171,9 +168,14 @@ def lunar_lander_train(neat_config_path, iterations, checkpoint_frequency, use_w
     extensive_stats, _ = generate_stats(stats)
 
     if use_wandb:
-        for i, (c, mean, median, stdev) in enumerate(zip(stats.most_fit_genomes, stats.get_fitness_mean(),
-                                                         stats.get_fitness_median(),
-                                                         stats.get_fitness_stdev())):
+        for i, (c, mean, median, stdev) in enumerate(
+            zip(
+                stats.most_fit_genomes,
+                stats.get_fitness_mean(),
+                stats.get_fitness_median(),
+                stats.get_fitness_stdev(),
+            )
+        ):
             wandb.log({"best_fitness": c.fitness}, step=i + 1)
             wandb.log({"nodes_number": len(c.nodes)}, step=i + 1)
             wandb.log({"connections_number": len(c.connections)}, step=i + 1)
@@ -181,17 +183,28 @@ def lunar_lander_train(neat_config_path, iterations, checkpoint_frequency, use_w
             wandb.log({"mean_fitness": mean}, step=i + 1)
             wandb.log({"median_fitness": median}, step=i + 1)
             wandb.log({"std_fitness": stdev}, step=i + 1)
-        for i, v in enumerate(extensive_stats[['generation', 'fitness']].groupby('generation').min()):
+        for i, v in enumerate(
+            extensive_stats[["generation", "fitness"]].groupby("generation").min()
+        ):
             wandb.log({"worst_fitness": v}, step=i + 1)
         wandb.finish()
     if evaluate_checkpoints:
-        eval_checkpoints([4, 9, 19, 29, 39, 49, 69, 99, 149, 199, 249, 299, 349, 399, 449, 499], iterations, config,
-                         '../assets/images/neat_lunar_lander_evolution.gif')
+        eval_checkpoints(
+            [4, 9, 19, 29, 39, 49, 69, 99, 149, 199, 249, 299, 349, 399, 449, 499],
+            iterations,
+            config,
+            "../assets/images/neat_lunar_lander_evolution.gif",
+        )
 
 
 def lunar_lander_inference(neat_config_path, winner_pickle, enable_wind, wind_power):
-    env = gym.make("LunarLander-v2", render_mode="human", enable_wind=enable_wind, wind_power=wind_power)
-    genome = pickle.load(open(winner_pickle, 'rb'))
+    env = gym.make(
+        "LunarLander-v2",
+        render_mode="human",
+        enable_wind=enable_wind,
+        wind_power=wind_power,
+    )
+    genome = pickle.load(open(winner_pickle, "rb"))
     config = neat.Config(
         neat.DefaultGenome,
         neat.DefaultReproduction,

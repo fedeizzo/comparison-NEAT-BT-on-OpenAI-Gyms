@@ -1,14 +1,14 @@
-import pickle
 import importlib
+import os
+import pickle
+from os.path import expandvars
+
+import neat
 import numpy as np
 import pandas as pd
-import os
-from os.path import expandvars
-import neat
-from utils.neat import visualize
-
+import visualize
+from derk.generate_all_possible_actions import generate_actions
 from gym_derk.envs import DerkEnv
-from derk_gym.generate_all_possible_actions import generate_actions
 
 
 def eval_genomes(genomes, config):
@@ -29,7 +29,7 @@ def eval_genomes(genomes, config):
     if len(derklings) != env.n_agents:
         print(len(derklings), env.n_agents)
         assert (
-                len(derklings) == env.n_agents
+            len(derklings) == env.n_agents
         ), "Population for neat must be n_agents_per_arena * n_arenas"
 
     observation_n = env.reset()
@@ -71,18 +71,18 @@ def set_player_args(player_id, p_cfg, config):
 
 
 def derk_main_high_level(
-        players,
-        number_of_arenas,
-        is_turbo,
-        reward_function,
-        is_train,
-        episodes_number,
-        neat_config,
-        network_input,
-        best_stats_path,
-        extensive_stats_path,
-        species_stats_path,
-        weights_path,
+    players,
+    number_of_arenas,
+    is_turbo,
+    reward_function,
+    is_train,
+    episodes_number,
+    neat_config,
+    network_input,
+    best_stats_path,
+    extensive_stats_path,
+    species_stats_path,
+    weights_path,
 ):
     chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
     chrome_executable = expandvars(chrome_executable) if chrome_executable else None
@@ -137,7 +137,7 @@ def derk_main_high_level(
     network_input_mask = list(network_input.values())
     config.__setattr__("network_input_mask", network_input_mask)
     player_classes = [
-        getattr(importlib.import_module(f"agent.{p['path']}"), p["name"])
+        getattr(importlib.import_module(f"derk.agent.{p['path']}"), p["name"])
         for p in players
     ]
     config.__setattr__(

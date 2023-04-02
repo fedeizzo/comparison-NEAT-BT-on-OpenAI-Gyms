@@ -96,6 +96,7 @@ class DerkQLearningNEATPlayer:
             )
 
         output = np.array(self.network.activate(observations.reshape(1, -1)).squeeze(0))
+        assert len(output) == len(self.all_actions), "output size must be equal to action space"
         output = softmax(output)
         output = self.all_actions[np.argmax(output)]
 

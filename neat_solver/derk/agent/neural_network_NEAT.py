@@ -127,6 +127,8 @@ class DerkNeatNNPlayer:
         output = np.array(
             [
                 *[0, 0],  # move and rotate
+                # output[0],  # move
+                # output[1],  # rotate
                 output[2],  # chase
                 *[
                     self.activation_functions[i](o) for i, o in enumerate([cast, focus])

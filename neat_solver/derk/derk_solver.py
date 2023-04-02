@@ -160,7 +160,7 @@ def derk_main_high_level(
         winner = p.run(eval_genomes, episodes_number)
         with open(weights_path, "wb") as f:
             pickle.dump(winner, f)
-        visualize.draw_net(config, winner, False)
+        # visualize.draw_net(config, winner, False)
         best_genome_stats = pd.DataFrame()
         # stats_df['species'] = stats.get_species_sizes()
         # stats_df['species_fitness'] = stats.get_species_fitness()

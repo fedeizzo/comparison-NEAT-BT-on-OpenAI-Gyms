@@ -1,14 +1,13 @@
 [game]
-# fast_mode = true
-# number_of_arenas = 10
-# train = true
-# episodes_number = 100
-fast_mode = false
-number_of_arenas = 1
-train = false
-episodes_number = 1
-neat_config = './configs/q_learning_neat_config.ini'
-weights_path = './weights/q_learning_winner.pkl'
+fast_mode = true
+number_of_arenas = 5
+train = true
+episodes_number = 500
+best_stats = './q-learning-1000-actions/best_stats.pkl'
+extensive_stats = './q-learning-1000-actions/extensive_stats.pkl'
+species_stats = './q-learning-1000-actions/species_stats.pkl'
+neat_config = './q-learning-1000-actions/q_learning_1000_actions.ini'
+weights_path = './q-learning-1000-actions/winner.pkl'
 
 [reward-function]
 damageEnemyStatue = 5
@@ -105,19 +104,19 @@ path = 'q_learning_nn_neat'
 name = 'DerkQLearningNEATPlayer'
 verbose = false
 # if actions_space is set to restricted
-# movement, rotaion and chase focust split
+# movement, rotation and chase focust split
 # are ignored
 # actions_space = "restricted"
 actions_space = "linespace"
-movement_split = 3
-rotation_split = 3
-chase_focus_split = 3
+movement_split = 5
+rotation_split = 5
+chase_focus_split = 5
 
 [[players]]
 path = 'q_learning_nn_neat'
 name = 'DerkQLearningNEATPlayer'
 verbose = false
 actions_space = "linespace"
-movement_split = 3
-rotation_split = 3
-chase_focus_split = 3
+movement_split = 5
+rotation_split = 5
+chase_focus_split = 5

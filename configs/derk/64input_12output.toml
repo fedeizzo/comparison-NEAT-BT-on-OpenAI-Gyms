@@ -1,31 +1,30 @@
 [game]
-# fast_mode = true
-# number_of_arenas = 10
-# train = true
-# episodes_number = 10
-fast_mode = false
-number_of_arenas = 1
-train = false
-episodes_number = 1
-neat_config = './configs/q_learning/melee_weapon_neat.ini'
-weights_path = './weights/q_learning/melee_weapon.pkl'
+fast_mode = true
+number_of_arenas = 5
+train = true
+episodes_number = 500
+best_stats = './64input_12output_derk/best_stats.pkl'
+extensive_stats = './64input_12output_derk/extensive_stats.pkl'
+species_stats = './64input_12output_derk/species_stats.pkl'
+neat_config = './64input_12output_derk/64input_12output.ini'
+weights_path = './64input_12output_derk/winner.pkl'
 
 [reward-function]
 damageEnemyStatue = 5
 damageEnemyUnit = 5
 killEnemyStatue = 5
 killEnemyUnit = 5
-healFriendlyStatue = 0
-healTeammate1 = 0
-healTeammate2 = 0
+healFriendlyStatue = 3
+healTeammate1 = 2
+healTeammate2 = 2
 timeSpentHomeBase = 0
 timeSpentHomeTerritory = 0
 timeSpentAwayTerritory = 0
 timeSpentAwayBase = 0
 damageTaken = -1
 friendlyFire = -3
-healEnemy = 0
-fallDamageTaken = -3
+healEnemy = -3
+fallDamageTaken = -1
 statueDamageTaken = -3
 manualBonus = 0
 victory = 5
@@ -101,19 +100,17 @@ UnusedExtraSense30 = true
 UnusedExtraSense31 = true
 
 [[players]]
-path = 'q_learning_nn_neat'
-name = 'DerkQLearningNEATPlayer'
+path = 'neural_network_NEAT'
+name = 'DerkNeatNNPlayer'
 verbose = false
-actions_space = "ranged_weapon"
-movement_split = 3
-rotation_split = 3
-chase_focus_split = 3
+[players.activation_functions]
+0 = 'identity'
+1 = 'identity'
 
 [[players]]
-path = 'q_learning_nn_neat'
-name = 'DerkQLearningNEATPlayer'
+path = 'neural_network_NEAT'
+name = 'DerkNeatNNPlayer'
 verbose = false
-actions_space = "ranged_weapon"
-movement_split = 3
-rotation_split = 3
-chase_focus_split = 3
+[players.activation_functions]
+0 = 'identity'
+1 = 'identity'

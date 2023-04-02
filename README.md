@@ -21,7 +21,7 @@ Lunar Lander:
 python neat_solver/run.py -e lunarlander -c configs/lunarlander/lunarlander_neat.toml
 
 # inference
-TODO
+python neat_solver/run.py -e lunarlander -c configs/lunarlander/inference_lunarlander_neat.toml -i
 ```
 
 Derk:

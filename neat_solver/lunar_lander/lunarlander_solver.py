@@ -1,5 +1,6 @@
 import pickle
 from configparser import ConfigParser
+from typing import Optional
 
 import gymnasium as gym
 import neat
@@ -10,11 +11,45 @@ from PIL import Image, ImageDraw
 import wandb
 
 
-def eval_genome(genome, config):
+def create_gym_env(
+    env_name: str,
+    seed: Optional[int] = None,
+    render_mode: Optional[str] = None,
+    **env_kwargs,
+) -> gym.Env:
+    """Creates a Gym environment given its name and configuration.
+
+    Args:
+        env_name (str): The name of the Gym environment to create.
+        seed (int): The seed to use for the environment.
+        render_mode (Optional[str]): The render mode to use for the environment. Defaults to None.
+        **env_kwargs: Additional keyword arguments to pass to the environment.
+
+    Returns:
+        gym.Env: The Gym environment.
+    """
+    env = gym.make(env_name, render_mode=render_mode, **env_kwargs)
+    if seed is not None:
+        _, _ = env.reset(seed=seed)
+    return env
+
+
+def eval_genome(
+    genome: neat.DefaultGenome, config: neat.Config, runs_per_net: int = 5
+) -> float:
+    """Evaluates a genome by running it in the environment a set number of times.
+
+    Args:
+        genome (neat.DefaultGenome): The genome to evaluate.
+        config (neat.Config): The NEAT config to build the network from.
+        runs_per_net (int, optional): The number of times to run the genome in the environment. Defaults to 5.
+
+    Returns:
+        float: The mean fitness across all runs.
+    """
     env = config.env
     net = neat.nn.FeedForwardNetwork.create(genome, config)
     fitnesses = []
-    runs_per_net = 5
 
     for _ in range(runs_per_net):
         observation, info = env.reset()
@@ -26,26 +61,43 @@ def eval_genome(genome, config):
             observation, reward, terminated, truncated, info = env.step(action)
             fitness += reward
             if terminated or truncated:
-                fitnesses.append(fitness)
                 break
         fitnesses.append(fitness)
-    # The genome's fitness is the mean performance across all runs.
+
     return np.mean(fitnesses)
 
 
-def eval_genomes(genomes, config):
+def eval_genomes(genomes: list[neat.DefaultGenome], config: neat.Config):
+    """Evaluates a list of genomes by running them in the environment."""
     for genome_id, genome in genomes:
         genome.fitness = eval_genome(genome, config)
 
 
-def eval_checkpoints(checkpoints, iterations, config, gif_path):
+def eval_checkpoints(
+    env_name: str,
+    checkpoints: list[int],
+    config: neat.Config,
+    gif_path: str,
+    **env_kwargs,
+):
+    """Evaluates a list of checkpoints by running them in the environment and saving the results as a gif.
+
+    Args:
+        env_name (str): The name of the Gym environment to create.
+        checkpoints (list[int]): A list of checkpoint generations to evaluate.
+        config (neat.Config): The NEAT config to build the network from.
+        gif_path (str): The path to save the gif to.
+        **env_kwargs: Additional keyword arguments to pass to the environment.
+    """
+    env = create_gym_env(env_name, render_mode="rgb_array", **env_kwargs)
+
     frames = []
-    env = gym.make("LunarLander-v2", render_mode="rgb_array")
     for generation in checkpoints:
         filename = f"neat-checkpoint-{generation}"
-        gif_temp_filename = f"neat-checkpoint-{generation}.gif"
-        winner = neat.Checkpointer.restore_checkpoint(filename).run(eval_genomes, 1)
-        winner = neat.nn.FeedForwardNetwork.create(winner, config)
+        winner_genome = neat.Checkpointer.restore_checkpoint(filename).run(
+            eval_genomes, 1
+        )
+        winner = neat.nn.FeedForwardNetwork.create(winner_genome, config)
         observation, info = env.reset(seed=1)
         done = False
         while not done:
@@ -66,7 +118,7 @@ def eval_checkpoints(checkpoints, iterations, config, gif_path):
                 done = True
                 # stop saving frames after the first time
                 frames[0].save(
-                    gif_temp_filename,
+                    f"{filename}.gif",
                     save_all=True,
                     append_images=frames[1::4],
                     optimize=False,
@@ -74,8 +126,7 @@ def eval_checkpoints(checkpoints, iterations, config, gif_path):
                     fps=60,
                 )
     for generation in checkpoints:
-        gif_temp_filename = f"neat-checkpoint-{generation}.gif"
-        with Image.open(gif_temp_filename) as im:
+        with Image.open(f"neat-checkpoint-{generation}.gif") as im:
             try:
                 while 1:
                     im.seek(im.tell() + 1)
@@ -93,13 +144,28 @@ def eval_checkpoints(checkpoints, iterations, config, gif_path):
     )
 
 
-def eval_winner_net(winner, config):
+def eval_winner_net(
+    winner: neat.DefaultGenome,
+    config: neat.Config,
+    env: gym.Env,
+    winner_dump_path: str,
+    num_evals: int = 100,
+):
+    """Evaluates a winner net by running it in the environment a set number of times.
+
+    Args:
+        winner (neat.DefaultGenome): The winner genome to evaluate.
+        config (neat.Config): The NEAT config to build the network from.
+        env (gym.Env): The environment to run the winner net in.
+        winner_dump_path (str): The path to save the winner genome to.
+        num_evals (int, optional): The number of times to run the genome in the environment. Defaults to 100.
+    """
     winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
     fitnesses = []
-    for _ in range(100):
+    for _ in range(num_evals):
         observation, info = env.reset()
         fitness = 0
-        for _ in range(1000):
+        while True:
             action = winner_net.activate(observation)
             action = int(np.argmax(action))
             observation, reward, terminated, truncated, info = env.step(action)
@@ -108,19 +174,15 @@ def eval_winner_net(winner, config):
                 fitnesses.append(fitness)
                 break
         fitnesses.append(fitness)
-    print("Average fitness across 100 episodes is: {}".format(np.mean(fitnesses)))
-    if np.mean(fitnesses) >= 200:
-        print(" + The task is solved + ")
-    else:
-        print(" - The task is not solved - ")
 
-    # Saves winner net
-    pickle_out = open("../assets/weights/lunarlander_500_iterations.pickle", "wb")
-    pickle.dump(winner, pickle_out)
-    pickle_out.close()
+    print(f"Average fitness across {num_evals} episodes is: {np.mean(fitnesses)}")
+
+    with open(winner_dump_path, "wb") as outfile:
+        pickle.dump(winner, outfile)
 
 
 def generate_stats(stats):
+    """Generates extensive and species stats from the NEAT stats object."""
     extensive_stats = []
     # stats.generation_statistics has len() == number of iterations
     for gen, i in enumerate(stats.generation_statistics):
@@ -132,7 +194,7 @@ def generate_stats(stats):
         extensive_stats, columns=["generation", "species", "genome", "fitness"]
     )
 
-    # SPECIES STATS
+    # species stats
     species_stats = [
         [gen, curve] for gen, curve in enumerate(stats.get_species_sizes())
     ]
@@ -141,14 +203,35 @@ def generate_stats(stats):
 
 
 def lunar_lander_train(
-    neat_config_path, iterations, checkpoint_frequency, use_wandb, evaluate_checkpoints
+    env_name: str,
+    env_kwargs: dict,
+    neat_config_path: str,
+    num_iterations: int,
+    checkpoint_frequency: int,
+    use_wandb: bool,
+    evaluate_checkpoints: bool,
+    winner_dump_path: str,
+    gif_path: str,
+    gif_checkpoints: list[int],
 ):
+    """Trains a lunar lander agent using NEAT.
+
+    Args:
+        env_name (str): Name of the Gym environment to use.
+        env_kwargs (str): Additional keyword arguments to pass to the environment.
+        neat_config_path (str): The path to the NEAT config file.
+        num_iterations (int): The number of iterations to train for.
+        checkpoint_frequency (int): The frequency to save checkpoints.
+        use_wandb (bool): Whether to use Weights and Biases to log the training.
+        evaluate_checkpoints (bool): Whether to create an output gif image.
+    """
     neat_config = ConfigParser()
     neat_config.read(neat_config_path)
+
     if use_wandb:
         wandb.init(project="Lander", config=neat_config.__dict__)
-    env = gym.make("LunarLander-v2")
-    observation, info = env.reset(seed=42)
+
+    env = create_gym_env(env_name, **env_kwargs)
     config = neat.Config(
         neat.DefaultGenome,
         neat.DefaultReproduction,
@@ -163,8 +246,9 @@ def lunar_lander_train(
         p.add_reporter(neat.Checkpointer(checkpoint_frequency))
     stats = neat.StatisticsReporter()
     p.add_reporter(stats)
-    winner = p.run(eval_genomes, iterations)
-    eval_winner_net(winner, config)
+
+    winner = p.run(eval_genomes, num_iterations)
+    eval_winner_net(winner, config, env, winner_dump_path)
     extensive_stats, _ = generate_stats(stats)
 
     if use_wandb:
@@ -183,26 +267,36 @@ def lunar_lander_train(
             wandb.log({"mean_fitness": mean}, step=i + 1)
             wandb.log({"median_fitness": median}, step=i + 1)
             wandb.log({"std_fitness": stdev}, step=i + 1)
+
         for i, v in enumerate(
             extensive_stats[["generation", "fitness"]].groupby("generation").min()
         ):
             wandb.log({"worst_fitness": v}, step=i + 1)
+
         wandb.finish()
+
     if evaluate_checkpoints:
-        eval_checkpoints(
-            [4, 9, 19, 29, 39, 49, 69, 99, 149, 199, 249, 299, 349, 399, 449, 499],
-            iterations,
-            config,
-            "../assets/images/neat_lunar_lander_evolution.gif",
-        )
+        eval_checkpoints(env_name, gif_checkpoints, config, gif_path, **env_kwargs)
 
 
-def lunar_lander_inference(neat_config_path, winner_pickle, enable_wind, wind_power):
-    env = gym.make(
-        "LunarLander-v2",
+def lunar_lander_inference(
+    env_name: str,
+    env_kwargs: dict,
+    neat_config_path: str,
+    winner_pickle: str,
+):
+    """Runs the lunar lander agent in inference mode rendered for humans.
+
+    Args:
+        env_name (str): Name of the Gym environment to use.
+        env_kwargs (str): Additional keyword arguments to pass to the environment.
+        neat_config_path (str): The path to the NEAT config file.
+        winner_pickle (str): The path to the winner genome pickle file.
+    """
+    env = create_gym_env(
+        env_name,
         render_mode="human",
-        enable_wind=enable_wind,
-        wind_power=wind_power,
+        **env_kwargs,
     )
     genome = pickle.load(open(winner_pickle, "rb"))
     config = neat.Config(
@@ -214,6 +308,7 @@ def lunar_lander_inference(neat_config_path, winner_pickle, enable_wind, wind_po
     )
     net = neat.nn.FeedForwardNetwork.create(genome, config)
     observation, info = env.reset()
+
     while True:
         action = net.activate(observation)
         action = int(np.argmax(action))

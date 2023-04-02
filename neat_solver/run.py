@@ -43,16 +43,21 @@ if __name__ == "__main__":
         config = toml.load(args.config)
         if args.inference:
             lunar_lander_inference(
+                config["env"]["name"],
+                config["env"]["kwargs"],
                 config["game"]["neat_config"],
                 config["game"]["winner_pickle"],
-                config["game"]["enable_wind"],
-                config["game"]["wind_power"],
             )
         else:
             lunar_lander_train(
+                config["env"]["name"],
+                config["env"]["kwargs"],
                 config["game"]["neat_config"],
-                config["game"]["iterations"],
+                config["game"]["num_iterations"],
                 config["game"]["checkpoint_frequency"],
                 config["game"]["use_wandb"],
                 config["game"]["evaluate_checkpoints"],
+                config["game"]["winner_pickle"],
+                config["game"]["gif_path"],
+                config["game"]["gif_checkpoints"],
             )

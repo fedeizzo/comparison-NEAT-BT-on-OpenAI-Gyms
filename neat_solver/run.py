@@ -1,10 +1,19 @@
 from argparse import ArgumentParser
+from enum import Enum
 
 import toml
 from derk.derk_solver import derk_main_high_level
-from lunar_lander.lunarlander_solver import lunar_lander_inference, lunar_lander_train
+from lunar_lander.lunarlander_solver import gym_inference, gym_train
 
-ENVIRONMENTS = ["derk", "lunarlander"]
+
+# https://stackoverflow.com/questions/43968006/support-for-enum-arguments-in-argparse
+class EnvType(Enum):
+    DERK = "derk"
+    LUNARLANDER = "lunarlander"
+    FROZENLAKE = "frozenlake"
+
+    def __str__(self):
+        return self.value
 
 
 if __name__ == "__main__":
@@ -12,10 +21,10 @@ if __name__ == "__main__":
     p.add_argument(
         "-e",
         "--environment",
-        help="Derk environment to use",
-        type=str,
+        help="Gym environment to use",
+        type=EnvType,
+        choices=list(EnvType),
         required=True,
-        choices=ENVIRONMENTS,
     )
     p.add_argument(
         "-c", "--config", help="Path to config file", type=str, required=True
@@ -23,7 +32,7 @@ if __name__ == "__main__":
     p.add_argument("-i", "--inference", help="Inference mode", action="store_true")
 
     args = p.parse_args()
-    if args.environment == "derk":
+    if args.environment == EnvType.DERK:
         config = toml.load(args.config)
         derk_main_high_level(
             players=config["players"],
@@ -39,17 +48,17 @@ if __name__ == "__main__":
             species_stats_path=config["game"]["species_stats"],
             weights_path=config["game"]["weights_path"],
         )
-    elif args.environment == "lunarlander":
+    elif args.environment in [EnvType.LUNARLANDER, EnvType.FROZENLAKE]:
         config = toml.load(args.config)
         if args.inference:
-            lunar_lander_inference(
+            gym_inference(
                 config["env"]["name"],
                 config["env"]["kwargs"],
                 config["game"]["neat_config"],
                 config["game"]["winner_pickle"],
             )
         else:
-            lunar_lander_train(
+            gym_train(
                 config["env"]["name"],
                 config["env"]["kwargs"],
                 config["game"]["neat_config"],

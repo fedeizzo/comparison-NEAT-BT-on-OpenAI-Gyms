@@ -56,6 +56,8 @@ def eval_genome(
 
         fitness = 0
         while True:
+            if isinstance(observation, int):
+                observation = [observation]
             action = net.activate(observation)
             action = int(np.argmax(action))
             observation, reward, terminated, truncated, info = env.step(action)
@@ -111,6 +113,8 @@ def eval_checkpoints(
                     fill=(255, 255, 255),
                 )
             frames.append(img)
+            if isinstance(observation, int):
+                observation = [observation]
             action = winner.activate(observation)
             action = int(np.argmax(action))
             observation, reward, terminated, truncated, info = env.step(action)
@@ -166,6 +170,8 @@ def eval_winner_net(
         observation, info = env.reset()
         fitness = 0
         while True:
+            if isinstance(observation, int):
+                observation = [observation]
             action = winner_net.activate(observation)
             action = int(np.argmax(action))
             observation, reward, terminated, truncated, info = env.step(action)
@@ -202,7 +208,7 @@ def generate_stats(stats):
     return extensive_stats, species_stats
 
 
-def lunar_lander_train(
+def gym_train(
     env_name: str,
     env_kwargs: dict,
     neat_config_path: str,
@@ -279,7 +285,7 @@ def lunar_lander_train(
         eval_checkpoints(env_name, gif_checkpoints, config, gif_path, **env_kwargs)
 
 
-def lunar_lander_inference(
+def gym_inference(
     env_name: str,
     env_kwargs: dict,
     neat_config_path: str,
@@ -310,6 +316,8 @@ def lunar_lander_inference(
     observation, info = env.reset()
 
     while True:
+        if isinstance(observation, int):
+            observation = [observation]
         action = net.activate(observation)
         action = int(np.argmax(action))
         observation, reward, terminated, truncated, info = env.step(action)

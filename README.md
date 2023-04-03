@@ -14,6 +14,16 @@ pip install -r requirements.txt
 
 ### Neat
 
+Frozen Lake:
+
+```bash
+# train
+python neat_solver/run.py -e frozenlake -c configs/frozenlake/neat_train.toml
+
+# inference
+python neat_solver/run.py -e frozenlake -c configs/frozenlake/neat_inference.toml -i
+```
+
 Lunar Lander:
 
 ```bash

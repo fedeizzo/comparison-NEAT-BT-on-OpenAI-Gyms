@@ -1,0 +1,7 @@
+[env]
+name = "FrozenLake-v1"
+kwargs = {}
+
+[game]
+winner_pickle = "./assets/weights/frozenlake_500_iterations.pickle"
+neat_config = "./configs/frozenlake/neat.ini"

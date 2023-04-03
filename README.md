@@ -28,10 +28,10 @@ Lunar Lander:
 
 ```bash
 # train
-python neat_solver/run.py -e lunarlander -c configs/lunarlander/lunarlander_neat.toml
+python neat_solver/run.py -e lunarlander -c configs/lunarlander/neat_train.toml
 
 # inference
-python neat_solver/run.py -e lunarlander -c configs/lunarlander/inference_lunarlander_neat.toml -i
+python neat_solver/run.py -e lunarlander -c configs/lunarlander/neat_inference.toml -i
 ```
 
 Derk:
@@ -50,7 +50,7 @@ Frozen Lake:
 
 ```bash
 # train
-python behavior_trees/lake_bt_run.py -c configs/frozenlake/bt_frozenlake.toml
+python behavior_trees/lake_bt_run.py -c configs/frozenlake/bt.toml
 
 # inference
 TODO
@@ -60,7 +60,7 @@ Lunar Lander:
 
 ```bash
 # train
-python behavior_trees/lander_bt_run.py -c configs/lunarlander/bt_lander.toml
+python behavior_trees/lander_bt_run.py -c configs/lunarlander/bt.toml
 
 # inference
 TODO

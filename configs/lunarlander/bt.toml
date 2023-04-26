@@ -1,6 +1,5 @@
 [game]
-train = true # train or play
-folder_path = 'lander'
+folder_path = 'assets/bts/lunar_lander' # folder where the player will be saved
 [bt_config]
 population_size = 200 # number of individuals in the population
 mutation_rate = 0.4 # probability of mutation
@@ -8,7 +7,7 @@ crossover_rate = 0.5  # probability of crossover
 tournament_size = 5 # number of individuals to select for the tournament    
 elitism_rate = 0.20 # percentage of the best individuals to keep in the next generation
 max_depth = 30 # maximum depth of the tree in the initial population
-episodes_number = 4 # number of episodes to play for each individual
+episodes_number = 1 # number of episodes to play for each individual
 number_generations = 1000  # number of generations to evolve
 tree_size_penalty = 0.01 # penalty for tree size
 seed = 42 # random seed for gym

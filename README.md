@@ -53,7 +53,7 @@ Frozen Lake:
 python behavior_trees/lake_bt_run.py -c configs/frozenlake/bt.toml
 
 # inference
-TODO
+python behavior_trees/lake_bt_run.py -c configs/frozenlake/bt.toml -i
 ```
 
 Lunar Lander:
@@ -63,7 +63,7 @@ Lunar Lander:
 python behavior_trees/lander_bt_run.py -c configs/lunarlander/bt.toml
 
 # inference
-TODO
+python behavior_trees/lander_bt_run.py -c configs/lunarlander/bt.toml -i
 ```
 
 Derk:

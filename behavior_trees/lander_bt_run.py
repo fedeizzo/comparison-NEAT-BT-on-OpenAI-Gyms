@@ -9,7 +9,7 @@ from lunar_lander.action_nodes import action_node_classes
 from lunar_lander.bt_evolution import BehaviorTreeEvolution
 from lunar_lander.condition_nodes import condition_node_classes
 
-def main_lander(lander_config):
+def main_lander(lander_config:dict, inference:bool):
     random.seed(lander_config["bt_config"]["mutation_seed"])
     bt_evolution = BehaviorTreeEvolution(
         population_size=lander_config["bt_config"]["population_size"],
@@ -23,10 +23,10 @@ def main_lander(lander_config):
         seed=lander_config["bt_config"]["seed"],
         save_every=lander_config["bt_config"]["save_every"],
         folder_path=lander_config["game"]["folder_path"],
-        train=lander_config["game"]["train"],
+        train=not inference,
     )
 
-    if lander_config["game"]["train"]:
+    if not inference:
         env = gym.make("LunarLander-v2")
 
         bt_evolution.initialize_population(
@@ -55,6 +55,7 @@ if __name__ == "__main__":
     p.add_argument(
         "-c", "--config", help="Path to config file", type=str, required=True
     )
+    p.add_argument("-i", "--inference", help="Inference mode", action="store_true")
     args = p.parse_args()
     config = toml.load(args.config)
-    main_lander(config)
+    main_lander(config, args.inference)

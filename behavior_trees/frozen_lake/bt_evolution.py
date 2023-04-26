@@ -109,7 +109,7 @@ class BehaviorTreeEvolution:
         individual: BehaviorTree,
         env: gym.Env,
         path:str="",
-        generation:str=None,
+        generation:int=None,
         skip_frames: int = 4,
         fps=60,
     ):

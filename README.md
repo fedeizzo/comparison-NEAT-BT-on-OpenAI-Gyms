@@ -1,4 +1,4 @@
-# A Comparison between NEAT and Behavioral Trees on Discrete Gym Environments
+# A Comparison between NEAT and Behavior Trees on Discrete Gym Environments
 
 ## How to install
 
@@ -14,14 +14,24 @@ pip install -r requirements.txt
 
 ### Neat
 
+Frozen Lake:
+
+```bash
+# train
+python neat_solver/run.py -e frozenlake -c configs/frozenlake/neat_train.toml
+
+# inference
+python neat_solver/run.py -e frozenlake -c configs/frozenlake/neat_inference.toml -i
+```
+
 Lunar Lander:
 
 ```bash
 # train
-python neat_solver/run.py -e lunarlander -c configs/lunarlander/lunarlander_neat.toml
+python neat_solver/run.py -e lunarlander -c configs/lunarlander/neat_train.toml
 
 # inference
-TODO
+python neat_solver/run.py -e lunarlander -c configs/lunarlander/neat_inference.toml -i
 ```
 
 Derk:
@@ -34,26 +44,26 @@ python neat_solver/run.py -e derk -c configs/derk/default_nn_neat.toml
 TODO
 ```
 
-### Behavioral Trees
+### Behavior Trees
 
 Frozen Lake:
 
 ```bash
 # train
-python behavior_trees/lake_bt_run.py -c configs/lunarlander/lander.toml
+python behavior_trees/lake_bt_run.py -c configs/frozenlake/bt.toml
 
 # inference
-TODO
+python behavior_trees/lake_bt_run.py -c configs/frozenlake/bt.toml -i
 ```
 
 Lunar Lander:
 
 ```bash
 # train
-python behavior_trees/lander_bt_run.py -c configs/lunarlander/lander.toml
+python behavior_trees/lander_bt_run.py -c configs/lunarlander/bt.toml
 
 # inference
-TODO
+python behavior_trees/lander_bt_run.py -c configs/lunarlander/bt.toml -i
 ```
 
 Derk:

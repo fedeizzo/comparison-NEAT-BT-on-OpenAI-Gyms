@@ -1,6 +1,0 @@
-[game]
-use_wandb = false
-iterations = 10
-checkpoint_frequency = 2
-evaluate_checkpoints = true
-neat_config = "./configs/lunarlander/neat.ini"

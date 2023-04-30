@@ -8,14 +8,14 @@ from tqdm import tqdm
 
 # from bt_lib.behavior_tree_evolution import BehaviorTreeEvolution
 from bt_lib.composite_nodes import CompositeNode, composite_node_classes
-from lunar_lander.action_nodes import action_node_classes
-from lunar_lander.condition_nodes import condition_node_classes
-from lunar_lander.bt_evolution import BehaviorTreeEvolution
+from frozen_lake.action_nodes import action_node_classes
+from frozen_lake.condition_nodes import condition_node_classes
+from frozen_lake.bt_evolution import BehaviorTreeEvolution
 import random
 
 def main_lander(lander_config):
     random.seed(lander_config["bt_config"]["mutation_seed"])
-    env = gym.make("LunarLander-v2", render_mode="rgb_array")
+    env = gym.make("FrozenLake-v1", render_mode="rgb_array")
     bt_evolution = BehaviorTreeEvolution(
         lander_config["bt_config"]["population_size"],
         lander_config["bt_config"]["mutation_rate"],
@@ -30,11 +30,11 @@ def main_lander(lander_config):
         lander_config["game"]["folder_path"],
         False,
     )
-    bt = BehaviorTree.from_json("lander/best_tree_generation_1000.json",action_node_classes,condition_node_classes,
+    bt = BehaviorTree.from_json("/Users/micheleyin/Documents/bio-inspired-mutant-battlegrounds/behavior_trees/frozen_lake/saved_bts/lake_mutation_crossover/best_tree_generation_500.json",action_node_classes,condition_node_classes,
                                 composite_node_classes)
 
-
-    bt_evolution.save_gif(bt,env,path="eval.gif",generation=1000)
+    
+    bt_evolution.save_gif(bt,env,path="eval.gif",generation=500)
     print(bt.fitness)
 
 

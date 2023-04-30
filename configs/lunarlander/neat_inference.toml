@@ -1,5 +1,7 @@
+[env]
+name = "LunarLander-v2"
+kwargs = {enable_wind = true, wind_power = 0.8}
+
 [game]
 winner_pickle = "./assets/weights/lunarlander_500_iterations.pickle"
 neat_config = "./configs/lunarlander/neat.ini"
-enable_wind = true
-wind_power = 0.8

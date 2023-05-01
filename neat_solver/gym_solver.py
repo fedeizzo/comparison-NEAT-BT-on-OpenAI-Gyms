@@ -11,6 +11,10 @@ from PIL import Image, ImageDraw
 import wandb
 
 
+def one_hot(value: int, num_classes: int):
+    return np.squeeze(np.eye(num_classes)[value])
+
+
 def create_gym_env(
     env_name: str,
     seed: Optional[int] = None,
@@ -35,13 +39,17 @@ def create_gym_env(
 
 
 def eval_genome(
-    genome: neat.DefaultGenome, config: neat.Config, runs_per_net: int = 5
+    genome: neat.DefaultGenome,
+    config: neat.Config,
+    runs_per_net: int = 5,
+    input_one_hot: bool = True,
 ) -> float:
     """Evaluates a genome by running it in the environment a set number of times.
 
     Args:
         genome (neat.DefaultGenome): The genome to evaluate.
         config (neat.Config): The NEAT config to build the network from.
+        input_one_hot (bool): Encode input observation with one-hot-encoding
         runs_per_net (int, optional): The number of times to run the genome in the environment. Defaults to 5.
 
     Returns:
@@ -57,7 +65,10 @@ def eval_genome(
         fitness = 0
         while True:
             if isinstance(observation, int):
-                observation = [observation]
+                if input_one_hot:
+                    observation = one_hot(observation, len(net.input_nodes))
+                else:
+                    observation = [observation]
             action = net.activate(observation)
             action = int(np.argmax(action))
             observation, reward, terminated, truncated, info = env.step(action)
@@ -80,6 +91,7 @@ def eval_checkpoints(
     checkpoints: list[int],
     config: neat.Config,
     gif_path: str,
+    input_one_hot: bool = True,
     **env_kwargs,
 ):
     """Evaluates a list of checkpoints by running them in the environment and saving the results as a gif.
@@ -89,6 +101,7 @@ def eval_checkpoints(
         checkpoints (list[int]): A list of checkpoint generations to evaluate.
         config (neat.Config): The NEAT config to build the network from.
         gif_path (str): The path to save the gif to.
+        input_one_hot (bool): Encode input observation with one-hot-encoding
         **env_kwargs: Additional keyword arguments to pass to the environment.
     """
     env = create_gym_env(env_name, render_mode="rgb_array", **env_kwargs)
@@ -114,7 +127,10 @@ def eval_checkpoints(
                 )
             frames.append(img)
             if isinstance(observation, int):
-                observation = [observation]
+                if input_one_hot:
+                    observation = one_hot(observation, len(winner.input_nodes))
+                else:
+                    observation = [observation]
             action = winner.activate(observation)
             action = int(np.argmax(action))
             observation, reward, terminated, truncated, info = env.step(action)
@@ -153,6 +169,7 @@ def eval_winner_net(
     config: neat.Config,
     env: gym.Env,
     winner_dump_path: str,
+    input_one_hot: bool = True,
     num_evals: int = 100,
 ):
     """Evaluates a winner net by running it in the environment a set number of times.
@@ -162,6 +179,7 @@ def eval_winner_net(
         config (neat.Config): The NEAT config to build the network from.
         env (gym.Env): The environment to run the winner net in.
         winner_dump_path (str): The path to save the winner genome to.
+        input_one_hot (bool): Encode input observation with one-hot-encoding
         num_evals (int, optional): The number of times to run the genome in the environment. Defaults to 100.
     """
     winner_net = neat.nn.FeedForwardNetwork.create(winner, config)
@@ -171,7 +189,10 @@ def eval_winner_net(
         fitness = 0
         while True:
             if isinstance(observation, int):
-                observation = [observation]
+                if input_one_hot:
+                    observation = one_hot(observation, len(winner_net.input_nodes))
+                else:
+                    observation = [observation]
             action = winner_net.activate(observation)
             action = int(np.argmax(action))
             observation, reward, terminated, truncated, info = env.step(action)
@@ -230,6 +251,10 @@ def gym_train(
         checkpoint_frequency (int): The frequency to save checkpoints.
         use_wandb (bool): Whether to use Weights and Biases to log the training.
         evaluate_checkpoints (bool): Whether to create an output gif image.
+        winner_dump_path (str):
+        gif_path (str):
+        gif_checkpoints (list[int]):
+        input_one_hot (bool): Encode input observation with one-hot-encoding
     """
     neat_config = ConfigParser()
     neat_config.read(neat_config_path)
@@ -290,6 +315,7 @@ def gym_inference(
     env_kwargs: dict,
     neat_config_path: str,
     winner_pickle: str,
+    input_one_hot: bool = True,
 ):
     """Runs the lunar lander agent in inference mode rendered for humans.
 
@@ -298,6 +324,7 @@ def gym_inference(
         env_kwargs (str): Additional keyword arguments to pass to the environment.
         neat_config_path (str): The path to the NEAT config file.
         winner_pickle (str): The path to the winner genome pickle file.
+        input_one_hot (bool): Encode input observation with one-hot-encoding
     """
     env = create_gym_env(
         env_name,
@@ -317,7 +344,10 @@ def gym_inference(
 
     while True:
         if isinstance(observation, int):
-            observation = [observation]
+            if input_one_hot:
+                observation = one_hot(observation, len(net.input_nodes))
+            else:
+                observation = [observation]
         action = net.activate(observation)
         action = int(np.argmax(action))
         observation, reward, terminated, truncated, info = env.step(action)

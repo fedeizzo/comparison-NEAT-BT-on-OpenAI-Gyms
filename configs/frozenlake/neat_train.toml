@@ -4,8 +4,8 @@ kwargs = {is_slippery = false}
 
 [game]
 use_wandb = true
-num_iterations = 10
-checkpoint_frequency = 2
+num_iterations = 50
+checkpoint_frequency = 1000
 evaluate_checkpoints = true
 neat_config = "./configs/frozenlake/neat.ini"
 

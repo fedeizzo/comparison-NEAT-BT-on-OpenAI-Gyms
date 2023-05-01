@@ -1,6 +1,6 @@
 [env]
 name = "FrozenLake-v1"
-kwargs = {}
+kwargs = {is_slippery = false}
 
 [game]
 use_wandb = true

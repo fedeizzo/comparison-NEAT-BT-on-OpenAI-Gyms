@@ -1,6 +1,6 @@
 [env]
 name = "FrozenLake-v1"
-kwargs = {}
+kwargs = {is_slippery = false}
 
 [game]
 winner_pickle = "./assets/weights/frozenlake_500_iterations.pickle"

@@ -235,7 +235,7 @@ def gym_train(
     neat_config.read(neat_config_path)
 
     if use_wandb:
-        wandb.init(project="Lander", config=neat_config.__dict__)
+        wandb.init(project=env_name, config=neat_config.__dict__)
 
     env = create_gym_env(env_name, **env_kwargs)
     config = neat.Config(

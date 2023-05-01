@@ -3,7 +3,7 @@ from enum import Enum
 
 import toml
 from derk.derk_solver import derk_main_high_level
-from lunar_lander.lunarlander_solver import gym_inference, gym_train
+from gym_solver import gym_inference, gym_train
 
 
 # https://stackoverflow.com/questions/43968006/support-for-enum-arguments-in-argparse

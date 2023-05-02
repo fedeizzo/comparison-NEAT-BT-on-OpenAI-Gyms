@@ -2,7 +2,7 @@
 folder_path = 'assets/bts/lunar_lander' # folder where the player will be saved
 [bt_config]
 population_size = 200 # number of individuals in the population
- mutation_rate = 0.2 # probability of mutation
+mutation_rate = 0.2 # probability of mutation
 crossover_rate = 0.8  # probability of crossover
 tournament_size = 5 # number of individuals to select for the tournament    
 elitism_rate = 0.05 # percentage of the best individuals to keep in the next generation

@@ -108,8 +108,8 @@ class BehaviorTreeEvolution:
         self,
         individual: BehaviorTree,
         env: gym.Env,
-        path:str="",
-        generation:str=None,
+        path: str = "",
+        generation: str = None,
         skip_frames: int = 4,
         fps=60,
     ):
@@ -225,9 +225,9 @@ class BehaviorTreeEvolution:
                     skip_frames=skip_frames,
                     fps=fps,
                 )
-        self.concat_gifs(path, generations_to_save,fps)
+        self.concat_gifs(path, generations_to_save, fps)
 
-    def concat_gifs(self, path, generations_to_save,fps:int=60):
+    def concat_gifs(self, path, generations_to_save, fps: int = 60):
         # extract all the frames from the gif
         frames = []
         for generation in generations_to_save:
@@ -264,6 +264,10 @@ class BehaviorTreeEvolution:
             wandb.log({"worst_fitness": self.worst_fitness_current_gen}, step=i)
             wandb.log({"best_tree_depth": self.best_tree.get_size()[0]}, step=i)
             wandb.log({"best_tree_children": self.best_tree.get_size()[1]}, step=i)
+            wandb.log(
+                {"best_tree_executed_nodes": self.best_tree.get_executed_nodes()},
+                step=i,
+            )
             if i % self.save_every == 0:
                 self.best_tree.to_json(
                     os.path.join(self.folder_path, f"best_tree_generation_{i}.json")
@@ -281,7 +285,6 @@ class BehaviorTreeEvolution:
 
 
 if __name__ == "__main__":
-
     bt = BehaviorTreeEvolution(10, 0.1, 0.7, 5, 0.2)
     from bt_lib.action_nodes import ActionNode
     from bt_lib.composite_nodes import CompositeNode, composite_node_classes

@@ -9,7 +9,8 @@ from lunar_lander.action_nodes import action_node_classes
 from lunar_lander.bt_evolution import BehaviorTreeEvolution
 from lunar_lander.condition_nodes import condition_node_classes
 
-def main_lander(lander_config:dict, inference:bool):
+
+def main_lander(lander_config: dict, inference: bool):
     random.seed(lander_config["bt_config"]["mutation_seed"])
     bt_evolution = BehaviorTreeEvolution(
         population_size=lander_config["bt_config"]["population_size"],
@@ -24,6 +25,7 @@ def main_lander(lander_config:dict, inference:bool):
         save_every=lander_config["bt_config"]["save_every"],
         folder_path=lander_config["game"]["folder_path"],
         train=not inference,
+        prob_keep_not_executed=lander_config["bt_config"]["prob_keep_not_executed"],
     )
 
     if not inference:
@@ -39,7 +41,13 @@ def main_lander(lander_config:dict, inference:bool):
         bt_evolution.evolutionary_algorithm(env)
         env.close()
     else:
-        files = sorted([ int(i.split(".")[0].split('_')[-1]) for i in os.listdir(lander_config["game"]["folder_path"]) if os.path.isfile(os.path.join(lander_config["game"]["folder_path"],i)) ])
+        files = sorted(
+            [
+                int(i.split(".")[0].split("_")[-1])
+                for i in os.listdir(lander_config["game"]["folder_path"])
+                if os.path.isfile(os.path.join(lander_config["game"]["folder_path"], i))
+            ]
+        )
         env = gym.make("LunarLander-v2", render_mode="rgb_array")
         bt_evolution.evalutate_folder(
             action_node_classes,
@@ -47,7 +55,7 @@ def main_lander(lander_config:dict, inference:bool):
             composite_node_classes,
             env,
             files,
-            os.path.join(lander_config["game"]["folder_path"],"results_gif"),
+            os.path.join(lander_config["game"]["folder_path"], "results_gif"),
         )
 
 

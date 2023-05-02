@@ -280,6 +280,35 @@ class BehaviorTree:
 
         return executed_nodes / total_nodes
 
+    def prune(self, prob_keep_not_executed: float):
+        """Prunes tree branches that are not being executed.
+
+        Args:
+            prob (float): probab
+        """
+        # if keeping all unexecuted nodes, save computation time
+        if prob_keep_not_executed > 0.999:
+            return
+
+        fifo: list[BehaviorNode] = [self.root]
+        while len(fifo) > 0:
+            node = fifo.pop(0)
+
+            if hasattr(node, "children"):
+                if len(node.children) > 0:
+                    node.children = list(
+                        filter(
+                            lambda child: child.is_executed
+                            or random.random() < prob_keep_not_executed,
+                            node.children,
+                        )
+                    ) or [
+                        node.children[0]  # avoid pruning all node's children
+                    ]
+
+                for child in node.children:
+                    fifo.append(child)
+
 
 if __name__ == "__main__":
     sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

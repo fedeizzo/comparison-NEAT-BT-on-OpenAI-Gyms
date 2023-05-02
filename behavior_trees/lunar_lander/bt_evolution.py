@@ -30,6 +30,7 @@ class BehaviorTreeEvolution:
         save_every=10,
         folder_path="",
         train=True,
+        prob_keep_not_executed: float = 1.0,
     ):
         self.population_size = population_size
         self.mutation_rate = mutation_rate
@@ -49,6 +50,7 @@ class BehaviorTreeEvolution:
         self.save_every = save_every
         self.folder_path = folder_path
         self.train = train
+        self.prob_keep_not_executed = prob_keep_not_executed
         if train:
             wandb.init(
                 # set the wandb project where this run will be logged
@@ -154,6 +156,7 @@ class BehaviorTreeEvolution:
         self.mean_fitness_current_gen = 0
         for individual in self.population:
             self.evaluate_individual(individual, episodes_number, env)
+            individual.prune(self.prob_keep_not_executed)
             if individual.fitness > self.best_tree.fitness:
                 self.best_tree = individual
             if individual.fitness > self.best_fitness_current_gen:

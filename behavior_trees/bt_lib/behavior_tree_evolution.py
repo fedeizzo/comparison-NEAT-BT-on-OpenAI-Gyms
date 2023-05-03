@@ -19,22 +19,22 @@ All of this should be performed while monitoring the performances of the various
 
 
 class BehaviorTreeEvolution:
-    def __init__(self, config, pop_size):
+    def __init__(self, config:dict, pop_size:int):
         """Save all the configurations for the evolution of BTs.
 
         Args:
             config (dict): configuration parameters.
         """
-        self.config = config
-        self.pop_size = pop_size
-        self.number_of_parents = int(pop_size * config["parents_proportion"])
+        self.config:dict = config
+        self.pop_size:int = pop_size
+        self.number_of_parents:int = int(pop_size * config["parents_proportion"])
         self.previous_parents = list()
         self.hall_of_fame = list()
-        self.global_best_player = None
+        self.global_best_player:BehaviorTree or None = None
         self.stats = {}
         self.iteration_nr = 0
 
-    def generate_initial_population(self):
+    def generate_initial_population(self) -> list[BehaviorTree]:
         """May want to generate random population or may want to use saved
         trees.
         Size of the population is specified in the self.config.
@@ -46,16 +46,15 @@ class BehaviorTreeEvolution:
 
         Note: It's useful to recognize that we can use also some previous knowledge to initialize the population, but this biases the genetic algorithm, therefore we push towards exploitation rather than exploration.
         """
-        initial_population = list()
         if self.config["initial_population"] == "random":
             initial_population = [
                 BehaviorTree.generate(5) for _ in range(self.pop_size)
             ]
         else:
-            raise Exception("non random init not implemented yet")
+            raise NotImplementedError("non random init not implemented yet")
         return initial_population
 
-    def evolve_population(self, population):
+    def evolve_population(self, population:list[BehaviorTree]) -> list[BehaviorTree]:
         """Generates the new population adopting all the policies defined in
         the configuration.
 
@@ -77,7 +76,7 @@ class BehaviorTreeEvolution:
             list[BehaviorTree]: next step population.
         """
         # penalize big trees
-        penalized_size_population = self.penalize_big_trees(population)
+        penalized_size_population:list[BehaviorTree] = self.penalize_big_trees(population)
         # collect data
         self.iteration_nr += 1
         self.stats[f"iteration#{self.iteration_nr}"] = {}
@@ -123,12 +122,12 @@ class BehaviorTreeEvolution:
         ):
             self.global_best_player = penalized_size_population[0].copy()
 
-        new_population = list()
+        new_population:list[BehaviorTree] = list()
         # select the pool from which extract the parents
-        parent_selection_pool = self.mu_lambda_strategy(penalized_size_population)
+        parent_selection_pool:list[BehaviorTree] = self.mu_lambda_strategy(penalized_size_population)
         # select the parents implementing one of the thousand strategies
         # fitness proportionate, ranking, hall of fame ...
-        selected_parents = self.select_parents(parent_selection_pool)
+        selected_parents:list[BehaviorTree] = self.select_parents(parent_selection_pool)
         # implement elitism
         if self.config["elitism"]:
             new_population += penalized_size_population[
@@ -140,16 +139,18 @@ class BehaviorTreeEvolution:
             # here combine parents in order to get the various children for next poulation
             if self.config["crossover"]:
                 # select randomly two parents from the parent pool and recombine them
-                (gen_a, gen_b) = np.random.choice(
+                gen_a: BehaviorTree
+                gen_b: BehaviorTree
+                gen_a, gen_b  = np.random.choice(
                     a=selected_parents, size=2, replace=False
                 )
                 # no change in parents here because recombination works on deep copies
-                child = gen_a.recombination(gen_b)
+                child:BehaviorTree = gen_a.recombination(gen_b, self.config["crossover_rate"])
             else:
                 # no crossover, jsut take one parent
                 # since parents are less than the population size, we need to
                 # iterate selected parents more than once
-                child = (selected_parents[tmp]).copy()
+                child: BehaviorTree = (selected_parents[tmp]).copy()
                 tmp += 1
                 if tmp == len(selected_parents):
                     tmp = 0
@@ -159,7 +160,7 @@ class BehaviorTreeEvolution:
             new_population.append(child)
         return new_population
 
-    def penalize_big_trees(self, forest: "list[BehaviorTree]"):
+    def penalize_big_trees(self, forest: list[BehaviorTree]) -> list[BehaviorTree]:
         """This function is used to penalize those trees that are too deep (or
         too big). By now we account for depth, maybe in future we'll account
         for width.
@@ -172,7 +173,7 @@ class BehaviorTreeEvolution:
             tree.fitness -= self.config["no_big_trees"] * depth
         return forest
 
-    def mu_lambda_strategy(self, population: "list[BehaviorTree]"):
+    def mu_lambda_strategy(self, population: list[BehaviorTree]) -> list[BehaviorTree]:
         """Generates the next population, by taking into account the parameters
         mu and lambda. It can therefore choose how many parents to keep in the
         next population.
@@ -192,7 +193,7 @@ class BehaviorTreeEvolution:
                 selection_pool = population + self.previous_parents
         return selection_pool
 
-    def select_parents(self, pool: "list[BehaviorTree]"):
+    def select_parents(self, pool: list[BehaviorTree]) -> list[BehaviorTree]:
         """Selects the list of parents from the current pool.
         The pool can be composed by the current population only or by current
         plus previous parents (accordingly to the mu-lambda strategy).
@@ -231,7 +232,7 @@ class BehaviorTreeEvolution:
         self.previous_parents = [p.copy() for p in selected_parents]
         return selected_parents
 
-    def fitness_proportionate_selection(self, pool):
+    def fitness_proportionate_selection(self, pool : list[BehaviorTree]) -> list[BehaviorTree]:
         fitnesses = [genome.fitness for genome in pool]
         # possible negative fitnesses
         min_fitness = min(fitnesses)
@@ -244,7 +245,7 @@ class BehaviorTreeEvolution:
         probabilities = softmax(fitnesses)
         return np.random.choice(a=pool, size=(self.number_of_parents), p=probabilities)
 
-    def ranking_selection(self, pool):
+    def ranking_selection(self, pool : list[BehaviorTree]) -> list[BehaviorTree]:
         pool.sort(key=lambda x: x.fitness, reverse=True)
         dividendum = sum([i + 1 for i in range(len(pool))])
         probabilities = [(1 - (i / dividendum)) for i in range(1, (len(pool) + 1))]
@@ -253,11 +254,11 @@ class BehaviorTreeEvolution:
         probabilities = softmax(probabilities)
         return np.random.choice(a=pool, size=(self.number_of_parents), p=probabilities)
 
-    def truncated_ranking_selection(self, pool):
+    def truncated_ranking_selection(self, pool : list[BehaviorTree]) -> list[BehaviorTree]:
         pool.sort(key=lambda x: x.fitness, reverse=True)
         return pool[: self.number_of_parents]
 
-    def tournament_selection(self, pool):
+    def tournament_selection(self, pool : list[BehaviorTree]) -> list[BehaviorTree]:
         selected_parents = list()
         while len(selected_parents) < self.number_of_parents:
             partecipants = list(
@@ -269,7 +270,7 @@ class BehaviorTreeEvolution:
             selected_parents.append(partecipants[0].copy())
         return selected_parents
 
-    def hall_of_fame_selection(self, pool):
+    def hall_of_fame_selection(self, pool : list[BehaviorTree]) -> list[BehaviorTree]:
         """Hall of fame selection strategy.
         Uses the fittest individuals in the hall of fame to be parents for the
         next population.

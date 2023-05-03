@@ -1,0 +1,316 @@
+{
+  "0": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "1": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      5,
+      6,
+      7,
+      8
+    ]
+  },
+  "2": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "FocusHitpoints",
+      "input_index": 20,
+      "condition_type": "GREATER",
+      "condition_value": 0
+    },
+    "children": []
+  },
+  "3": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      9,
+      10
+    ]
+  },
+  "4": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "HasBlaster",
+      "input_index": 41,
+      "condition_type": "EQUAL",
+      "condition_value": true
+    },
+    "children": []
+  },
+  "5": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      11,
+      12,
+      13
+    ]
+  },
+  "6": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      14,
+      15
+    ]
+  },
+  "7": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      16,
+      17,
+      18
+    ]
+  },
+  "8": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      19,
+      20,
+      21,
+      22
+    ]
+  },
+  "9": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      23,
+      24,
+      25
+    ]
+  },
+  "10": {
+    "class": "CastNode",
+    "parameters": {
+      "cast_ability": 1
+    },
+    "children": []
+  },
+  "11": {
+    "class": "ChangeFocusNode",
+    "parameters": {
+      "focus": 7
+    },
+    "children": []
+  },
+  "12": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "FocusHitpoints",
+      "input_index": 20,
+      "condition_type": "GREATER",
+      "condition_value": 0
+    },
+    "children": []
+  },
+  "13": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      26
+    ]
+  },
+  "14": {
+    "class": "ChangeFocusNode",
+    "parameters": {
+      "focus": 6
+    },
+    "children": []
+  },
+  "15": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "Enemy2Distance",
+      "input_index": 12,
+      "condition_type": "GREATER",
+      "condition_value": 0.967429386632751
+    },
+    "children": []
+  },
+  "16": {
+    "class": "ChangeFocusNode",
+    "parameters": {
+      "focus": 5
+    },
+    "children": []
+  },
+  "17": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "FocusHitpoints",
+      "input_index": 20,
+      "condition_type": "GREATER",
+      "condition_value": 0
+    },
+    "children": []
+  },
+  "18": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      27,
+      28
+    ]
+  },
+  "19": {
+    "class": "ChangeFocusNode",
+    "parameters": {
+      "focus": 4
+    },
+    "children": []
+  },
+  "20": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "FocusHasCleavers",
+      "input_index": 49,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": true
+    },
+    "children": []
+  },
+  "21": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      29
+    ]
+  },
+  "22": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      30
+    ]
+  },
+  "23": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "Enemy3Distance",
+      "input_index": 14,
+      "condition_type": "LESS",
+      "condition_value": 0.5
+    },
+    "children": []
+  },
+  "24": {
+    "class": "ChaseFocusNode",
+    "parameters": {
+      "chase_focus": 1
+    },
+    "children": []
+  },
+  "25": {
+    "class": "CastNode",
+    "parameters": {
+      "cast_ability": 3
+    },
+    "children": []
+  },
+  "26": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      31,
+      32,
+      33
+    ]
+  },
+  "27": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      34,
+      35
+    ]
+  },
+  "28": {
+    "class": "CastNode",
+    "parameters": {
+      "cast_ability": 1
+    },
+    "children": []
+  },
+  "29": {
+    "class": "CastNode",
+    "parameters": {
+      "cast_ability": 1
+    },
+    "children": []
+  },
+  "30": {
+    "class": "CastNode",
+    "parameters": {
+      "cast_ability": 1
+    },
+    "children": []
+  },
+  "31": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "Enemy3Distance",
+      "input_index": 14,
+      "condition_type": "LESS",
+      "condition_value": 0.5
+    },
+    "children": []
+  },
+  "32": {
+    "class": "ChaseFocusNode",
+    "parameters": {
+      "chase_focus": 1
+    },
+    "children": []
+  },
+  "33": {
+    "class": "FallbackNode",
+    "parameters": {},
+    "children": [
+      36
+    ]
+  },
+  "34": {
+    "class": "ChaseFocusNode",
+    "parameters": {
+      "chase_focus": 1
+    },
+    "children": []
+  },
+  "35": {
+    "class": "CheckConditionNode",
+    "parameters": {
+      "input_name": "Stuck",
+      "input_index": 30,
+      "condition_type": "NOT_EQUAL",
+      "condition_value": false
+    },
+    "children": []
+  },
+  "36": {
+    "class": "SequenceNode",
+    "parameters": {},
+    "children": [
+      37
+    ]
+  },
+  "37": {
+    "class": "ChangeFocusNode",
+    "parameters": {
+      "focus": 6
+    },
+    "children": []
+  }
+}

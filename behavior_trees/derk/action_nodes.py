@@ -140,7 +140,7 @@ class CastNode(ActionNode):
         Args:
             prob (float): probability of mutation.
         """
-        if random() < prob:
+        if random.random() < prob:
             # players can be 1, 2 or 3
             self.parameters["cast_ability"] = random.randint(1, 3)
 
@@ -167,9 +167,6 @@ class ChangeFocusNode(ActionNode):
         """
         action = np.zeros((5,))
 
-        # print(self.ticks_to_run, self.max_ticks_to_run, bool(input[InputIndex.HasFocus]))
-        # import pdb; pdb.set_trace()
-
         if self.ticks_to_run == self.max_ticks_to_run:
             self.ticks_to_run -= 1
             action[OutputIndex.ChangeFocus] = self.parameters["focus"]
@@ -193,7 +190,7 @@ class ChangeFocusNode(ActionNode):
         Args:
             prob (float): probability of mutation.
         """
-        if random() < prob:
+        if random.random() < prob:
             self.parameters["focus"] = random.randint(0, 7)
 
 
@@ -231,7 +228,7 @@ class ChaseFocusNode(ActionNode):
             return BehaviorStates.RUNNING, action
     @staticmethod
     def get_random_node():
-        parameters = {"chase_focus": random()}
+        parameters = {"chase_focus": random.random()}
         return ChaseFocusNode(parameters)
 
     def mutate(self, prob: float, all_mutations):
@@ -240,8 +237,8 @@ class ChaseFocusNode(ActionNode):
         Args:
             prob (float): probability of mutation.
         """
-        if random() < prob:
-            self.parameters["chase_focus"] = random()
+        if random.random() < prob:
+            self.parameters["chase_focus"] = random.random()
 
 
 action_node_classes = [

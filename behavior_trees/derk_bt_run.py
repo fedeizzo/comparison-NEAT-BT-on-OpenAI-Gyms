@@ -12,6 +12,7 @@ from derk.action_nodes import action_node_classes
 from derk.condition_nodes import condition_node_classes
 from gym_derk.envs import DerkEnv
 
+import wandb
 """To evolve behavior trees we use genetic programming we use Genetic 
 Algorithms principles, therefore we need:
 1. genetic representation (BT)
@@ -33,6 +34,8 @@ def main_dinosaurs(
     episodes_number,
     bt_config,
     is_turbo,
+    folder_path,
+    start_bt_config,
     bt_best_player_name,
 ):
     # create game environment
@@ -75,7 +78,7 @@ def main_dinosaurs(
             },
         ],
     )
-
+    wandb.init(project="Derk", config=config)
     population_size = number_of_arenas * 6
     evolution_engine = BehaviorTreeEvolution(bt_config, population_size)
     # create players at gen 0
@@ -83,7 +86,7 @@ def main_dinosaurs(
         new_population = [
             # BehaviorTree.generate(5) for _ in range(population_size)
             BehaviorTree.from_json(
-                "behavior_trees/derk/saved_bts/dummy.json",
+                os.path.join(folder_path, start_bt_config),
                 action_node_classes,
                 condition_node_classes,
                 composite_node_classes,
@@ -100,13 +103,12 @@ def main_dinosaurs(
 
             observation_n = env.reset()
             while True:
-                print(f"+ Episode {ep} -- New Step")
+                # print(f"+ Episode {ep} -- New Step")
 
                 actions = []
                 for i, player in enumerate(players):
-                    print(f"- Player {i}")
+                    # print(f"- Player {i}")
                     actions.append(player.tick(observation_n[i])[1])
-                    # import pdb; pdb.set_trace()
 
                 actions = np.asarray(actions)
 
@@ -117,14 +119,25 @@ def main_dinosaurs(
                     break
             start = time()
             total_reward = env.total_reward
+            max_fitness = float('-inf')
+            best_player = None
             for player, reward in zip(players, list(total_reward)):
                 player.fitness = float(reward)
+                if reward > max_fitness:
+                    max_fitness = reward
+                    best_player = player
+            wandb.log({"mean_fitness": np.mean(total_reward, axis=0)})
+            wandb.log({"max_fitness": np.max(total_reward, axis=0)})
+            wandb.log({"min_fitness": np.min(total_reward, axis=0)})
+            wandb.log({"std_fitness": np.std(total_reward, axis=0)})
+            if best_player:
+                depth, size = best_player.get_size()
+                wandb.log({"best_tree_depth": depth})
+                wandb.log({"best_tree_size": size})
             new_population = evolution_engine.evolve_population(players)
             print(f"population mutated in {int(time()-start)}s")
 
-        agent_path = os.path.join(
-            os.getcwd(), "behavior_trees", "saved_bts", bt_best_player_name
-        )
+        agent_path = os.path.join(folder_path, bt_best_player_name)
 
         # save best player
         evolution_engine.global_best_player.to_json(agent_path)
@@ -150,5 +163,8 @@ if __name__ == "__main__":
         episodes_number=config["game"]["episodes_number"],
         bt_config=config["bt_config"],
         is_turbo=config["game"]["fast_mode"],
+        folder_path=config["game"]["folder_path"],
+        start_bt_config=config["game"]["starting_config"],
         bt_best_player_name=config["game"]["bt_best_player_name"],
+        
     )

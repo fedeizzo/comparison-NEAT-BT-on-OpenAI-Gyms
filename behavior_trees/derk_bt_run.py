@@ -126,10 +126,10 @@ def main_dinosaurs(
                 if reward > max_fitness:
                     max_fitness = reward
                     best_player = player
-            wandb.log({"mean_fitness": np.mean(total_reward, axis=0)})
-            wandb.log({"max_fitness": np.max(total_reward, axis=0)})
-            wandb.log({"min_fitness": np.min(total_reward, axis=0)})
-            wandb.log({"std_fitness": np.std(total_reward, axis=0)})
+            wandb.log({"mean_fitness": np.mean(total_reward, axis=0)} , step=ep)
+            wandb.log({"max_fitness": np.max(total_reward, axis=0)}, step=ep)
+            wandb.log({"min_fitness": np.min(total_reward, axis=0)}, step=ep)
+            wandb.log({"std_fitness": np.std(total_reward, axis=0)}, step=ep)
             if best_player:
                 depth, size = best_player.get_size()
                 wandb.log({"best_tree_depth": depth})

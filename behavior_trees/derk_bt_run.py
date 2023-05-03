@@ -132,8 +132,8 @@ def main_dinosaurs(
             wandb.log({"std_fitness": np.std(total_reward, axis=0)}, step=ep)
             if best_player:
                 depth, size = best_player.get_size()
-                wandb.log({"best_tree_depth": depth})
-                wandb.log({"best_tree_size": size})
+                wandb.log({"best_tree_depth": depth}, step=ep)
+                wandb.log({"best_tree_size": size}, step=ep)
             new_population = evolution_engine.evolve_population(players)
             print(f"population mutated in {int(time()-start)}s")
 

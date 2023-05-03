@@ -13,4 +13,4 @@ tree_size_penalty = 0.10 # penalty for tree size
 seed = 42 # random seed for gym
 mutation_seed = 42 # random seed for the mutation
 save_every = 50 # save the best individual every n generations
-prob_keep_not_executed = 1
+prob_keep_not_executed = 0.98

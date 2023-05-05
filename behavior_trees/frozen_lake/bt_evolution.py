@@ -27,8 +27,7 @@ class BehaviorTreeEvolution:
         number_generations: int = 100,
         episodes_number: int = 1,
         seed=0,
-        save_every=10,
-        folder_path="",
+        best_player: str = None,
         train=True,
         prob_keep_not_executed: float = 1.0,
     ):
@@ -47,8 +46,7 @@ class BehaviorTreeEvolution:
         self.number_generations = number_generations
         self.episodes_number = episodes_number
         self.seed = seed
-        self.save_every = save_every
-        self.folder_path = folder_path
+        self.best_player = best_player
         self.train = train
         self.prob_keep_not_executed = prob_keep_not_executed
         if train:
@@ -248,7 +246,7 @@ class BehaviorTreeEvolution:
             append_images=frames[1:],
             optimize=False,
             loop=0,
-            fps=10,
+            fps=fps,
         )
 
     def evolutionary_algorithm(self, env: gym.Env) -> BehaviorTree:
@@ -271,20 +269,11 @@ class BehaviorTreeEvolution:
                 {"best_tree_executed_nodes": self.best_tree.get_executed_nodes()},
                 step=i,
             )
-            if i % self.save_every == 0:
-                self.best_tree.to_json(
-                    os.path.join(self.folder_path, f"best_tree_generation_{i}.json")
-                )
 
     def __del__(self):
         if self.train:
             wandb.finish()
-            self.best_tree.to_json(
-                os.path.join(
-                    self.folder_path,
-                    f"best_tree_generation_{self.number_generations}.json",
-                )
-            )
+            self.best_tree.to_json(self.best_player)
 
 
 if __name__ == "__main__":

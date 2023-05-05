@@ -39,7 +39,7 @@ if __name__ == "__main__":
             number_of_arenas=config["game"]["number_of_arenas"],
             is_turbo=config["game"]["fast_mode"],
             reward_function=config["reward-function"],
-            is_train=config["game"]["train"],
+            is_train=not args.inference,
             episodes_number=config["game"]["episodes_number"],
             neat_config=config["game"]["neat_config"],
             network_input=config["network_input"],

@@ -1,7 +1,6 @@
 [game]
 fast_mode = true
 number_of_arenas = 5
-train = true
 episodes_number = 500
 best_stats = './weights/derk/64input_12output_derk/best_stats.pkl'
 extensive_stats = './weights/derk/64input_12output_derk/extensive_stats.pkl'

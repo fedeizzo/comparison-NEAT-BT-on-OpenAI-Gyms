@@ -1,4 +1,4 @@
-# A Comparison between NEAT and Behavior Trees on Discrete Gym Environments
+# A Comparison between NEAT and Behavior Trees on OpenAI Gym Environments
 
 | Frozen Lake                                       | Lunar lander                                                             | Derk                                              |
 | ------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------- |
@@ -45,7 +45,7 @@ Derk:
 python neat_solver/run.py -e derk -c configs/derk/64input_12output.toml
 
 # inference
-TODO
+python neat_solver/run.py -e derk -c configs/derk/64input_12output.toml -i
 ```
 
 ### Behavior Trees

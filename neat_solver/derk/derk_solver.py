@@ -1,8 +1,8 @@
 import importlib
 import os
-from pathlib import Path
 import pickle
 from os.path import expandvars
+from pathlib import Path
 
 import neat
 import numpy as np
@@ -87,6 +87,9 @@ def derk_main_high_level(
 ):
     chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
     chrome_executable = expandvars(chrome_executable) if chrome_executable else None
+
+    if not is_train:
+        number_of_arenas = 1
 
     env = DerkEnv(
         mode="normal",

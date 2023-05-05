@@ -1,5 +1,9 @@
 # A Comparison between NEAT and Behavior Trees on Discrete Gym Environments
 
+|Frozen Lake| Lunar lander | Derk |
+|---|--------------|------| 
+|<img src="./assets/images/lake.gif" width="300"/> | <img src="./assets/images/neat_lunar_lander_evolution.gif" width="350"/> | <img src="./assets/images/game.gif" width="350"/> |
+
 ## How to install
 
 Dependencies are collected in `requirements.txt` and can be installed with `pip`:
@@ -75,12 +79,6 @@ python behavior_trees/derk_bt_run.py -c configs/bt.toml
 # inference
 TODO
 ```
-
-## GIFs
-
-|Frozen Lake| Lunar lander | Derk |
-|---|--------------|------| 
-|<img src="./assets/images/lake.gif" width="300"/> | <img src="./assets/images/neat_lunar_lander_evolution.gif" width="350"/> | <img src="./assets/images/game.gif" width="350"/> |
 
 
 ## Environments

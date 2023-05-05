@@ -1,6 +1,8 @@
 import pickle
 from configparser import ConfigParser
+from pathlib import Path
 from typing import Optional
+import os
 
 import gymnasium as gym
 import neat
@@ -104,6 +106,7 @@ def eval_checkpoints(
         input_one_hot (bool): Encode input observation with one-hot-encoding
         **env_kwargs: Additional keyword arguments to pass to the environment.
     """
+
     env = create_gym_env(env_name, render_mode="rgb_array", **env_kwargs)
 
     frames = []
@@ -145,6 +148,8 @@ def eval_checkpoints(
                     loop=False,
                     fps=60,
                 )
+
+    os.makedirs(Path(gif_path).parent, exist_ok=True)
     for generation in checkpoints:
         with Image.open(f"neat-checkpoint-{generation}.gif") as im:
             try:
@@ -206,6 +211,7 @@ def eval_winner_net(
 
     print(f"Average fitness across {num_evals} episodes is: {np.mean(fitnesses)}")
 
+    os.makedirs(Path(winner_dump_path).parent, exist_ok=True)
     with open(winner_dump_path, "wb") as outfile:
         pickle.dump(winner, outfile)
 

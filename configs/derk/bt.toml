@@ -3,9 +3,10 @@ fast_mode = true
 number_of_arenas = 50
 train = true
 episodes_number = 500
-folder_path = 'assets/bts/derk' # folder where the player will be saved
+folder_path = 'behavior_trees/derk/saved_bts' # folder where the player will be saved
 starting_config = 'dummy.json'
 bt_best_player_name = 'trial.json'
+use_wandb = false
 
 [bt_config]
 elitism = true

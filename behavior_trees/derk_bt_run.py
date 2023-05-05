@@ -13,6 +13,7 @@ from derk.condition_nodes import condition_node_classes
 from gym_derk.envs import DerkEnv
 
 import wandb
+
 """To evolve behavior trees we use genetic programming we use Genetic 
 Algorithms principles, therefore we need:
 1. genetic representation (BT)
@@ -37,6 +38,7 @@ def main_dinosaurs(
     folder_path,
     start_bt_config,
     bt_best_player_name,
+    use_wandb,
 ):
     # create game environment
     chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
@@ -78,7 +80,10 @@ def main_dinosaurs(
             },
         ],
     )
-    wandb.init(project="Derk", config=config)
+
+    if use_wandb:
+        wandb.init(project="Derk", config=config)
+
     population_size = number_of_arenas * 6
     evolution_engine = BehaviorTreeEvolution(bt_config, population_size)
     # create players at gen 0
@@ -119,21 +124,24 @@ def main_dinosaurs(
                     break
             start = time()
             total_reward = env.total_reward
-            max_fitness = float('-inf')
+            max_fitness = float("-inf")
             best_player = None
             for player, reward in zip(players, list(total_reward)):
                 player.fitness = float(reward)
                 if reward > max_fitness:
                     max_fitness = reward
                     best_player = player
-            wandb.log({"mean_fitness": np.mean(total_reward, axis=0)} , step=ep)
-            wandb.log({"max_fitness": np.max(total_reward, axis=0)}, step=ep)
-            wandb.log({"min_fitness": np.min(total_reward, axis=0)}, step=ep)
-            wandb.log({"std_fitness": np.std(total_reward, axis=0)}, step=ep)
-            if best_player:
-                depth, size = best_player.get_size()
-                wandb.log({"best_tree_depth": depth}, step=ep)
-                wandb.log({"best_tree_size": size}, step=ep)
+
+            if use_wandb:
+                wandb.log({"mean_fitness": np.mean(total_reward, axis=0)}, step=ep)
+                wandb.log({"max_fitness": np.max(total_reward, axis=0)}, step=ep)
+                wandb.log({"min_fitness": np.min(total_reward, axis=0)}, step=ep)
+                wandb.log({"std_fitness": np.std(total_reward, axis=0)}, step=ep)
+                if best_player:
+                    depth, size = best_player.get_size()
+                    wandb.log({"best_tree_depth": depth}, step=ep)
+                    wandb.log({"best_tree_size": size}, step=ep)
+
             new_population = evolution_engine.evolve_population(players)
             print(f"population mutated in {int(time()-start)}s")
 
@@ -166,5 +174,5 @@ if __name__ == "__main__":
         folder_path=config["game"]["folder_path"],
         start_bt_config=config["game"]["starting_config"],
         bt_best_player_name=config["game"]["bt_best_player_name"],
-        
+        use_wandb=config["game"]["use_wandb"],
     )

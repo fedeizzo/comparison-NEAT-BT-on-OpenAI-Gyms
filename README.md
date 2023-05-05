@@ -80,7 +80,7 @@ TODO
 
 |Frozen Lake| Lunar lander | Derk |
 |---|--------------|------| 
-|<img src="./assets/images/neat_frozenlake_evolution.gif" width="300"/> | <img src="./assets/images/neat_lunar_lander_evolution.gif" width="350"/> | <img src="./assets/images/game.gif" width="350"/> |
+|<img src="./assets/images/lake.gif" width="300"/> | <img src="./assets/images/neat_lunar_lander_evolution.gif" width="350"/> | <img src="./assets/images/game.gif" width="350"/> |
 
 
 ## Environments

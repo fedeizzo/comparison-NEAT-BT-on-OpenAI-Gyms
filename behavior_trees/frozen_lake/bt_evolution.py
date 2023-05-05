@@ -28,8 +28,9 @@ class BehaviorTreeEvolution:
         episodes_number: int = 1,
         seed=0,
         best_player: str = None,
-        train=True,
+        train: bool = True,
         prob_keep_not_executed: float = 1.0,
+        use_wandb: bool = False,
     ):
         self.population_size = population_size
         self.mutation_rate = mutation_rate
@@ -49,7 +50,8 @@ class BehaviorTreeEvolution:
         self.best_player = best_player
         self.train = train
         self.prob_keep_not_executed = prob_keep_not_executed
-        if train:
+        self.use_wandb = use_wandb
+        if train and self.use_wandb:
             wandb.init(
                 # set the wandb project where this run will be logged
                 project="Lake",
@@ -258,22 +260,24 @@ class BehaviorTreeEvolution:
                 env,
             )
 
-            wandb.log({"best_fitness overall": self.best_tree.fitness}, step=i)
-            wandb.log({"best_fitness": self.best_fitness_current_gen}, step=i)
-            wandb.log({"mean_fitness": self.mean_fitness_current_gen}, step=i)
-            wandb.log({"std_fitness": self.std_fitness_current_gen}, step=i)
-            wandb.log({"worst_fitness": self.worst_fitness_current_gen}, step=i)
-            wandb.log({"best_tree_depth": self.best_tree.get_size()[0]}, step=i)
-            wandb.log({"best_tree_children": self.best_tree.get_size()[1]}, step=i)
-            wandb.log(
-                {"best_tree_executed_nodes": self.best_tree.get_executed_nodes()},
-                step=i,
-            )
+            if self.use_wandb:
+                wandb.log({"best_fitness overall": self.best_tree.fitness}, step=i)
+                wandb.log({"best_fitness": self.best_fitness_current_gen}, step=i)
+                wandb.log({"mean_fitness": self.mean_fitness_current_gen}, step=i)
+                wandb.log({"std_fitness": self.std_fitness_current_gen}, step=i)
+                wandb.log({"worst_fitness": self.worst_fitness_current_gen}, step=i)
+                wandb.log({"best_tree_depth": self.best_tree.get_size()[0]}, step=i)
+                wandb.log({"best_tree_children": self.best_tree.get_size()[1]}, step=i)
+                wandb.log(
+                    {"best_tree_executed_nodes": self.best_tree.get_executed_nodes()},
+                    step=i,
+                )
 
     def __del__(self):
         if self.train:
-            wandb.finish()
             self.best_tree.to_json(self.best_player)
+            if self.use_wandb:
+                wandb.finish()
 
 
 if __name__ == "__main__":

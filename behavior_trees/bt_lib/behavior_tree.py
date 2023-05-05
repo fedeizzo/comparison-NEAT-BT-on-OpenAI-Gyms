@@ -3,6 +3,7 @@ import os
 import pickle
 import random
 import sys
+from pathlib import Path
 
 import numpy as np
 from bt_lib.action_nodes import ActionNode
@@ -184,6 +185,9 @@ class BehaviorTree:
                     all_nodes[index]["children"].append(node_global_index)
                     fifo.append((str(node_global_index), child))
                     node_global_index += 1
+
+        Path(filename).parent.mkdir(parents=True, exist_ok=True)
+
         with open(filename, "w") as outfile:
             json.dump(all_nodes, outfile, indent=2)
 

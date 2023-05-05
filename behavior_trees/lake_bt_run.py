@@ -26,6 +26,7 @@ def main_lander(lander_config: dict, inference: bool):
         best_player=lander_config["game"]["best_player"],
         train=not inference,
         prob_keep_not_executed=lander_config["bt_config"]["prob_keep_not_executed"],
+        use_wandb=lander_config["game"]["use_wandb"],
     )
 
     if not inference:
@@ -49,9 +50,10 @@ def main_lander(lander_config: dict, inference: bool):
             composite_node_classes,
         )
         env = gym.make("FrozenLake-v1", is_slippery=False, render_mode="human")
-        bt_evolution.evaluate_individual(bt, 1 , env)
+        bt_evolution.evaluate_individual(bt, 1, env)
         # env_1 = gym.make("FrozenLake-v1", is_slippery=False, render_mode="rgb_array")
         # bt_evolution.save_gif(bt, env_1, "lake.gif", skip_frames=1, fps=1)
+
 
 if __name__ == "__main__":
     p = ArgumentParser()

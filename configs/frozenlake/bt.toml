@@ -1,5 +1,7 @@
 [game]
-best_player = 'assets/bts/frozen_lake/best.json' # path to the best bt
+best_player = 'weights/bts/frozen_lake/best.json' # path to the best bt
+use_wandb = false
+
 [bt_config]
 population_size = 200 # number of individuals in the population
 mutation_rate = 0.8 # probability of mutation

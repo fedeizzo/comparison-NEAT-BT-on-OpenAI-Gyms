@@ -1,5 +1,6 @@
 import importlib
 import os
+from pathlib import Path
 import pickle
 from os.path import expandvars
 
@@ -158,6 +159,7 @@ def derk_main_high_level(
         p.add_reporter(stats)
         # p.add_reporter(neat.Checkpointer(1, filename_prefix="neat-checkpoint-"))
         winner = p.run(eval_genomes, episodes_number)
+        os.makedirs(Path(weights_path).parent, exist_ok=True)
         with open(weights_path, "wb") as f:
             pickle.dump(winner, f)
         # visualize.draw_net(config, winner, False)

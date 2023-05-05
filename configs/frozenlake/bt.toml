@@ -1,5 +1,5 @@
 [game]
-folder_path = 'assets/bts/frozenlake' # folder where the player will be saved
+folder_path = 'weights/bts/frozenlake' # folder where the player will be saved
 [bt_config]
 population_size = 200 # number of individuals in the population
 mutation_rate = 0.4 # probability of mutation

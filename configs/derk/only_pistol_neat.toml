@@ -3,11 +3,11 @@ fast_mode = true
 number_of_arenas = 5
 train = true
 episodes_number = 500
-best_stats = './only_pistol/best_stats.pkl'
-extensive_stats = './only_pistol/extensive_stats.pkl'
-species_stats = './only_pistol/species_stats.pkl'
-neat_config = './only_pistol/only_pistol_neat.ini'
-weights_path = './only_pistol/winner.pkl'
+best_stats = './weights/derk/only_pistol/best_stats.pkl'
+extensive_stats = './weights/derk/only_pistol/extensive_stats.pkl'
+species_stats = './weights/derk/only_pistol/species_stats.pkl'
+neat_config = './weights/derk/only_pistol_neat.ini'
+weights_path = './weights/derk/only_pistol/winner.pkl'
 
 [reward-function]
 damageEnemyStatue = 5

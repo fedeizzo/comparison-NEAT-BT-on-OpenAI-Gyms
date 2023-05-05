@@ -3,5 +3,5 @@ name = "FrozenLake-v1"
 kwargs = {}
 
 [game]
-winner_pickle = "./assets/weights/frozenlake_500_iterations.pickle"
+winner_pickle = "./weights/frozenlake/frozenlake_500_iterations.pickle"
 neat_config = "./configs/frozenlake/neat.ini"

@@ -9,6 +9,6 @@ checkpoint_frequency = 2
 evaluate_checkpoints = true
 neat_config = "./configs/frozenlake/neat.ini"
 
-winner_pickle = "./assets/weights/frozenlake_500_iterations.pickle"
-gif_path = "./assets/images/neat_frozenlake_evolution.gif"
+winner_pickle = "./weights/frozenlake/frozenlake_500_iterations.pickle"
+gif_path = "./weights/frozenlake/images/neat_frozenlake_evolution.gif"
 gif_checkpoints = [1, 3, 5, 7]

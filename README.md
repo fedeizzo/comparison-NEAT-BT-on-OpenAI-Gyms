@@ -38,7 +38,7 @@ Derk:
 
 ```bash
 # train
-python neat_solver/run.py -e derk -c configs/derk/default_nn_neat.toml
+python neat_solver/run.py -e derk -c configs/derk/64input_12output.toml
 
 # inference
 TODO

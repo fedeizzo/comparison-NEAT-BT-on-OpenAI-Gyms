@@ -3,11 +3,11 @@ fast_mode = true
 number_of_arenas = 5
 train = true
 episodes_number = 500
-best_stats = './q-learning-25-actions/best_stats.pkl'
-extensive_stats = './q-learning-25-actions/extensive_stats.pkl'
-species_stats = './q-learning-25-actions/species_stats.pkl'
-neat_config = './q-learning-25-actions/q_learning_25_actions.ini'
-weights_path = './q-learning-25-actions/winner.pkl'
+best_stats = './weights/derk/q-learning-25-actions/best_stats.pkl'
+extensive_stats = './weights/derk/q-learning-25-actions/extensive_stats.pkl'
+species_stats = './weights/derk/q-learning-25-actions/species_stats.pkl'
+neat_config = './weights/derk/q_learning_25_actions.ini'
+weights_path = './weights/derk/q-learning-25-actions/winner.pkl'
 
 [reward-function]
 damageEnemyStatue = 5

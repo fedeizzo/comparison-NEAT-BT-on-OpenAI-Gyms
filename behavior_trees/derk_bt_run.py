@@ -31,21 +31,20 @@ try with python .\behavior_trees\bt_run.py -c .\configs\bt.toml
 def main_dinosaurs(
     number_of_arenas,
     reward_function,
-    is_train,
     episodes_number,
     bt_config,
     is_turbo,
-    folder_path,
     start_bt_config,
-    bt_best_player_name,
+    best_player,
     use_wandb,
+    inference,
 ):
     # create game environment
     chrome_executable = os.environ.get("CHROMIUM_EXECUTABLE_DERK")
     chrome_executable = os.expandvars(chrome_executable) if chrome_executable else None
     env = DerkEnv(
         mode="normal",
-        n_arenas=number_of_arenas if is_train else 6,
+        n_arenas=number_of_arenas if not inference else 1,
         reward_function=reward_function,
         turbo_mode=is_turbo,
         app_args={
@@ -83,15 +82,17 @@ def main_dinosaurs(
 
     if use_wandb:
         wandb.init(project="Derk", config=config)
-
-    population_size = number_of_arenas * 6
+    if not inference:
+        population_size = number_of_arenas * 6
+    else:
+        population_size = 6
     evolution_engine = BehaviorTreeEvolution(bt_config, population_size)
     # create players at gen 0
-    if is_train:
+    if not inference:
         new_population = [
             # BehaviorTree.generate(5) for _ in range(population_size)
             BehaviorTree.from_json(
-                os.path.join(folder_path, start_bt_config),
+                start_bt_config,
                 action_node_classes,
                 condition_node_classes,
                 composite_node_classes,
@@ -145,13 +146,35 @@ def main_dinosaurs(
             new_population = evolution_engine.evolve_population(players)
             print(f"population mutated in {int(time()-start)}s")
 
-        agent_path = os.path.join(folder_path, bt_best_player_name)
 
         # save best player
-        evolution_engine.global_best_player.to_json(agent_path)
+        evolution_engine.global_best_player.to_json(best_player)
 
     else:
-        assert False, "Test phase not implemented yet"
+        # load best player
+        new_population = [
+            # BehaviorTree.generate(5) for _ in range(population_size)
+            BehaviorTree.from_json(
+                best_player,
+                action_node_classes,
+                condition_node_classes,
+                composite_node_classes,
+            )
+            for _ in range(population_size)
+        ]
+        observation_n = env.reset()
+        while True:
+            actions = []
+            for i, player in enumerate(new_population):
+                actions.append(player.tick(observation_n[i])[1])
+                # import pdb; pdb.set_trace()
+            actions = np.asarray(actions)
+            # import pdb; pdb.set_trace()
+            observation_n, reward_n, done_n, _ = env.step(actions)
+
+            if all(done_n):
+                print(f"Episode finished")
+                break
 
     env.close()
 
@@ -161,18 +184,18 @@ if __name__ == "__main__":
     p.add_argument(
         "-c", "--config", help="Path to config file", type=str, required=True
     )
+    p.add_argument("-i", "--inference", help="Inference mode", action="store_true")
     args = p.parse_args()
     config = toml.load(args.config)
 
     main_dinosaurs(
         number_of_arenas=config["game"]["number_of_arenas"],
         reward_function=config["reward-function"],
-        is_train=config["game"]["train"],
         episodes_number=config["game"]["episodes_number"],
         bt_config=config["bt_config"],
         is_turbo=config["game"]["fast_mode"],
-        folder_path=config["game"]["folder_path"],
         start_bt_config=config["game"]["starting_config"],
-        bt_best_player_name=config["game"]["bt_best_player_name"],
+        best_player=config["game"]["best_player"],
         use_wandb=config["game"]["use_wandb"],
+        inference=args.inference,
     )

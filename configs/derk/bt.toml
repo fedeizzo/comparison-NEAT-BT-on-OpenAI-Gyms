@@ -1,11 +1,9 @@
 [game]
 fast_mode = true
 number_of_arenas = 50
-train = true
 episodes_number = 500
-folder_path = 'behavior_trees/derk/saved_bts' # folder where the player will be saved
-starting_config = 'dummy.json'
-bt_best_player_name = 'trial.json'
+starting_config = 'behavior_trees/derk/saved_bts/dummy.json'
+best_player = 'behavior_trees/derk/saved_bts/trial.json'
 use_wandb = false
 
 [bt_config]

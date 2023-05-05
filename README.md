@@ -77,7 +77,7 @@ Derk:
 python behavior_trees/derk_bt_run.py -c configs/derk/bt.toml
 
 # inference
-TODO
+python behavior_trees/derk_bt_run.py -c configs/derk/bt.toml -i
 ```
 
 ## Environments

@@ -83,16 +83,23 @@ TODO
 |<img src="./assets/images/neat_frozenlake_evolution.gif" width="300"/> | <img src="./assets/images/neat_lunar_lander_evolution.gif" width="350"/> | <img src="./assets/images/game.gif" width="350"/> |
 
 
-[Docs](http://docs.gym.derkgame.com/)
+## Environments
+### Frozen Lake
+Frozen Lake is a grid-world game that simulates an agent navigating through a frozen lake. The game is played on a grid of square tiles, where the agent starts at the top left cell and it must navigate through the frozen lake to reach the goal which is located on the other side of the map. At every step, the agent receives as input an absolute number that represents its position on the grid, and it can move in one direction. The agent’s goal is to reach the final tile without falling into any of the holes scattered around the environment; a positive reward (one) is provided only when the goal is reached before the time limit, otherwise the reward is zero. By default, the map has a fixed size of 4x4, but it can be also customized with further parameters tweaking. There is also the possibility to make the map slippery, therefore making the agent’s moves non-deterministic.
 
-### Game base rules
+### Lunar Lander
+Lunar Lander is a Gym environment that consists of a trajectory optimization problem in which a rocket has to land smoothly on a specific target pad area on the lunar surface. The observation space includes lander position, velocity, angle, angular velocity, and whether or not each leg is touching the ground. There are three engines, two on the sides and one on the bottom of the rocket. Each engine can be activated individually to change the trajectory and velocity of the missile itself. Therefore the discrete action space is composed of the three engine fires and the do-nothing operation. The reward function favors a lander that is moving slowly, near the landing pad, horizontally positioned, that can land safely on the ground while saving as much propellant as possible. By its creators, agents that score more than 200 points are considered successful.
+
+### Derk
+
+#### Game base rules
 
 The game is played in "episodes" or "epochs", for each episode the agents are fixed, but if they "learn" through RL or other mechanisms, they can improve from the environment.
 Each episode is split in steps, where each step is a "tick". An agent has a fixed set of actions, and the environment is updated accordingly when the agents perform one action among all possible ones. This is repeated for each tick of an episode.
 
 After each episode ends, agents and environment are cleared.
 
-### Default configuration
+#### Default configuration
 
 Two teams composed by three agents and one totem. Each agent is generated with random equipment (arms, misc, tail). Each slot may be filled or not, giving each agent different "abilities". Our network should be able to correctly exploit any of these abilities and come up with a "good" strategy to destroy the enemy and win.
 
@@ -100,11 +107,11 @@ Win is defined by whichever team has the most points when time is up. Standard r
 
 Colors and aesthetics are present but randomly initialized and are not meaningful for the outcome. However, they are useful to distinguish the agents.
 
-### IO of an agent
+#### IO of an agent
 
 The main goal of an agent is to take an action that maximizes his reward given the current environment.
 
-#### Input
+##### Input
 
 A tuple of four elements:
 
@@ -113,7 +120,7 @@ A tuple of four elements:
 3. a python list of one boolean element indicating done (maybe it represents the state of the game: running or done).
 4. a list of dict or a dict representing information, it seems always empty.
 
-#### Output
+##### Output
 
 An array where each cell is the decision taken by an agent of a team. The decision is composed like a tuple of five elements:
 
@@ -132,7 +139,7 @@ An array where each cell is the decision taken by an agent of a team. The decisi
    - 4: focus enemy statue
    - 5-7: focus enemy
 
-### Config parser
+#### Config parser
 
 To improve reproducibility and readability of the code a `toml` config parser is used in the project. A toml file contains:
 
@@ -140,9 +147,9 @@ To improve reproducibility and readability of the code a `toml` config parser is
 - the type of players that should be used;
 - the required information for the initialization of each player;
 
-#### Required sections
+##### Required sections
 
-##### game
+###### game
 
 In game section there are four variables:
 
@@ -153,7 +160,7 @@ In game section there are four variables:
 - neat_config: path to the configuration for neat;
 - weights_path: path where weights of the network will be saved.
 
-##### reward-function
+###### reward-function
 
 Section for the reward function
 
@@ -182,7 +189,7 @@ teamSpirit = 0.5
 timeScaling = 0.8
 ```
 
-#### Network input
+##### Network input
 
 Section for the network input
 
@@ -253,7 +260,7 @@ UnusedExtraSense30 = true
 UnusedExtraSense31 = true
 ```
 
-##### players array
+###### players array
 
 Each player is defined as:
 
@@ -273,11 +280,11 @@ Required files are:
 
 During train phase it is required to have same player for both teams, instead for test phase it is possible to use different players.
 
-###### Nueral Network NEAT
+####### Nueral Network NEAT
 
 Configuration for neural network neat can be found [here](configs/derk/default_nn_neat.toml) and [here](configs/derk/default_nn_neat.ini).
 
-###### Revisited Deep Q Learning with NEAT
+####### Revisited Deep Q Learning with NEAT
 
 Configuration for revisited deep q learning with neat can be found [here](configs/derk/q_learning_neat.toml) and [here](configs/derk/q_learning_neat_config.ini).
 

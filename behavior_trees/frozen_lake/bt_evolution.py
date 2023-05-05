@@ -27,9 +27,9 @@ class BehaviorTreeEvolution:
         number_generations: int = 100,
         episodes_number: int = 1,
         seed=0,
-        save_every=10,
-        folder_path="",
+        best_player: str = None,
         train=True,
+        prob_keep_not_executed: float = 1.0,
     ):
         self.population_size = population_size
         self.mutation_rate = mutation_rate
@@ -46,9 +46,9 @@ class BehaviorTreeEvolution:
         self.number_generations = number_generations
         self.episodes_number = episodes_number
         self.seed = seed
-        self.save_every = save_every
-        self.folder_path = folder_path
+        self.best_player = best_player
         self.train = train
+        self.prob_keep_not_executed = prob_keep_not_executed
         if train:
             wandb.init(
                 # set the wandb project where this run will be logged
@@ -108,8 +108,8 @@ class BehaviorTreeEvolution:
         self,
         individual: BehaviorTree,
         env: gym.Env,
-        path:str="",
-        generation:int=None,
+        path: str = "",
+        generation: int = None,
         skip_frames: int = 4,
         fps=60,
     ):
@@ -154,6 +154,7 @@ class BehaviorTreeEvolution:
         self.mean_fitness_current_gen = 0
         for individual in self.population:
             self.evaluate_individual(individual, episodes_number, env)
+            individual.prune(self.prob_keep_not_executed)
             if individual.fitness > self.best_tree.fitness:
                 self.best_tree = individual
             if individual.fitness > self.best_fitness_current_gen:
@@ -225,9 +226,9 @@ class BehaviorTreeEvolution:
                     skip_frames=skip_frames,
                     fps=fps,
                 )
-        self.concat_gifs(path, generations_to_save,fps)
+        self.concat_gifs(path, generations_to_save, fps)
 
-    def concat_gifs(self, path, generations_to_save,fps:int=60):
+    def concat_gifs(self, path, generations_to_save, fps: int = 60):
         # extract all the frames from the gif
         frames = []
         for generation in generations_to_save:
@@ -245,7 +246,7 @@ class BehaviorTreeEvolution:
             append_images=frames[1:],
             optimize=False,
             loop=0,
-            fps=10,
+            fps=fps,
         )
 
     def evolutionary_algorithm(self, env: gym.Env) -> BehaviorTree:
@@ -264,24 +265,18 @@ class BehaviorTreeEvolution:
             wandb.log({"worst_fitness": self.worst_fitness_current_gen}, step=i)
             wandb.log({"best_tree_depth": self.best_tree.get_size()[0]}, step=i)
             wandb.log({"best_tree_children": self.best_tree.get_size()[1]}, step=i)
-            if i % self.save_every == 0:
-                self.best_tree.to_json(
-                    os.path.join(self.folder_path, f"best_tree_generation_{i}.json")
-                )
+            wandb.log(
+                {"best_tree_executed_nodes": self.best_tree.get_executed_nodes()},
+                step=i,
+            )
 
     def __del__(self):
         if self.train:
             wandb.finish()
-            self.best_tree.to_json(
-                os.path.join(
-                    self.folder_path,
-                    f"best_tree_generation_{self.number_generations}.json",
-                )
-            )
+            self.best_tree.to_json(self.best_player)
 
 
 if __name__ == "__main__":
-
     bt = BehaviorTreeEvolution(10, 0.1, 0.7, 5, 0.2)
     from bt_lib.action_nodes import ActionNode
     from bt_lib.composite_nodes import CompositeNode, composite_node_classes

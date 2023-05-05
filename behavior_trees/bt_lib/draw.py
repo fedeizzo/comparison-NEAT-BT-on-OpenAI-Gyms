@@ -180,7 +180,7 @@ class BtDrawer:
                         labels[node] = (
                             labels[node] + " \n" + "{} = {:.2f}".format(key, label)
                         )
-                    elif type(label) == str:
+                    elif type(label) == str or type(label) == int:
                         labels[node] = (
                             labels[node] + " \n" + "{} = {}".format(key, label)
                         )
@@ -197,7 +197,7 @@ class BtDrawer:
         # import pdb; pdb.set_trace()
         nx.draw_networkx_edges(self._bt_graph, positions)  # draw edges
         nx.draw_networkx_labels(
-            self._bt_graph, positions, labels, verticalalignment="center_baseline"
+            self._bt_graph, positions, labels, verticalalignment="center_baseline",font_size=8
         )  # draw node labels
 
         # Draw the nodes for each shape with the shape specified

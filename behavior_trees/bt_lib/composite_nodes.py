@@ -119,10 +119,13 @@ class CompositeNode(BehaviorNode):
     def reset(self):
         """Resets the node and all its children."""
         self.last_child_ticked = 0
+        self.is_executed = False
         for child in self.children:
+            child.is_executed = False
             # reset only composite nodes and action nodes because are the only with time state
             if isinstance(child, CompositeNode) or isinstance(child, ActionNode):
                 child.reset()
+
     def get_size(self) -> tuple[int, int]:
         """Returns a tuple (depth,count) where depth is the level of the node
         starting from the leaves, and count is the count of nodes below+this

@@ -27,6 +27,7 @@ class BehaviorNode(ABC):
         self.parameters = parameters
         self.status = None
         self.id = next(BehaviorNode.BEHAVIOR_NODE_ID)
+        self.is_executed = False
 
     def tick(self, input: np.ndarray) -> tuple[BehaviorStates, np.ndarray]:
         """Launches the tick to the node, it implements the standard routine
@@ -41,6 +42,7 @@ class BehaviorNode(ABC):
             action to perform.
         """
         if self.applicable(input):
+            self.is_executed = True
             result = self.run(input)
         else:
             result = (BehaviorStates.FAILURE, np.zeros(shape=(5,)))

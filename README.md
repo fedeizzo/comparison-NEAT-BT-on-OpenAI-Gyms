@@ -76,13 +76,12 @@ python behavior_trees/derk_bt_run.py -c configs/bt.toml
 TODO
 ```
 
-## Lunar Lander
+## GIFs
 
-![Game demo](assets/images/neat_lunar_lander_evolution.gif)
+|Frozen Lake| Lunar lander | Derk |
+|---|--------------|------| 
+|<img src="./assets/images/lake.gif" width="350"/> | <img src="./assets/images/neat_lunar_lander_evolution.gif" width="350"/> | <img src="./assets/images/game.gif" width="350"/> |
 
-## Derk
-
-![Game demo](assets/images/game.gif)
 
 [Docs](http://docs.gym.derkgame.com/)
 

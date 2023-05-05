@@ -1,5 +1,6 @@
 [game]
 folder_path = 'weights/bts/frozenlake' # folder where the player will be saved
+
 [bt_config]
 population_size = 200 # number of individuals in the population
 mutation_rate = 0.4 # probability of mutation
@@ -12,4 +13,5 @@ number_generations = 1000  # number of generations to evolve
 tree_size_penalty = 0.01 # penalty for tree size
 seed = 42 # random seed for gym
 mutation_seed = 42 # random seed for the mutation
-save_every = 1 # save the best individual every n generations
+save_every = 100 # save the best individual every n generations
+prob_keep_not_executed = 1

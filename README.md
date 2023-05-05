@@ -78,9 +78,9 @@ TODO
 
 ## GIFs
 
-| Lunar lander | Derk |
-|--------------|------| 
-| <img src="./assets/images/neat_lunar_lander_evolution.gif" width="350"/> | <img src="./assets/images/game.gif" width="350"/> |
+|Frozen Lake| Lunar lander | Derk |
+|---|--------------|------| 
+|<img src="./assets/images/lake.gif" width="350"/> | <img src="./assets/images/neat_lunar_lander_evolution.gif" width="350"/> | <img src="./assets/images/game.gif" width="350"/> |
 
 
 [Docs](http://docs.gym.derkgame.com/)

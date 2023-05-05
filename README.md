@@ -80,7 +80,7 @@ TODO
 
 | Lunar lander | Derk |
 |--------------|------| 
-| ![Game demo](assets/images/neat_lunar_lander_evolution.gif) | ![Game demo](assets/images/game.gif) |
+| <img src="./assets/images/neat_lunar_lander_evolution.gif" width="350"/> | <img src="./assets/images/game.gif" width="350"/> |
 
 
 [Docs](http://docs.gym.derkgame.com/)

@@ -6,7 +6,7 @@ episodes_number = 500
 best_stats = './weights/derk/64input_12output_derk/best_stats.pkl'
 extensive_stats = './weights/derk/64input_12output_derk/extensive_stats.pkl'
 species_stats = './weights/derk/64input_12output_derk/species_stats.pkl'
-neat_config = './weights/derk/64input_12output.ini'
+neat_config = './configs/derk/64input_12output.ini'
 weights_path = './weights/derk/64input_12output_derk/winner.pkl'
 
 [reward-function]

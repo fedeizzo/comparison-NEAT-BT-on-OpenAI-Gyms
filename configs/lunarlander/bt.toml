@@ -1,5 +1,5 @@
 [game]
-folder_path = 'weights/bts/lunar_lander' # folder where the player will be saved
+best_player = "assets/bts/frozen_lake/best.json"
 [bt_config]
 population_size = 200 # number of individuals in the population
 mutation_rate = 0.2 # probability of mutation

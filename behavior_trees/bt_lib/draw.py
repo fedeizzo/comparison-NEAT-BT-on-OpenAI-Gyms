@@ -180,7 +180,7 @@ class BtDrawer:
                         labels[node] = (
                             labels[node] + " \n" + "{} = {:.2f}".format(key, label)
                         )
-                    elif type(label) == str:
+                    elif type(label) == str or type(label) == int:
                         labels[node] = (
                             labels[node] + " \n" + "{} = {}".format(key, label)
                         )

@@ -170,7 +170,7 @@ class BehaviorTreeEvolution:
         """
         for tree in forest:
             depth, count = tree.get_size()
-            tree.fitness -= self.config["no_big_trees"] * depth
+            tree.fitness -= self.config["no_big_trees"] * (count + depth)
         return forest
 
     def mu_lambda_strategy(self, population: list[BehaviorTree]) -> list[BehaviorTree]:

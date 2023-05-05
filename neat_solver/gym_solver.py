@@ -153,15 +153,17 @@ def eval_checkpoints(
                     frames.append(im.copy())
             except EOFError:
                 pass  # end of sequence
+
     # save the frames as a new gif
-    frames[0].save(
-        gif_path,
-        save_all=True,
-        append_images=frames[1:],
-        optimize=False,
-        loop=0,
-        fps=60,
-    )
+    if frames:
+        frames[0].save(
+            gif_path,
+            save_all=True,
+            append_images=frames[1:],
+            optimize=False,
+            loop=0,
+            fps=60,
+        )
 
 
 def eval_winner_net(

@@ -3,7 +3,7 @@ name = "FrozenLake-v1"
 kwargs = {is_slippery = false}
 
 [game]
-use_wandb = true
+use_wandb = false
 num_iterations = 50
 checkpoint_frequency = 1000
 evaluate_checkpoints = true

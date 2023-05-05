@@ -3,7 +3,7 @@ name = "LunarLander-v2"
 kwargs = {}
 
 [game]
-use_wandb = true
+use_wandb = false
 num_iterations = 10
 checkpoint_frequency = 2
 evaluate_checkpoints = true

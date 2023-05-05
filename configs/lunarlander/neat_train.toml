@@ -4,11 +4,11 @@ kwargs = {}
 
 [game]
 use_wandb = false
-num_iterations = 10
-checkpoint_frequency = 2
+num_iterations = 500
+checkpoint_frequency = 25
 evaluate_checkpoints = true
 neat_config = "./configs/lunarlander/neat.ini"
 
 winner_pickle = "./weights/lunarlander/lunarlander_500_iterations.pickle"
 gif_path = "./weights/lunarlander/images/neat_lunar_lander_evolution.gif"
-gif_checkpoints = [1, 3, 5, 7]
+gif_checkpoints = []

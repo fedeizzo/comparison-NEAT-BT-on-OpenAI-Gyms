@@ -2,7 +2,7 @@ import numpy as np
 from bt_lib.behavior_tree import BehaviorTree
 from bt_lib.draw import BtDrawer
 from scipy.special import softmax
-
+import random
 """Class to manage evolution of the population of behavior trees.
 Functionalities:
 
@@ -158,6 +158,7 @@ class BehaviorTreeEvolution:
                 # mutate the tree with the chosen strategy
                 child.mutate(self.config["mutation_rate"], self.config["all_mutations"])
             new_population.append(child)
+        random.shuffle(new_population)
         return new_population
 
     def penalize_big_trees(self, forest: list[BehaviorTree]) -> list[BehaviorTree]:

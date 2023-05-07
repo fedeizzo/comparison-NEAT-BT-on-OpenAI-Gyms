@@ -4,11 +4,11 @@ number_of_arenas = 50
 episodes_number = 500
 starting_config = 'behavior_trees/derk/saved_bts/dummy.json'
 best_player = 'behavior_trees/derk/saved_bts/trial.json'
-use_wandb = false
+use_wandb = true
 
 [bt_config]
 elitism = true
-number_of_elites = 3
+number_of_elites = 6
 crossover = true
 mutation = true
 mutation_rate = 0.2

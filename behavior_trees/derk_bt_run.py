@@ -35,7 +35,7 @@ def main_dinosaurs(
     bt_config,
     is_turbo,
     start_bt_config,
-    best_player,
+    best_player_path,
     use_wandb,
     inference,
 ):
@@ -148,14 +148,14 @@ def main_dinosaurs(
 
 
         # save best player
-        evolution_engine.global_best_player.to_json(best_player)
+        evolution_engine.global_best_player.to_json(best_player_path)
 
     else:
         # load best player
         new_population = [
             # BehaviorTree.generate(5) for _ in range(population_size)
             BehaviorTree.from_json(
-                best_player,
+                best_player_path,
                 action_node_classes,
                 condition_node_classes,
                 composite_node_classes,
@@ -195,7 +195,7 @@ if __name__ == "__main__":
         bt_config=config["bt_config"],
         is_turbo=config["game"]["fast_mode"],
         start_bt_config=config["game"]["starting_config"],
-        best_player=config["game"]["best_player"],
+        best_player_path=config["game"]["best_player"],
         use_wandb=config["game"]["use_wandb"],
         inference=args.inference,
     )

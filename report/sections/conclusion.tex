@@ -1,0 +1,25 @@
+% - What difficulties were encountered during the project (if any), and what steps were taken to overcome those difficulties?
+% - A discussion of the lessons learned from the project.
+% - What conclusions can be drawn from the work? 
+
+As presented previously, to obtain some decent results on complex environments, many different approaches have been implemented to tackle the issues we faced: agent robustness on environment changes (random seed, environment variables) and environment complexity. Many of our attempted workarounds have been inspired by state-of-the-art solutions from other applications, such as pruning and Q-learning. Alternatively, we also tried to simplify complex environments by reducing the number of variables, such as fixing weapons and abilities on Derk.
+
+\Cref{tab:neat-vs-bt} summarizes NEAT and BT performances over the tested environments. While both techniques are able to reach the optimal agent on Frozen Lake, please consider that BTs on Lunar Lander have been evolved and tested only on a single random seed, therefore the table entry could be misleading. Moreover, NEAT outperforms BT in the Derk environment.
+
+In general, BTs should be preferred with respect to NEAT when explainability is necessary, especially when keeping limited tree sizes thanks to pruning or penalization.
+
+\begin{table}[t]
+    \caption{NEAT and BT max fitness in different environments.}
+    \begin{center}
+        \begin{tabular}{lrr}
+            \toprule
+            Environment & NEAT & BT \\
+            \midrule
+            Frozen Lake  & 1    &  \(^* 0.94\) \\
+            Lunar Lander & 281  & \(^* 291\) \\
+            Derk         & 2038 & 1087 \\
+            \bottomrule
+        \end{tabular}
+    \end{center}
+    \label{tab:neat-vs-bt}
+\end{table}

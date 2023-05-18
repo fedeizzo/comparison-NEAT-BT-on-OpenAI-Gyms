@@ -1,0 +1,22 @@
+This report presents a comparison between two evolution-based algorithms for solving control tasks on the OpenAI Gym environment: NEAT~\cite{NEAT} and BT~\cite{BT}. The former uses a genetic algorithm to evolve a topology, while the latter uses a hierarchical structure of decision-making nodes. The experiments were conducted on \textit{Frozen Lake}, \textit{Lunar Lander}, and \textit{Derk} environments supported by OpenAI's Gym.
+
+\subsection{Frozen Lake}
+Frozen Lake is a grid-world game that simulates an agent navigating through a frozen lake. The game is played on a grid of square tiles, where the agent starts at the top left cell and it must navigate through the frozen lake to reach the goal which is located on the other side of the map. At every step, the agent receives as input an absolute number that represents its position on the grid, and it can move in one direction.
+
+The agent's goal is to reach the final tile without falling into any of the holes scattered around the environment; a positive reward (one) is provided only when the goal is reached before the time limit, otherwise the reward is zero. 
+
+By default, the map has a fixed size of 4x4, but it can be also customized tweaking parameters. There is also the possibility to make the map slippery, therefore making the agent's moves non-deterministic.
+
+\subsection{Lunar Lander}
+Lunar Lander is a Gym environment that consists of a trajectory optimization problem in which a rocket has to land smoothly on a specific target pad area on the lunar surface. The observation space includes lander position, velocity, angle, angular velocity, and whether or not each leg is touching the ground.
+
+There are three engines, two on the sides and one on the bottom of the rocket. Each engine can be activated individually to change the trajectory and velocity of the missile itself. Therefore the discrete action space is composed of the three engine fires and the do-nothing operation.
+
+The reward function favors a lander that is moving slowly, near the landing pad, horizontally positioned, that can land safely on the ground while saving as much propellant as possible. According to its creators, agents that score more than 200 points are considered successful.
+
+\subsection{Derk Gym}
+Derk Gym is a MOBA-style \textit{Reinforcement Learning (RL)} environment shipped as an OpenAI Gym environment. The game has two teams in competition, and each of them is composed of three agents. The agent's goal is to defeat the enemy team and destroy the enemy tower by using up to three abilities that can consist of either offensive or defensive tools.
+
+The environment is fully observable and there are a total of 64 pieces of information sensed from the environment. An agent can decide to move, rotate, focus, chase, and activate an ability. The reward function can be customized and it is computed based on players' interactions, for example encouraging damage to enemies and penalizing friendly fire. 
+
+Derk Gym represents a challenging environment for many reasons, especially because some actions do not trigger an instant reward while others return zero feedback. Moreover, the interaction between agents is built on top of many variables, such as weapons and abilities.

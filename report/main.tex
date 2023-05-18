@@ -1,0 +1,73 @@
+\documentclass[journal]{IEEEtran}
+
+\ifCLASSINFOpdf
+\else
+\fi
+
+% correct bad hyphenation here
+\usepackage[british]{babel}
+\usepackage[hidelinks, unicode]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{amsfonts}
+\usepackage{float}
+\usepackage{array, booktabs, makecell}
+\usepackage{xcolor}
+\usepackage{comment}
+\usepackage{lscape}
+\usepackage{graphicx}
+
+\usepackage[noabbrev,capitalize]{cleveref}
+
+\begin{document}
+
+\title{A Comparison between NEAT and Behavior Trees on OpenAI Gym Environments}
+\author{
+\href{https://github.com/fedeizzo}{Federico Izzo},
+\href{https://github.com/francescobozzo}{Francesco Bozzo},
+\href{https://github.com/BigEmperor26}{Michele Yin}
+\\Department of Information Engineering and Computer Science\\University of Trento, Italy\\
+
+\normalsize\{\href{mailto:federico.izzo@studenti.unitn.it}{\texttt{federico.izzo}}, 
+\href{mailto:francesco-bozzo@studenti.unitn.it}{\texttt{francesco.bozzo}},
+\href{mailto:michele.yin@studenti.unitn.it}{\texttt{michele.yin}}\} \texttt{@studenti.unitn.it}\vspace{-1em}}%
+
+% make the title area
+\maketitle
+
+\begin{abstract}
+This report presents a comparison between two evolution-based algorithms for solving control tasks on the OpenAI Gym framework: \textit{NeuroEvolution of Augmenting Topologies (NEAT)} and \textit{Behavior Trees (BT)}. Results show that while both algorithms are capable of obtaining decent results on simple tasks, NEAT often outperforms BT, although the latter offers more interpretability in debugging the agent's behavior.
+
+Overall, this document provides insights into the strengths and weaknesses of these two popular algorithms and highlights the potential benefits of using them for tasks of different complexity.
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\section{Introduction}
+\label{sec:intro}
+\input{sections/introduction}
+
+\section{Methodologies}
+\label{sec:methodologies}
+\input{sections/methodologies}
+
+\section{Results}
+\label{sec:results}
+\input{sections/results}
+
+\section{Conclusion}
+\label{sec:conclusion}
+\input{sections/conclusion}
+
+\section{Contributions}
+\label{sec:contributions}
+\input{sections/contributions}
+
+
+\bibliography{bibliography.bib}{}
+\bibliographystyle{IEEEtran}
+
+\input{sections/appendix}
+\end{document}

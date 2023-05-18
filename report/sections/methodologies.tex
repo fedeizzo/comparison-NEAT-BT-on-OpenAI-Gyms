@@ -1,0 +1,56 @@
+In this project, we are considering two evolution-based techniques: NEAT and Behavior Trees.
+
+\subsection{NEAT}
+\textit{NeuroEvolution of Augmenting Topologies (NEAT)}~\cite{NEAT} is a technique for evolving arbitrary topologies like \textit{Neural Networks (NN)}. The goal is to obtain a NN capable of acting in a specific environment through the maximization of a given reward function. The learning process is driven by an \textit{Evolutionary Algorithm (EA)}, which tries to replicate the natural selection through the evolution of individuals inside a population, by using crossover and mutation.
+
+A NN is created from a genome and each genome includes a list of connection genes, where a connection gene refers to two node genes. Additionally, each connection gene contains the weight that is used to represent the strength of the link between the two nodes.
+
+To better explain how NEAT works, the following concepts are introduced: \emph{mutation}, \emph{crossover}, \emph{speciation}, and \emph{structural complexity}.
+
+\subsubsection{Mutation}
+Can occur to update the intensity of the connection gene or can modify the structure of the topology: a probability is associated to the creation/deletion of a new node/connection gene.
+
+\subsubsection{Crossover}
+During a run, a unique integer is associated with each new genome, in this way it is possible to create a complete hierarchical structure of the evolution of different NNs. This process is called \emph{historical marking}, and it is used in the core logic of the crossover algorithm.
+
+\subsubsection{Speciation}
+The population is divided into multiple species, and genomes compete against other individuals within the same species. This approach is used to overcome the phenomenon in which a new genome with a structural modification is removed from the population due to its low fitness value. The final goal is to stimulate structural mutations leaving enough time to assess the real performance of new individuals.
+
+\subsubsection{Structural complexity}
+\label{sec:structural-complexity}
+NEAT tries to solve two optimization problems at the same time. The first one consists in the reward function optimization: given a topology we want to find the best possible set of weights that maximizes it. The second optimization task is related to the search of the best possible topology for the specific task. Due to the latter problem, the topology exploration can bring a complexity explosion: NEAT tries to avoid this by starting from small networks.
+
+\subsection{Behavioural Trees}
+A \emph{Behavior Tree (BT)} is defined as a tool to structure the switching between different tasks in an autonomous agent being both modular and reactive~\cite{BT}. As an alternative to Finite State Machines, they were first implemented to improve the behavior of Non-Player Characters (NPCs) in video games.
+
+Due to the fact that there is no standard way to work with BTs, we decided to develop our own implementation to have full control over every detail from the design process, since many BTs are strictly linked with their target environments. Specifically, the BT library we devised includes:
+\begin{itemize}
+    \item implementation of action, condition, and composite nodes with memory.
+    \item random initialization of BTs given a maximum height value;
+    \item mutation and crossover strategies;
+    \item simple evolution tools, such as elitism, size penalties, and pruning inactive nodes.
+\end{itemize}
+Each BT node can return a result and one of these three behavior states:
+\begin{itemize}
+    \item \texttt{SUCCESS} when a node has been successfully executed;
+    \item \texttt{FAILURE} when a node has failed its execution;
+    \item \texttt{RUNNING} when a time-consuming action is happening and the agent has to wait for some iterations to state whether it has been successful or not.
+\end{itemize}
+
+Since action and condition nodes are strictly connected to the target task solved by the BT, we implemented a different version of them for each OpenAI Gym environment we tested. Here it is presented a quick overview of different node types:
+
+\subsubsection{Action Nodes}
+The actual actions that the agent can perform through BTs are stored in action nodes.
+In our implementation, each action has a duration that is defined as the number of environment iterations required to perform it. Action nodes do not return either \texttt{SUCCESS} or \texttt{FAILURE} until they have ended their execution: in that case, they yield the \texttt{RUNNING} state.
+
+\subsubsection{Condition Nodes}
+Condition nodes return boolean values while checking for some conditions on the input data that describe the environment with respect to some fixed constants.
+For this reason, we implemented a good number of comparison operators that are commonly used in general-purpose programming languages: equal, greater, less, greater equal, less equal, and not equal. In all our experiments all the condition nodes return immediately either \texttt{SUCCESS} or \texttt{FAILURE} since they are applied on the agent's input observations.
+
+\subsubsection{Composite Nodes}
+Composite nodes are used to improve the logical information flow in BTs and they are the building block of any complex behavior that can be achieved with this framework. A composite node defines a list of children nodes that must be executed. There are two types of composite nodes:
+\begin{itemize}
+    \item \textit{sequence} nodes return \texttt{SUCCESS} if all children return \texttt{SUCCESS};
+    \item \textit{fallback} nodes return \texttt{SUCCESS} if any children returns \texttt{SUCCESS}, otherwise \texttt{FAILURE} is propagated.
+\end{itemize}
+A BT can be viewed as a function that returns the action that maximizes the reward function given the environment state provided as input: each evaluation of it is called \texttt{tick} and the decision process is propagated from the root node to its sub-trees in a recursive way using a DFS-like strategy. The BT execution stops when leaves propagate either \texttt{FAILURE} or \texttt{SUCCESS} responses towards the tree root. If the state \texttt{RUNNING} is provided, the final result can be retrieved in the next ticks thanks to the memory implemented on composite and action nodes. 
